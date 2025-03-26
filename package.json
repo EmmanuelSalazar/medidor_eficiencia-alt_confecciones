@@ -2,6 +2,7 @@
     "scripts": {
         "copy:front": "xcopy /E /I \"C:\\Users\\emman\\OneDrive\\Documentos\\GitHub\\rendimientoALTCONFECCIONES\\rendimiento\" \"C:\\Users\\emman\\OneDrive\\Documentos\\GitHub\\Medidor de eficiencia\\frontend\"",
         "copy:back": "xcopy /E /I \"C:\\Wamp64\\www\" \"C:\\Users\\emman\\OneDrive\\Documentos\\GitHub\\Medidor de eficiencia\\backend\"",
-        "copy:all": "npm run copy:front && npm run copy:back"
+        "copy:all": "npm run copy:front && npm run copy:back",
+        "start:front": "cd frontend && npm run dev"
     }
 }
