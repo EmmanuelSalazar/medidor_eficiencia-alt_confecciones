@@ -7,6 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     $datos = json_decode(file_get_contents('php://input'), true);
 
     // Extraer los datos del cuerpo JSON
+    $ref_id = $datos['ref_id'] ?? NULL;
     $referencia = $datos['referencia'] ?? NULL;
     $tiempoDeProduccion = $datos['tiempoDeProduccion'] ?? NULL;
     $modulo = $datos['modulo'] ?? NULL;
@@ -23,9 +24,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
 
     try {
         // Actualizar la referencia seleccionada
-        $sql = "UPDATE referencias SET tiempoDeProduccion = ?, modulo = ?, activo = ? WHERE referencia = ?";
+        $sql = "UPDATE referencias SET referencia = ?, tiempoDeProduccion = ?, modulo = ?, activo = ? WHERE ref_id = ?";
         $stmt = $mysqli->prepare($sql);
-        $stmt->bind_param("siis", $tiempoDeProduccion, $modulo, $activo, $referencia); // Usamos "iiis" porque `tiempoDeProduccion`, `modulo` y `activo` son enteros, y `referencia` es una cadena
+        $stmt->bind_param("siiii", $referencia, $tiempoDeProduccion, $modulo, $activo, $ref_id); // Usamos "iiis" porque `tiempoDeProduccion`, `modulo` y `activo` son enteros, y `referencia` es una cadena
 
         if (!$stmt->execute()) {
             throw new Exception("Error al actualizar la referencia.");
