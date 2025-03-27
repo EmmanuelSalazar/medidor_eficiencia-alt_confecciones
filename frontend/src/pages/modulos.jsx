@@ -6,6 +6,7 @@ import PorcentajeDeEficienciaDiaria from "../components/porcentajeEficienciaDelD
 import PanelNotificaciones from "../components/panelNotificaciones";
 import IncentivoQuincena from "../components/incentivoQuincena";
 import { useSearchParams } from "react-router-dom";
+import logo from '../assets/img/logo.png'
 function Modulo() {
   const [moduloConMarca, setModuloConMarca] = React.useState("");
   // MOSTRAR TABLERO EN USO
@@ -42,6 +43,9 @@ function Modulo() {
             </Row>
             <Row className='border border-black mb-2 me-1 bg-black  rounded text-light'>
              <PorcentajeDeEficienciaDiaria />
+            </Row>
+            <Row className='border border-white pe-3 bg-white  rounded text-light justify-content-center'>
+              <img src={logo} alt="logo" style={{width: '70%', height: '100%'}} className="img-fluid" />
             </Row>
           </Col>
           <Col lg={9} xs={12} sm={12} md={4} className='bg-black rounded border border-primary text-light text-center' >            

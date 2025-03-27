@@ -173,9 +173,9 @@ const ListaRegistroOperaciones = () => {
                             <Form.Select required ref={referenciaRef}>
                                 {listas.map((dato, index) => (
                                     dato.ref_id === registroSeleccionado.ref_id ? (
-                                        <option value={dato.ref_id} selected>{dato.referencia}</option>
+                                        <option key={index} value={dato.ref_id} selected>{dato.referencia}</option>
                                     ) : (
-                                        <option value={dato.ref_id}>{dato.referencia}</option>
+                                        <option key={index} value={dato.ref_id}>{dato.referencia}</option>
                                     )
                                 ))}
                             </Form.Select>
@@ -189,9 +189,9 @@ const ListaRegistroOperaciones = () => {
                             <Form.Select ref={horarioRef}>
                                 {horariosJson.map((dato, index) => (
                                     dato.horario === registroSeleccionado.horario ? (
-                                        <option value={dato.horario} selected>{dato.horaHorario}</option>
+                                        <option key={index} value={dato.horario} selected>{dato.horaHorario}</option>
                                     ) : (
-                                        <option value={dato.horario}>{dato.horaHorario}</option>
+                                        <option key={index} value={dato.horario}>{dato.horaHorario}</option>
                                     )
                                 ))}
                             </Form.Select>

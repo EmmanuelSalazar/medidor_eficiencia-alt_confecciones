@@ -18,7 +18,7 @@ const ActualizarOperario = () => {
             setData(response.data.respuesta);
             return response.data.respuesta; // Array garantizado
           } else {
-            console.error("Respuesta inválida:", response.data);
+            setError("Respuesta inválida:" + response.data.respuesta);
             return []; // Retornar array vacío
           }
           
