@@ -15,13 +15,12 @@ const ActualizarRegistroOperacion = () => {
             setData(response.data.respuesta);
             return response.data.respuesta; // Array garantizado
           } else {
-            throw new Error("Ha ocurrido un error: " + response.data);
+            setError("Ha ocurrido un error: " + response.data.respuesta);
             return []; // Retornar array vacío
           }
         } catch (error) {
+          console.error("Error al realizar la solicitud:", error);
           throw error;
-          console.error("Error en fetchData:", error);
-          return []; // Retornar array vacío
         }
       }, [apiURL]);
         useEffect(() => {

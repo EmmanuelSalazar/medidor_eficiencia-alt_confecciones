@@ -147,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 "fecha" => $row["Fecha"],
                 "modulo" => $row["Modulo"],
                 "total_unidades_producidas" => $row["TotalUnidadesProducidas"],
-                "total_meta_eficiencia" => floor($row["TotalMetaPorEficiencia"]),
+                "total_meta_eficiencia" => round($row["TotalMetaPorEficiencia"]),
                 "eficiencia" => $eficiencia,
                 "eficiencia_int" => $eficienciaInt,
                 "eficiencia_quincenal" => $row["EficienciaQuincenal"] // Agregar eficiencia del período específico
