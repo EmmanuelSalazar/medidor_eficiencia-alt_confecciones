@@ -7,8 +7,10 @@ import PanelNotificaciones from "../components/panelNotificaciones";
 import IncentivoQuincena from "../components/incentivoQuincena";
 import { useSearchParams } from "react-router-dom";
 import logo from '../assets/img/logo.png'
+import TableroMensajes from "../components/tablero/tableroMensajes";
 function Modulo() {
   const [moduloConMarca, setModuloConMarca] = React.useState("");
+  const [pantalla, setPantalla] = React.useState(2);
   // MOSTRAR TABLERO EN USO
   const [buscarParametro] = useSearchParams();
     let moduloEnLaUrl = buscarParametro.get('modulo');
@@ -28,8 +30,18 @@ function Modulo() {
           break;
       }
     },[moduloEnLaUrl]);
-    return ( 
-    <Container className="mt-2" style={{minWidth: '100%'}}>
+    // CAMBIO DE PANTALLA
+    /* React.useEffect(() => {
+      const interval = setInterval(() => {
+        setPantalla((pantalla) => (pantalla === 1 ? 2 : 1));
+      }, 5000);
+      return () => clearInterval(interval);
+    },[]); */
+  
+    
+
+    const tableroPorcentajes = (
+        <>
         <Row className="border border-black p-1 mb-2 bg-black bg-opacity-50 rounded text-light">
           <PanelNotificaciones />
         </Row>
@@ -55,7 +67,21 @@ function Modulo() {
             </div>
           </Col>
         </Row>
-      </Container>
-    )
+      </>
+      )
+
+  const tableroMensajes = (
+      <TableroMensajes />
+  )
+
+  
+
+  return (
+    <Container className="mt-2" style={{minWidth: '100%'}}>
+      {pantalla === 1 ? tableroPorcentajes : tableroMensajes}
+    </Container>
+  )
+
 }
+
 export default Modulo

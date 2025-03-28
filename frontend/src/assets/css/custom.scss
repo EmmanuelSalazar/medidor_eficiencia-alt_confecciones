@@ -1,5 +1,7 @@
 $primary: #812323;
-
-
+$font-sizes: (
+  1: 5rem,
+  6: 4rem
+);
 
 @import 'bootstrap/scss/bootstrap';
