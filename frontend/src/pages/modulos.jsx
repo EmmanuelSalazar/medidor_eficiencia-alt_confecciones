@@ -4,22 +4,31 @@ import TableroMensajes from "../components/tablero/tableroMensajes";
 import TableroGrafico from "../components/tablero/tableroGrafica";
 function Modulo() {
   const [pantalla, setPantalla] = React.useState(1);
- 
+  const [tiempo, setTiempo] = React.useState(3600000);
     // CAMBIO DE PANTALLA
     React.useEffect(() => {
       const interval = setInterval(() => {
         setPantalla((pantalla) => (pantalla === 1 ? 2 : 1));
-      }, 5000);
+      }, tiempo);
       return () => clearInterval(interval);
     },[]);
+    // CAMBIO DE TIEMPO
+    React.useEffect(() => {
+      if(pantalla === 1){
+        setTiempo(3600000);
+      }else{
+        setTiempo(150000);
+      }
+    },[pantalla])
 
+    // TABLEROS
     const tableroPorcentajes = (
        <TableroGrafico />
       )
 
-  const tableroMensajes = (
-        <TableroMensajes />
-  )
+    const tableroMensajes = (
+          <TableroMensajes />
+    )
 
   
 

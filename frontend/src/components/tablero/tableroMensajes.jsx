@@ -4,17 +4,17 @@ import tableroMensajes from "../../utils/json/tableroMensajes.json";
 import { Howl, Howler } from 'howler';
 const TableroMensajes = () => {
     const [mensaje, setMensaje] = React.useState("");
-    React.useEffect(() => {
+    /* React.useEffect(() => {
         const mensajeAleatorio = tableroMensajes[Math.floor(Math.random() * tableroMensajes.length)];
-        setMensaje(mensajeAleatorio.mensaje);
+        setMensaje(mensajeAleatorio);
         const audio = new Howl({
-            src: [`/audio/5.mp3`],
+            src: [`/audio/${mensaje.id}.mp3`],
             volume: 1,
             autoplay: true,
             loop: false,
         });
         audio.play();
-    }, []);
+    }, []); */ //COMING SOON
     return (
         <>
         <Row className="justify-content-center align-content-center" style={{height: "100vh"}}>
@@ -22,7 +22,8 @@ const TableroMensajes = () => {
             <div className="bg-primary text-light text-center rounded p-2">
               <h1 className="fs-1">Mensaje del momento</h1>
               <hr className="border border-white border-2"/>
-              <p className="fs-6">"{mensaje}"</p>
+              <p className="fs-6">"{mensaje.mensaje}"</p>
+              <p className="fs-3">-{mensaje.autor || "Desconocido"}</p>
             </div>
           </Col>
         </Row>
