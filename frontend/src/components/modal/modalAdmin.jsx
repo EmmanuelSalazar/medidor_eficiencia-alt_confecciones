@@ -1,8 +1,10 @@
 import React from "react";
-import { Modal, Button, DatePicker, Space } from 'antd'
+import { Modal, Button, DatePicker, Space} from 'antd'
+import { Row } from 'react-bootstrap'
 import ListaRegistroOperaciones from "../listas/listaRegistroOperaciones";
 import {ListaContext } from "../../contexts/actualizarRegistroOperaciones";
 import ExportToExcel from "../exportarExcel";
+import BotonesSelModAdminRegOp from '../botonesSeleccion/botonesSeleccionModuloAdminModal'
 const { RangePicker } = DatePicker;
 const FechasDuales = () => {
     const { listaRegistro, setListaRegistro } = React.useContext(ListaContext)
@@ -74,8 +76,11 @@ const FechasDuales = () => {
                         <RangePicker onChange={onPanelChange}/>
                         <strong>Seleccionar hora</strong>
                         <RangePicker onChange={onChangeHours} picker="time" format="HH" disabledTime={disabledTime}/>
-                        <ExportToExcel datos={listaRegistro}/>
+                        <ExportToExcel datos={listaRegistro}/> 
                     </Space>
+                    <Row className="my-2">
+                        <BotonesSelModAdminRegOp />
+                    </Row>
                     {mensajeDeExito && <Alert variant="success">{mensajeDeExito}</Alert>}
                     {mensajeDeAlerta && <Alert variant="warning">{mensajeDeAlerta}</Alert>}
                     {mensajeDeError && <Alert variant="danger">{mensajeDeError}</Alert>}
