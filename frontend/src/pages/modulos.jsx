@@ -3,17 +3,15 @@ import { Container } from 'react-bootstrap'
 import TableroMensajes from "../components/tablero/tableroMensajes";
 import TableroGrafico from "../components/tablero/tableroGrafica";
 function Modulo() {
-  const [pantalla, setPantalla] = React.useState(2);
+  const [pantalla, setPantalla] = React.useState(1);
  
     // CAMBIO DE PANTALLA
     React.useEffect(() => {
       const interval = setInterval(() => {
         setPantalla((pantalla) => (pantalla === 1 ? 2 : 1));
-      }, 300000);
+      }, 5000);
       return () => clearInterval(interval);
     },[]);
-  
-    
 
     const tableroPorcentajes = (
        <TableroGrafico />

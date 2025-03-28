@@ -1,11 +1,19 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
 import tableroMensajes from "../../utils/json/tableroMensajes.json";
+import { Howl, Howler } from 'howler';
 const TableroMensajes = () => {
     const [mensaje, setMensaje] = React.useState("");
     React.useEffect(() => {
         const mensajeAleatorio = tableroMensajes[Math.floor(Math.random() * tableroMensajes.length)];
         setMensaje(mensajeAleatorio.mensaje);
+        const audio = new Howl({
+            src: [`/audio/5.mp3`],
+            volume: 1,
+            autoplay: true,
+            loop: false,
+        });
+        audio.play();
     }, []);
     return (
         <>

@@ -13,8 +13,15 @@
     },
     {
         "id": 4,
-        "mensaje": "Los verdaderos héroes están hechos de integridad"
+        "mensaje": "La esencia de la calidad, antes de manifestarse en los productos, debe residir en el alma de quienes los crean."
+    },
+    {
+        "id": 5,
+        "mensaje": "¡Acá se trabaja con berraquera y cero disculpas!"
+    },
+    {
+        "id": 6,
+        "mensaje": "Rendimiento + Calidad = Satisfacción"
     }
-    
     
 ]
