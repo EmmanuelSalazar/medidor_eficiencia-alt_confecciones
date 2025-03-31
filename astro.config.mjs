@@ -1,28 +1,31 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
-
-// https://astro.build/config
+import remarkMermaid from 'remark-mermaidjs';
 export default defineConfig({
 	integrations: [
 		starlight({
-			title: 'My Docs',
+			title: 'ALT-Confecciones',
 			social: {
-				github: 'https://github.com/withastro/starlight',
+				github: 'https://github.com/EmmanuelSalazar',
 			},
 			sidebar: [
 				{
-					label: 'Guides',
-					items: [
-						// Each item here is one entry in the navigation menu.
-						{ label: 'Example Guide', slug: 'guides/example' },
-					],
+					label: 'Comienza Aquí',
+					autogenerate: { directory: 'inicio' },
 				},
 				{
 					label: 'Reference',
 					autogenerate: { directory: 'reference' },
 				},
+				{
+					label: 'Arquitectura',
+					autogenerate: { directory: 'arquitectura' },
+				},
 			],
 		}),
 	],
+	markdown: {
+		remarkPlugins: [remarkMermaid],
+	},
 });
