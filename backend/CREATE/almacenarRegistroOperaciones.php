@@ -1,7 +1,7 @@
 <?php 
 
 require_once '../config/cors.php';
-require_once '../baseDeDatos.php';
+require_once '../config/baseDeDatos.php';
 require_once '../config/horarios.php';
 
 // Manejar solicitud OPTIONS (preflight)

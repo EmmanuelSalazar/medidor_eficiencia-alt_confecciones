@@ -1,7 +1,7 @@
 <?php 
 
-require_once 'config/cors.php';
-require 'baseDeDatos.php';
+require_once '../config/cors.php';
+require_once '../config/baseDeDatos.php';
 
 // Manejar solicitud OPTIONS (preflight)
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
