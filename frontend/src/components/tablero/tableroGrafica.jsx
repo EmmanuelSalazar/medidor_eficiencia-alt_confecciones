@@ -1,14 +1,16 @@
 import React from "react";
-import { Row, Col} from 'react-bootstrap'
+import { Row, Col, Stack} from 'react-bootstrap'
 import HorizontalBarChart from '..//graficos/grafico';
 import PorcentajeDeEficienciaPorCorte from "..//porcentajeEficienciaDeCorte";
 import PorcentajeDeEficienciaDiaria from "..//porcentajeEficienciaDelDia";
 import PanelNotificaciones from "..//panelNotificaciones";
 import IncentivoQuincena from "..//incentivoQuincena";
 import { useSearchParams } from "react-router-dom";
+import FechaActual from "../fechaActual";
 import logo from '../../assets/img/logo.png'
 
 const TableroGrafico = () => {
+  const {fechaFormateada} = FechaActual();  
     const [moduloConMarca, setModuloConMarca] = React.useState("");
     // MOSTRAR TABLERO EN USO
     const [buscarParametro] = useSearchParams();
@@ -41,10 +43,18 @@ const TableroGrafico = () => {
               <IncentivoQuincena />
             </Row>
             <Row className='border border-black mb-2 me-1 bg-black  rounded text-light' >
-              <PorcentajeDeEficienciaPorCorte />
+              <Stack style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
+                <div className="p-2"><h4><strong>EFICIENCIA DEL DÍA</strong></h4></div>
+                <PorcentajeDeEficienciaPorCorte />
+                <div className="p-2"><h5><strong>{fechaFormateada}</strong></h5></div>
+              </Stack>
             </Row>
             <Row className='border border-black mb-2 me-1 bg-black  rounded text-light'>
-             <PorcentajeDeEficienciaDiaria />
+              <Stack style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
+                <div className="p-2"><h4><strong>INCENTIVO QUINCENA</strong></h4></div>
+                <PorcentajeDeEficienciaDiaria />
+                <div className="p-2"><h5><strong>{fechaFormateada}</strong></h5></div>
+              </Stack>
             </Row>
             <Row className='border border-white pe-3 bg-white  rounded text-light justify-content-center'>
               <img src={logo} alt="logo" style={{width: '70%', height: '100%'}} className="img-fluid" />

@@ -4,17 +4,17 @@ import tableroMensajes from "../../utils/json/tableroMensajes.json";
 import { Howl, Howler } from 'howler';
 const TableroMensajes = () => {
     const [mensaje, setMensaje] = React.useState("");
-    /* React.useEffect(() => {
+    React.useEffect(() => {
         const mensajeAleatorio = tableroMensajes[Math.floor(Math.random() * tableroMensajes.length)];
         setMensaje(mensajeAleatorio);
-        const audio = new Howl({
+        /* const audio = new Howl({
             src: [`/audio/${mensaje.id}.mp3`],
             volume: 1,
             autoplay: true,
             loop: false,
         });
-        audio.play();
-    }, []); */ //COMING SOON
+        audio.play(); */
+    }, []); //COMING SOON
     return (
         <>
         <Row className="justify-content-center align-content-center" style={{height: "100vh"}}>

@@ -3,7 +3,7 @@ import axios from "axios"
 const AlmacenarDatos = async (values) => {
   const apiURL = import.meta.env.VITE_API_URL;
   try {
-    const response = await axios.post(`${apiURL}/almacenarReferencias.php`, values)
+    const response = await axios.post(`${apiURL}/CREATE/almacenarReferencias.php`, values)
     if (!response.data.ok) {
       throw new Error("Ha ocurrido un error al almacenar la referencia, si el error persiste, contacta al administrador")
     }

@@ -16,7 +16,7 @@ const useFetchData = () => {
         let horaFinSeleccionada = hora_fin ?? '23:59'
         setLoading(true)
             try {
-                const response = await axios.get(`${apiURL}/mostrarRegistroOperaciones.php?modulo=${moduloSeleccionado}&fecha_inicio=${fechaInicioSeleccionada}&fecha_fin=${fechaFinSeleccionada}&hora_inicio=${horaInicioSeleccionada}&hora_fin=${horaFinSeleccionada}`)
+                const response = await axios.get(`${apiURL}/READ/mostrarRegistroOperaciones.php?modulo=${moduloSeleccionado}&fecha_inicio=${fechaInicioSeleccionada}&fecha_fin=${fechaFinSeleccionada}&hora_inicio=${horaInicioSeleccionada}&hora_fin=${horaFinSeleccionada}`)
                 if (response.data.ok) {
                     setData(response.data.respuesta)
                     return response.data.respuesta

@@ -1,6 +1,6 @@
 <?php
 require_once '../config/cors.php';
-require_once '../baseDeDatos.php';
+require_once '../config/baseDeDatos.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     // Decodificar los datos enviados en el cuerpo de la solicitud
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
         // Actualizar la referencia seleccionada
         $sql = "UPDATE referencias SET referencia = ?, tiempoDeProduccion = ?, modulo = ?, activo = ? WHERE ref_id = ?";
         $stmt = $mysqli->prepare($sql);
-        $stmt->bind_param("siiii", $referencia, $tiempoDeProduccion, $modulo, $activo, $ref_id); // Usamos "iiis" porque `tiempoDeProduccion`, `modulo` y `activo` son enteros, y `referencia` es una cadena
+        $stmt->bind_param("sdiii", $referencia, $tiempoDeProduccion, $modulo, $activo, $ref_id); // Usamos "iiis" porque `tiempoDeProduccion`, `modulo` y `activo` son enteros, y `referencia` es una cadena
 
         if (!$stmt->execute()) {
             throw new Exception("Error al actualizar la referencia.");

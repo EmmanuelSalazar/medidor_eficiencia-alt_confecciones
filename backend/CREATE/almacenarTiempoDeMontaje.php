@@ -1,6 +1,6 @@
 <?php 
     require_once '../config/cors.php';
-    require_once '../baseDeDatos.php';
+    require_once '../config/baseDeDatos.php';
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // RECIBIR Y ALMACENAR ARRAY DE DATOS
@@ -16,7 +16,7 @@
                 'ok' => 'false',
                 'respuesta' => 'SOLICITUD INVALIDA (CONERR3)'
             ];
-            http_response_code(400);
+            http_response_code(401);
             echo json_encode($respuesta);
             exit;
         }

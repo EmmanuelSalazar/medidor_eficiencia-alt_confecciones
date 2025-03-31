@@ -9,16 +9,16 @@ const useFetchData = () => {
         setLoading(true)
         let moduloFinal = modulo ?? null;
         let reduxFinal = redux ?? false;
+        console.log(moduloFinal, reduxFinal)
             try {
-                const response = await axios.get(`${apiURL}/mostrarOperarios.php?modulo=${moduloFinal}&redux=${reduxFinal}`)
+                const response = await axios.get(`${apiURL}/READ/mostrarOperarios.php?modulo=${moduloFinal}&redux=${reduxFinal}`)
                 if (response.data.ok) {
                     setData(response.data.respuesta)
                     return response.data.respuesta 
                 } else {
                     console.error('Ha ocurrido un error, reinicie, si este persiste, contacte al administrador')
                     return []
-/*                     throw new Error(response.data.respuesta)
- */                }
+                }
             }  catch (error) {
                 setError(error instanceof Error ? error : new Error("Ha ocurrido un error desconocido"))
                 console.error("Error al obtener datos:", error)

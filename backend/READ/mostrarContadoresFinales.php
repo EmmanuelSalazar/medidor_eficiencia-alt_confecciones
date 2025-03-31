@@ -1,6 +1,6 @@
 <?php 
 require_once '../config/cors.php';
-require_once '../baseDeDatos.php';
+require_once '../config/baseDeDatos.php';
 $datos = [];
 
 $query = 'SELECT * FROM operarios WHERE calculadorFinal = 1';

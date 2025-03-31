@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col, Container } from 'react-bootstrap'
+import { Row, Col, Container, Stack } from 'react-bootstrap'
 import TablaRegistros from '../components/listas/listaRegistro'
 import { ListaProvider} from "../contexts/actualizarRegistros";
 import { ListaProvider as ProveedorDeLista } from '../contexts/informacionGrafico'
@@ -11,6 +11,8 @@ import GraficaAdministrativa from "../components/graficos/graficoAdmin";
 import FechasDuales from "../components/modal/modalAdmin";
 import PanelAdministrativo from '../components/modal/seleccionarOperarioContador'
 import TiempoDeMontaje from "../components/modal/ingresarTiempoDeMontaje";
+import PorcentajeDeEficienciaDiaria from "../components/porcentajeEficienciaDelDia";
+import PorcentajeDeEficienciaQuincenal from "../components/porcentajeEficienciaDeCorte";
 function TablaRegistro() {
     return (
         <Container>
@@ -29,6 +31,20 @@ function TablaRegistro() {
                             </Col>
                             <Col lg={8} xs={12}>
                                 <TablaRegistros />
+                            </Col>
+                        </Row>
+                        <Row className="d-flex justify-content-around">
+                            <Col lg={4} xs={5} md={6} className="bg-primary bg-opacity-50 rounded border border-primary my-2">
+                                <Stack style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}} className="mb-2">
+                                    <div className="p-2"><h4><strong>EFICIENCIA FINAL DEL DÍA</strong></h4></div>
+                                    <PorcentajeDeEficienciaDiaria/>
+                                </Stack>
+                            </Col>
+                            <Col lg={4} xs={5} md={6} className="bg-primary bg-opacity-50 rounded border border-primary my-2">
+                                <Stack style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}} className="mb-2">
+                                    <div className="p-2"><h4><strong>INCENTIVO QUINCENA</strong></h4></div>
+                                    <PorcentajeDeEficienciaQuincenal />     
+                                </Stack>
                             </Col>
                         </Row>
                         <Row>

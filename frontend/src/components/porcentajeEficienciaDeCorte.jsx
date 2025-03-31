@@ -46,11 +46,7 @@ const PorcentajeDeEficienciaPorCorte = () => {
             }
         /* -------------------- */
     return (
-        <Stack style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
-                  <div className="p-2"><h4><strong>INCENTIVO QUINCENA</strong></h4></div>
                   <div className={`p-2 rounded ${obtenerColorEficiencia()} numeroConPorcentaje`}><strong className="porcentajeEficienciaTitulo">{porcentaje}%</strong></div>
-                  <div className="p-2"><h5><strong>{corteQuincena}</strong></h5></div>
-        </Stack>
     )
 
 }
