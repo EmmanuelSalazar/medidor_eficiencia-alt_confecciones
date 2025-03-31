@@ -8,36 +8,22 @@ Representado en un diagrama, se puede ver de la siguiente manera:
 
 ```mermaid
 flowchart LR
-    A[Frontend] --> B[API]
-    B --> D[Backend]
-    D --> E[(MySQL DB)]
-    E --> F[Triggers]
-    F --> G[Calculadora de Metas]
-    G --> D
+    subgraph Frontend["Frontend (React)"]
+        A[CONTEXT] --> B[Gráficos, e información en tiempo real]
+    end
+
+    subgraph Backend["Backend (PHP)"]
+        C[API REST] --> D[Lógica de Negocio]
+        D --> E[Cálculo de Eficiencia]
+    end
+
+    subgraph Database["Base de Datos (MySQL)"]
+        F[Operarios] --> G[Registros de Producción]
+        G --> H[Metas Automáticas]
+    end
+
+    Frontend <--> Backend
+    Backend <--> Database
 ```
-
-
----
-
-### **2. Flujos de Datos Centrales**  
-**Archivo:** `docs/workflows/data-flows.md`  
-```markdown
-## Flujo: Cálculo de Eficiencia  
-
-```mermaid
-sequenceDiagram
-    participant F as Frontend
-    participant B as Backend
-    participant D as DB
-    participant T as Trigger
-
-    F->>B: POST /registro {unidades: 85, operario: 123}
-    B->>D: INSERT INTO registro_produccion
-    D->>T: Ejecutar trigger_post_insert
-    T->>D: SELECT COUNT(operarios) WHERE modulo=2
-    T->>D: UPDATE metas SET meta = (count * 546)/tiempo_referencia
-    D-->>B: Meta actualizada
-    B->>B: Calcular eficiencia: (85 / meta) * 100
-    B-->>F: {"eficiencia": 112%, "meta_ajustada": 76}
 
 
