@@ -22,6 +22,7 @@ const columns = [
 const TablaRegistros = () => {
     // CONTEXTOS
     const { lista, error, loading } = useContext(ListaContext);
+    const [, setLoading] = useState(false);
     const { actualizarLista} = useContext(ContextoEnLista);
     //
     const [seleccionados, setSeleccionados] = useState([]);

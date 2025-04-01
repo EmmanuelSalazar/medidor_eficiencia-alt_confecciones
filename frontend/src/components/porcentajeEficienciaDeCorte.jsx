@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Stack } from 'react-bootstrap'
-import data from '../utils/json/cortePorQuincena.json'
 import { ListaContext } from "../contexts/informacionGrafico";
 
 const PorcentajeDeEficienciaPorCorte = () => {
@@ -8,7 +6,6 @@ const PorcentajeDeEficienciaPorCorte = () => {
     const { lista } = React.useContext(ListaContext);
     //
     const [porcentaje, setPorcentaje] = useState("--");
-    var corteQuincena = "";
     // ACTUALIZAR AL RECIBIR NUEVOS DATOS
     useEffect(() => {
             establecerEficiencia();
@@ -34,16 +31,6 @@ const PorcentajeDeEficienciaPorCorte = () => {
                 return 'bg-danger  text-light'
             }
         }
-        /* CALCULAR CORTE */
-        const fechaActual = new Date();
-        const mesActual = fechaActual.getMonth()+1;
-        const diaActual = fechaActual.getDate();
-        const corte = data.find(corte => corte.mes == mesActual);
-            if (diaActual <= 15) {
-                corteQuincena = corte.primerCorte;
-            } else {
-                corteQuincena = corte.segundoCorte;
-            }
         /* -------------------- */
     return (
                   <div className={`p-2 rounded ${obtenerColorEficiencia()} numeroConPorcentaje`}><strong className="porcentajeEficienciaTitulo">{porcentaje}%</strong></div>

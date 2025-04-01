@@ -9,10 +9,14 @@ function Tablero() {
     React.useEffect(() => {
       if(pantalla === 1){
         setTiempo(3600000);
-        cambioDePantalla();
+        setTimeout(() => {
+          cambioDePantalla();
+        }, 5000);
       }else{
         setTiempo(150000);
-        cambioDePantalla();
+        setTimeout(() => {
+          cambioDePantalla();
+        }, 5000);
       }
     },[pantalla])
     // CAMBIO DE PANTALLA
