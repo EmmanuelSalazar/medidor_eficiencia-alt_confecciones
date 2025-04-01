@@ -22,6 +22,10 @@ export default defineConfig({
 					label: 'API',
 					autogenerate: { directory: 'api' },
 				},
+				{
+					label: 'Configuración',
+					autogenerate: { directory: 'configuracion' },
+				},
 			],
 		}),
 	],

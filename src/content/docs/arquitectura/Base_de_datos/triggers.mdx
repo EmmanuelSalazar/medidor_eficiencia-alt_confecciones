@@ -1,0 +1,58 @@
+---
+title: Triggers
+---
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+:::note[¿Que es un trigger?]
+    Los triggers son funciones que se ejecutan automaticamente cuando se realiza una accion en la base de datos, como por ejemplo, cuando se inserta un nuevo registro.
+:::
+
+
+En este apartado, se detallarán los triggers que se utilizaron para la base de datos, los cuales están encargados de filtrar los datos y mantener la consistencia de la base de datos.
+
+## Diagramas
+
+>Estos diagramas resumen y asocian la función de cada uno de los triggers dentro de la base de datos
+
+    ### Operarios
+        ```mermaid
+        flowchart TB
+        %% Sección Operarios
+        A[Trigger: AFTER UPDATE en operarios] --> B["Actualiza módulo en registro_produccion (solo registros del día)"]
+        A -.->|Si cambia módulo| B
+
+        C[Trigger: AFTER DELETE en operarios] --> D["Recalcula metas para módulo antiguo (si estaba activo)"]
+        C -.->|Si operario estaba activo| D
+
+        E[Trigger: AFTER INSERT en operarios] --> F["Recalcula metas para nuevo módulo (si está activo)"]
+        E -.->|Si operario está activo| F
+        ```
+    ### Referencias
+    ```mermaid
+    flowchart TB
+        %% Sección Referencias
+        G[Trigger: AFTER INSERT en referencias] --> H["Calcula meta inicial (546 * N°Operarios / Tiempo)"]
+        G --> I["Ajusta meta si hay revisores"]
+
+        J[Trigger: AFTER UPDATE en referencias] --> K["Actualiza meta si tiempo/modulo cambia"]
+        J --> L["Propaga cambios a registro_produccion"]
+
+        M[Trigger: AFTER DELETE en referencias] --> N["Elimina meta asociada"]
+        M -.->|Eliminación en cascada| N
+    ```
+    ### Registro de producción
+    ```mermaid
+        flowchart TB
+            %% Sección Registro Producción
+            O[Trigger: BEFORE INSERT en registro_produccion] --> P["Valida operario activo"]
+            O --> Q["Asigna módulo automáticamente"]
+        O --> R["Calcula horario secuencial"]
+        O --> S["Calcula MetaPorEficiencia (base: meta/9.1)"]
+        O --> T["Aplica ajustes por tiempo de montaje/revisores"]
+    ```
+    ```mermaid
+        flowchart TB
+            U[Trigger: BEFORE UPDATE en registro_produccion] --> V["Valida cambios en ref_id o unidades"]
+        U --> W["Recalcula MetaPorEficiencia"]
+    ```
+

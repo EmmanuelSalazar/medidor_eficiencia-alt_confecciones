@@ -12,8 +12,13 @@ flowchart LR
     G[DELETE /referencias] --> H[Eliminar referencia]
 ```
 
-### 2. Estructura de Datos
+### 2. Estructura 
+
+#### 2.1. Crear Referencia
     POST /referencias
+    ```bash
+        http://localhost:80/CREATE/almacenarReferencia.php
+    ```
     ```json
     {
         "codigoReferencia": "string",
@@ -22,7 +27,11 @@ flowchart LR
     }
     ``` 
 
+#### 2.2. Listar Referencias
     GET /referencias
+    ```bash
+        http://localhost:80/DELETE/eliminarReferencia.php?id=int&modulo=int
+    ```
     ```json
     {
         "id": "int",
@@ -33,7 +42,11 @@ flowchart LR
     }
     ```
 
+#### 2.3. Actualizar Referencia
     PUT /referencias
+    ```bash
+        http://localhost:80/UPDATE/actualizarReferencia.php?id=int
+    ```
     ```json
     {
         "id": "int",
@@ -44,5 +57,13 @@ flowchart LR
     }
     ```
 
+#### 2.5. Respuesta
+     Respuesta generalizada para cada peticion: 
+    ```json
+    {
+        "ok": "boolean",
+        "message": "string"
+    }
+    ```
 
 

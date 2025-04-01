@@ -1,0 +1,104 @@
+---
+title: Esquema de la base de datos
+---
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+
+La base de datos es posiblemente la parte mas importante de la aplicación, ya que es la que se encarga de realizar todos los calculos y almacenar los datos para su posterior uso.
+
+## Estructura de la base de datos
+
+La base de datos se compone de 4 tablas, las cuales se detallan a continuación:
+
+<CardGrid stagger title="Estructura de la base de datos">
+    <Card title="Tabla de operarios">
+        - (PK)op_id: int
+        - nombre: varchar(255)
+        - modulo: int
+        - activo: boolean
+        - revisador: boolean
+    </Card>
+    <Card title="Tabla de registros de producción">
+        - (PK)regProd_id: int
+        - fecha: date
+        - (FK)op_id: int
+        - (FK)ref_id: int
+        - unidadesProducidas: int
+    </Card>
+    <Card title="Tabla de referencias">
+        - (PK)ref_id: int
+        - referencia: varchar(255)
+        - tiempoDeProduccion: float
+        - modulo: int
+        - activo: boolean
+    </Card>
+    <Card title="Tabla de metas">
+        - (PK)meta_id: int
+        - (FK)ref_id: int
+        - meta: int
+    </Card>
+    <Card title="Tabla de tiempo de montaje">
+        - (PK)ID: int
+        - fecha: date
+        - tiempo: int
+        - modulo: int
+        - horario: int
+    </Card>
+</CardGrid>
+
+
+## Diagrama entidad-relación de la base de datos
+
+```mermaid
+erDiagram
+    operarios ||--o{ registro_produccion : "op_id"
+    referencias ||--o{ metas : "ref_id"
+    referencias ||--o{ registro_produccion : "ref_id"
+    tiempo_de_montaje ||--o{ registro_produccion : "modulo, horario"
+
+    operarios {
+        int op_id PK
+        varchar nombre
+        int modulo
+        int activo
+        int calculadorFinal
+        int revisador
+    }
+
+    referencias {
+        int ref_id PK
+        varchar referencia
+        decimal tiempoDeProduccion
+        int modulo
+        int activo
+    }
+
+    metas {
+        int meta_id PK
+        int ref_id FK
+        int meta
+    }
+
+    registro_produccion {
+        int regProd_id PK
+        datetime fecha
+        int op_id FK
+        int ref_id FK
+        int unidadesProducidas
+        decimal MetaPorEficiencia
+        decimal eficiencia
+        int horario
+        int modulo
+        text adicionales
+    }
+
+    tiempo_de_montaje {
+        int ID PK
+        datetime fecha
+        int tiempo
+        int modulo
+        int horario
+    }
+```
+
+

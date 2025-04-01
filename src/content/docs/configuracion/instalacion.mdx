@@ -1,0 +1,78 @@
+---
+title: Instalación y configuración
+---
+
+En esta seccion, encontraremos los pasos para instalar y configurar el medidor de eficiencia en tu entorno local.
+
+## Requisitos
+
+- PHP 8.0 o superior (Recomendado 8.2)  
+- MySQL 8.0 o superior (Recomendado 8.2)
+- Node.js 18.0 o superior (Recomendado 20.11)
+- Git (Opcional, para clonar el repositorio)
+:::tip[Entorno de desarrollo]
+Puedes configurar rapidamente un entorno de desarrollo local (Del lado del servidor) con [XAMPP](https://www.apachefriends.org/es/index.html) o [Wamp](https://wampserver.aviatechno.net/)
+:::
+
+## Instalación
+
+1. Clona el repositorio en tu máquina local, ya sea descargando el zip atraves de [este enlace](https://github.com/EmmanuelSalazar/medidor_eficiencia-alt_confecciones) o ejecutando el siguiente comando:
+:::caution[Opcional]
+Si no tienes git instalado, puedes descargar el zip desde el boton de codigo y descomprimirlo en tu máquina local.
+:::
+
+```bash
+git clone https://github.com/EmmanuelSalazar/medidor_eficiencia-alt_confecciones.git
+```
+
+2. Configuración de archivos
+
+    ### Backend 
+
+        Para configurar el Backend, suponiendo que decidiste instalar **Wamp**, copiarás los archivos del directorio `Backend`, el cual se encuentra en el repositorio, luego vas a acceder a la carpeta `WWW` y pegaras los archivos allí.
+
+    ### Base de datos
+
+        -Para configurar la base de datos, vas a acceder al enlace ```http://localhost/phpmyadmin/``` y vas a crear una nueva base de datos con el nombre `eficiencia_produccion`.
+
+        -Luego, vas a importar el archivo `eficiencia_produccion.sql`, el cual se encuentra en el repositorio, en la carpeta `Base de datos`.
+
+        -Finalmente, vas a configurar el archivo `config/baseDeDatos.php`, el cual se encuentra en la carpeta `Backend`, y vas a cambiar los datos de la conexión a la base de datos. 
+            >Por defecto, el archivo viene con los datos de la base de datos y el usuario `root` sin contraseña.
+
+    ### Frontend
+
+        Para configurar el Frontend, suponiendo que ya tienes instalado **Node.js**, vas a acceder a la carpeta `Frontend` y vas a ejecutar el siguiente comando:
+
+        ```bash
+        npm install
+        ```
+        >Este comando te instalará todas las dependencias necesarias para que el proyecto funcione con normalidad
+
+        1. Vas a la carpeta _Frontend_ y buscas el archivo `.env`, en caso de no estar, vas a crear uno nuevo.
+
+        2. Ahora vas a acceder al archivo `.env` y agregarás la variable `VITE_API_URL=http://localhost:80/` o el enlace que apunte a tu `Backend`.
+
+        3. Luego, vas a ejecutar el siguiente comando adentro de la carpeta `Frontend`:
+
+        ```bash
+        npm run dev
+        ```
+        >Este comando te iniciará el servidor de desarrollo del Frontend (Por defecto, se ejecuta en el puerto 3001).
+
+        Finalmente, para acceder al medidor de eficiencia, vas a acceder al enlace ```http://localhost:3001/```.
+
+        :::tip[¡Felicidades! Has instalado el medidor de eficiencia con éxito.¡]
+
+
+        
+        
+        
+        
+
+
+
+
+
+
+
