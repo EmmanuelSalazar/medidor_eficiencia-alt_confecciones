@@ -1,0 +1,48 @@
+---
+title: Referencias
+---
+
+Aquí se encuentran los endpoints para la gestión de referencias.
+
+```mermaid
+flowchart LR
+    A[GET /referencias] --> B[Listar referencias]
+    C[POST /referencias] --> D[Crear referencia]
+    E[PUT /referencias] --> F[Actualizar referencia]
+    G[DELETE /referencias] --> H[Eliminar referencia]
+```
+
+### 2. Estructura de Datos
+    POST /referencias
+    ```json
+    {
+        "codigoReferencia": "string",
+        "tiempoTarea": "int",
+        "modulo": "int",
+    }
+    ``` 
+
+    GET /referencias
+    ```json
+    {
+        "id": "int",
+        "codigoReferencia": "string",
+        "tiempoTarea": "int",
+        "modulo": "int",
+        "estado": "boolean",
+    }
+    ```
+
+    PUT /referencias
+    ```json
+    {
+        "id": "int",
+        "codigoReferencia": "string",
+        "tiempoTarea": "int",
+        "modulo": "int",
+        "estado": "boolean",
+    }
+    ```
+
+
+

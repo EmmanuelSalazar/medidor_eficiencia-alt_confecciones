@@ -11,16 +11,16 @@ export default defineConfig({
 			},
 			sidebar: [
 				{
-					label: 'Comienza Aquí',
-					autogenerate: { directory: 'inicio' },
-				},
-				{
-					label: 'Reference',
-					autogenerate: { directory: 'reference' },
+					label: 'Introducción',
+					autogenerate: { directory: 'introduccion' },
 				},
 				{
 					label: 'Arquitectura',
 					autogenerate: { directory: 'arquitectura' },
+				},
+				{
+					label: 'API',
+					autogenerate: { directory: 'api' },
 				},
 			],
 		}),

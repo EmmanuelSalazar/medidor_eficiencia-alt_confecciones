@@ -1,0 +1,50 @@
+---
+title: Operarios
+---
+
+### 1. CRUD Operarios
+
+Aquí se encuentran los endpoints para la gestión de operarios.
+
+```mermaid
+flowchart LR
+    A[GET /operarios] --> B[Listar operarios]
+    C[POST /operarios] --> D[Crear operario]
+    E[PUT /operarios] --> F[Actualizar operario]
+    G[DELETE /operarios] --> H[Eliminar operario]
+```
+
+### 2. Estructura de Datos
+    POST /operarios
+    ```json
+    {
+        "nombreOperario": "string",
+        "modulo": "string"
+    }
+    ```
+
+    GET /operarios
+    ```json
+    {
+        "nombreOperario": "string",
+        "modulo": "string",
+        "estado": "boolean",
+        "revisor": "boolean"
+    }
+    ```
+    PUT /operarios
+    ```json
+    {
+        "nombreOperario": "string",
+        "modulo": "string",
+        "estado": "boolean",
+        "revisor": "boolean"
+    }
+    ```
+
+    DELETE /operarios
+    ```json
+    {
+        "id": "int"
+    }
+    ```
