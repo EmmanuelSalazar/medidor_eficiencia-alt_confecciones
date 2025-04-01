@@ -1,7 +1,7 @@
 <?php 
 
 require_once '../config/cors.php';
-require_once '../baseDeDatos.php';
+require_once '../config/baseDeDatos.php';
 
     if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
         $datos = json_decode(file_get_contents('php://input'), true);

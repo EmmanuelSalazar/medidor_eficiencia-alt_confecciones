@@ -34,7 +34,7 @@ const AgregarReferencia = () => {
         }
         try {
             await AlmacenarDatos(values)
-            await actualizarListas();
+            await actualizarListas(window.ModuloSeleccionado, 0);
             setMensajeDeExito("La Referencia se ha almacenado correctamente");
             formRef.current.reset();
         } catch (error){

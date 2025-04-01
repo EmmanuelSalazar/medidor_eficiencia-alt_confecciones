@@ -10,13 +10,15 @@ const useFetchData = () => {
     const fetchData = useCallback(async (fecha, modulo, operarios) => {
       setLoading(true);
         try {
-          const response = await axios.get(`${apiURL}/calcularEficienciaDiaria.php?fecha=${fecha}&modulo=${modulo}&operarios=${operarios}`);
+          const response = await axios.get(`${apiURL}/READ/calcularEficienciaDiaria.php?fecha=${fecha}&modulo=${modulo}&operarios=${operarios}`);
           // Validar estructura de respuesta
-          if (response.data?.ok && Array.isArray(response.data.respuesta)) {
+          if (response.data.ok) {
+            console.log(response.data.respuesta);
             setData(response.data.respuesta);
-            return response.data.respuesta; // ✅ Array garantizado
+            return response.data.respuesta;
           } else {
             setError(response.data);
+            console.error("Respuesta inválida:", response.data);
             throw new Error("Respuesta inválida:", response.data);
           }
         } catch (error) {

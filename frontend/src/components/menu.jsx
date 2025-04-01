@@ -5,23 +5,23 @@ import { NavLink } from 'react-router-dom'
 import { ListaContext } from "../contexts/informacionGrafico";
 const items = [
         {
-            label: <NavLink to="/modulo" className="noDecorativos">Tablero</NavLink>,
-            key: 'modulos',
+            label: <NavLink to="/tablero" className="noDecorativos">Tablero</NavLink>,
+            key: 'tablero',
             icon: <CaretDownOutlined />,
             children: [
               {
-                label: <NavLink to="/modulo?modulo=1" className="noDecorativos">Modulo 1</NavLink>,
+                label: <NavLink to="/tablero?modulo=1" className="noDecorativos">Modulo 1</NavLink>,
                 key: '1'
               },
               {
-                label: <NavLink to="/modulo?modulo=2" className="noDecorativos">Modulo 2</NavLink>,
+                label: <NavLink to="/tablero?modulo=2" className="noDecorativos">Modulo 2</NavLink>,
                 key: '2'
               },
               {
-                label: <NavLink to="/modulo?modulo=3" className="noDecorativos">Modulo 3</NavLink>,
+                label: <NavLink to="/tablero?modulo=3" className="noDecorativos">Modulo 3</NavLink>,
                 key: '3'
               },{
-                label: <NavLink to="/modulo?modulo=4" className="noDecorativos">Modulo 4</NavLink>,
+                label: <NavLink to="/tablero?modulo=4" className="noDecorativos">Modulo 4</NavLink>,
                 key: '4'
               },
             ]

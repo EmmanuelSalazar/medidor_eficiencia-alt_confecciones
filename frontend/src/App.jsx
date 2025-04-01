@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './assets/css/styles.css'
 import './assets/css/custom.scss'
-import Modulo from './pages/modulos'
+import Tablero from './pages/tableros'
 import Referencias from './pages/referencias'
 import Operarios from "./pages/operarios";
 import TablaRegistro from './pages/tablaRegistros';
@@ -16,8 +16,8 @@ function App() {
         <ListaProvider>
           <MenuPrincipal />
           <Routes>
-            <Route path="/" element={<Modulo />} />
-            <Route path='/modulo' element={<Modulo />}/>
+            <Route path="/" element={<Tablero />} />
+            <Route path='/Tablero' element={<Tablero />}/>
             <Route path='/referencias' element={<Referencias />}/>
             <Route path='/operarios' element={<Operarios />}/>
             <Route path='/registro_operaciones' element={<RegistroOperaciones />}/>

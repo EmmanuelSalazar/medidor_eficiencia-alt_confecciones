@@ -10,7 +10,7 @@ const useFetchData = () => {
         let reduxConsultado = redux ?? 0;
         setLoading(true)
             try {
-                const response = await axios.get(`${apiURL}/mostrarReferencias.php?modulo=${moduloConsultado}&redux=${reduxConsultado}`);
+                const response = await axios.get(`${apiURL}/READ/mostrarReferencias.php?modulo=${moduloConsultado}&redux=${reduxConsultado}`);
                 if (response.data.ok) {
                     setData(response.data.respuesta)
                     return response.data.respuesta

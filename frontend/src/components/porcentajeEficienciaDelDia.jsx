@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Stack } from 'react-bootstrap';
 import FechaActual from './fechaActual'
 import { ListaContext } from "../contexts/informacionGrafico";
 const PorcentajeDeEficienciaDiaria = () => {
@@ -35,11 +34,7 @@ const PorcentajeDeEficienciaDiaria = () => {
             }
         }
     return (
-        <Stack style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
-            <div className="p-2"><h4><strong>EFICIENCIA DEL DÍA</strong></h4></div>
             <div className={`p-2 rounded ${obtenerColorEficiencia()} numeroConPorcentaje`}><strong className="porcentajeEficienciaTitulo">{porcentaje}%</strong></div>
-            <div className="p-2"><h5><strong>{fechaFormateada}</strong></h5></div>
-        </Stack>
     )
 }
 export default PorcentajeDeEficienciaDiaria

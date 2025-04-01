@@ -1,0 +1,45 @@
+[
+    {
+        "id": 1,
+        "mensaje": "Si todos avanzamos juntos, el éxito llegará solo",
+        "autor": "Henry Ford"
+    },
+    {
+        "id": 2,
+        "mensaje": "Individualmente somos una gota, pero juntos somos un oceano",
+        "autor": "Ryunosuke Satoro"
+    },
+    {
+        "id": 3,
+        "mensaje": "El éxito no es obra de una sola persona, sino el resultado de un equipo que trabaja con un mismo propósito."
+    },
+    {
+        "id": 4,
+        "mensaje": "La esencia de la calidad, antes de manifestarse en los productos, debe residir en el alma de quienes los crean."
+    },
+    {
+        "id": 5,
+        "mensaje": "¡Acá se trabaja con berraquera y cero disculpas!"
+    },
+    {
+        "id": 6,
+        "mensaje": "Rendimiento + Calidad = Satisfacción"
+    },
+    {
+        "id": 7,
+        "mensaje": "La calidad no es un accidente; es el resultado de nuestro esfuerzo y atención al detalle."
+    },
+    {
+        "id": 8,
+        "mensaje": "La calidad no es un accidente; es el resultado de nuestro esfuerzo y atención al detalle."
+    },
+    {
+        "id": 9,
+        "mensaje": "La calidad no es un accidente; es el resultado de nuestro esfuerzo y atención al detalle."
+    },
+    {
+        "id": 10,
+        "mensaje": "Tu esfuerzo, nuestra distinción"
+    }
+    
+]

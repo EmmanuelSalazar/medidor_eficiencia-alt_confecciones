@@ -3,7 +3,7 @@ import axios from "axios"
 const AlmacenarDatos = async (values) => {
   const apiURL = import.meta.env.VITE_API_URL;
   try {
-    const response = await axios.post(`${apiURL}/almacenarRegistroOperaciones.php`, values)
+    const response = await axios.post(`${apiURL}/CREATE/almacenarRegistroOperaciones.php`, values)
     if (response.data.ok) {
       return response.data
     } else {

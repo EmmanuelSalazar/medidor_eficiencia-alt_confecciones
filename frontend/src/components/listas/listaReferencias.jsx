@@ -43,7 +43,8 @@ const ListaReferencias = () => {
                 "referencia": referenciaRef.current.value,
                 "tiempoDeProduccion": tiempoDeProduccionRef.current.value,
                 "modulo": moduloRef.current.value,
-                "estado": estadoRef.current.value
+                "estado": estadoRef.current.value,
+                "ref_id": referenciaSeleccionada.ref_id
             }
             try {
                 await actualizarReferencia(values);

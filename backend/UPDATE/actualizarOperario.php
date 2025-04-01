@@ -1,6 +1,6 @@
 <?php
 require_once '../config/cors.php';
-require_once '../baseDeDatos.php';
+require_once '../config/baseDeDatos.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     $id = intval($_GET['id']) ?? NULL;

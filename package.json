@@ -5,5 +5,8 @@
         "copy:all": "npm run copy:front && npm run copy:back",
         "start:front": "cd frontend && npm run dev",
         "build:front": "cd frontend && npm run build"
+    },
+    "dependencies": {
+        "howler": "^2.2.4"
     }
 }

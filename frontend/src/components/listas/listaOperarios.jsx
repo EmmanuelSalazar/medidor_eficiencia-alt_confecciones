@@ -11,6 +11,7 @@ const ListaOperarios = () => {
     const [operarioSeleccionado, setOperarioSeleccionado] = useState(null);
     const { fetchData } = EliminarOperario();
     const { actualizarOperario } = ActualizarOperario();
+    const modulo = window.ModuloSeleccionado;
     // ALMACENAR DATOS DE FORMULARIO
     const nombreOperarioRef = useRef();
     const moduloRef = useRef();
@@ -34,7 +35,7 @@ const ListaOperarios = () => {
     const handleDelete = async (id) => {
         try {
             await fetchData(id);
-            await actualizarLista();
+            await actualizarLista(modulo);
             setMensajeDeAlerta("El operario ha sido eliminado");
         } catch (error) {
             console.error("Ha ocurrido un error: ", error);
@@ -61,7 +62,7 @@ const ListaOperarios = () => {
         };
         try {
             await actualizarOperario(operarioSeleccionado.op_id, false, values);
-            await actualizarLista();
+            await actualizarLista(modulo);
             setMensajeDeExito("El operario ha sido actualizado con exito");
             setMostrar(null)
         } catch (error) {
@@ -101,7 +102,6 @@ const ListaOperarios = () => {
             {mensajeDeAlerta && <Alert variant="warning">{mensajeDeAlerta}</Alert>}
             {mensajeDeError && <Alert variant="danger">{mensajeDeError}</Alert>}
             <Table dataSource={lista} columns={columns} rowKey="op_id" scroll={{y: 500}} pagination={false} />
-            {/* Modal */}
             <Modal show={mostrar} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Editar Operario</Modal.Title>

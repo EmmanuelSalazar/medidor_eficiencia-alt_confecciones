@@ -3,7 +3,7 @@ import axios from "axios"
 const AlmacenarOperario = async (values) => {
   const apiURL = import.meta.env.VITE_API_URL;
   try {
-    const response = await axios.post(`${apiURL}/almacenarOperarios.php`, values)
+    const response = await axios.post(`${apiURL}/CREATE/almacenarOperarios.php`, values)
     if (!response.data.ok) {
       throw new Error("Ha ocurrido un error al almacenar la venta, si el error persiste, contacta al administrador")
     }

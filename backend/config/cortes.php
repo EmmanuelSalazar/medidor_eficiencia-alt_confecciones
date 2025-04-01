@@ -1,6 +1,6 @@
 <?php 
 
-$cortesJson = file_get_contents('config/json/cortes.json');
+$cortesJson = file_get_contents('../config/json/cortes.json');
 $cortesJson = json_decode($cortesJson, true);
     $fechongas = date('m');
     $fechongas -= 1;

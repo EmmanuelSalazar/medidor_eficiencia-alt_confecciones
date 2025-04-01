@@ -1,6 +1,6 @@
 <?php
 require_once '../config/cors.php';
-require_once '../baseDeDatos.php';
+require_once '../config/baseDeDatos.php';
 // Obtener la fecha seleccionada (por defecto, hoy)
 $fechaFiltro = $_GET['fecha'] ?? date('Y-m-d');
 
