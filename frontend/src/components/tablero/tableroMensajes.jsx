@@ -1,8 +1,8 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
 import tableroMensajes from "../../utils/json/tableroMensajes.json";
-import { Howl, Howler } from 'howler';
-const TableroMensajes = () => {
+/* import { Howl, Howler } from 'howler';
+ */const TableroMensajes = () => {
     const [mensaje, setMensaje] = React.useState("");
     React.useEffect(() => {
         const mensajeAleatorio = tableroMensajes[Math.floor(Math.random() * tableroMensajes.length)];

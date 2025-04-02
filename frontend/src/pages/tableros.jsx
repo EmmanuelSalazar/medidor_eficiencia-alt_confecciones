@@ -6,7 +6,7 @@ function Tablero() {
   const [pantalla, setPantalla] = React.useState(1);
   const [tiempo, setTiempo] = React.useState(3600000);
     // CAMBIO DE TIEMPO
-    React.useEffect(() => {
+    /* React.useEffect(() => {
       if(pantalla === 1){
         setTiempo(3600000);
         setTimeout(() => {
@@ -18,7 +18,7 @@ function Tablero() {
           cambioDePantalla();
         }, 5000);
       }
-    },[pantalla])
+    },[pantalla]) */
     // CAMBIO DE PANTALLA
     const cambioDePantalla = () => {
         const interval = setInterval(() => {

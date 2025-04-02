@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Button, Form, Alert, Col } from 'react-bootstrap'
-import AlmacenarDatos from '../../services/api/almacenarReferencia'
+import AlmacenarDatos from '../../services/api/create/almacenarReferencia'
 import { ListaContext } from '../../contexts/actualizarReferencias';
 const AgregarReferencia = () => {
     // CONTEXTOS

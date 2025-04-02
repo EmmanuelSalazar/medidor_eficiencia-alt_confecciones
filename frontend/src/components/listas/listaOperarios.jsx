@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
 import { ListaContext } from '../../contexts/actualizarOperarios';
-import EliminarOperario from '../../services/api/eliminarOperario';
+import EliminarOperario from '../../services/api/delete/eliminarOperario';
 import ActualizarOperario from '../../services/api/update/actualizarOperario';
 import { Table, Spin } from 'antd';
 import { Alert, Button, Modal, Form } from 'react-bootstrap';

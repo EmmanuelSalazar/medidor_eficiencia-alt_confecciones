@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Button, Form, Alert, Col, Stack } from "react-bootstrap";
 import { Switch, Checkbox, Spin } from "antd";
-import AlmacenarDatos from "../../services/api/almacenarRegistroOperaciones";
+import AlmacenarDatos from "../../services/api/create/almacenarRegistroOperaciones";
 import { ListaContext as ContextoEnLista } from "../../contexts/actualizarRegistroOperaciones";
 import { ListaContext, ListaProvider } from "../../contexts/actualizarOperarios";
 import { ListaContext as ContextoEnLista2 } from "../../contexts/actualizarReferencias";
