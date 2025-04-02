@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
-import useFetchData from '../services/api/mostrarOperarios';
+import useFetchData from '../services/api/read/mostrarOperarios';
 export const ListaContext = createContext();
 
 export const ListaProvider = ({ children }) => {

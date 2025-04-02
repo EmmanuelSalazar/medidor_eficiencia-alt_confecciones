@@ -8,8 +8,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $modulo = $_GET['modulo'] ?? null; // Módulo (opcional, ahora de registro_produccion)
     $fechaFiltro = $_GET['fecha'] ?? date('Y-m-d'); // Fecha (por defecto, hoy)
     $operariosFiltro = $_GET['operarios'] ?? null; // Lista de operarios (opcional)
+    $fechaDeCortes = explode('-', $fechaFiltro);
+    $fechasDeCortes = obtenerCorte($fechaDeCortes);
+    $fechaCorteInicial = $fechasDeCortes[0];
+    $fechaCorteFinal = $fechasDeCortes[1];
 
-    // Validar las fechas de corte
+    # Validar las fechas de corte
     if (empty($fechaCorteInicial) || empty($fechaCorteFinal)) {
         http_response_code(400);
         echo json_encode([
@@ -100,8 +104,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         exit();
     }
 
-    // Enlazar parámetros
-    $types = 'sss'; // Tipos para las fechas de corte y la fecha principal
+    # Enlazar parámetros
+    $types = 'sss'; # Tipos para las fechas de corte y la fecha principal
     $params = [$fechaCorteInicial, $fechaCorteFinal, $fechaFiltro];
 
     if ($moduloFiltro) {

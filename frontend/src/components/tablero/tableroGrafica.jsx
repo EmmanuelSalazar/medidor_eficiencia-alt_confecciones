@@ -10,7 +10,7 @@ import FechaActual from "../fechaActual";
 import logo from '../../assets/img/logo.png'
 
 const TableroGrafico = () => {
-  const {fechaFormateada} = FechaActual();  
+  const {fechaFormateada, corteQuincena} = FechaActual();  
     const [moduloConMarca, setModuloConMarca] = React.useState("");
     // MOSTRAR TABLERO EN USO
     const [buscarParametro] = useSearchParams();
@@ -53,7 +53,7 @@ const TableroGrafico = () => {
               <Stack style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
                 <div className="p-2"><h4><strong>INCENTIVO QUINCENA</strong></h4></div>
                 <PorcentajeDeEficienciaDiaria />
-                <div className="p-2"><h5><strong>{fechaFormateada}</strong></h5></div>
+                <div className="p-2"><h5><strong>{corteQuincena}</strong></h5></div>
               </Stack>
             </Row>
             <Row className='border border-white pe-3 bg-white  rounded text-light justify-content-center'>

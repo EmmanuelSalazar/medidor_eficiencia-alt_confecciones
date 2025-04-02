@@ -42,7 +42,7 @@ function TablaRegistro() {
                             </Col>
                             <Col lg={4} xs={5} md={6} className="bg-primary bg-opacity-50 rounded border border-primary my-2">
                                 <Stack style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}} className="mb-2">
-                                    <div className="p-2"><h4><strong>INCENTIVO QUINCENA</strong></h4></div>
+                                    <div className="p-2"><h4><strong>EFICIENCIA FINAL DE QUINCENA</strong></h4></div>
                                     <PorcentajeDeEficienciaQuincenal />     
                                 </Stack>
                             </Col>

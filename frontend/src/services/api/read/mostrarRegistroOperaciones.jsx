@@ -1,6 +1,6 @@
 import {useState, useEffect, useCallback} from "react";
 import axios from 'axios';
-import FechaActual from "../../components/fechaActual";
+import FechaActual from "../../../components/fechaActual";
 const useFetchData = () => {
     const { fechaActualDia } = FechaActual();
     const apiURL = import.meta.env.VITE_API_URL;
