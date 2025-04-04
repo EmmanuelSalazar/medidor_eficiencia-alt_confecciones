@@ -60,7 +60,10 @@ const RegistrarOperaciones = () => {
             referencia: referenciaRef.current.value,
             adicionales: adicionalesRef.current.value ?? NULL
         };
-        console.log(values);
+        if (window.moduloSeleccionado == "" || window.moduloSeleccionado == null){
+            setMensajeDeError("No se ha seleccionado un modulo");
+            return;
+        }
         try {
             await AlmacenarDatos(values);
             await setListaRegistro(window.moduloSeleccionado);

@@ -7,6 +7,7 @@
         "build:front": "cd frontend && npm run build"
     },
     "dependencies": {
-        "howler": "^2.2.4"
+        "howler": "^2.2.4",
+        "jwt-decode": "^4.0.0"
     }
 }
