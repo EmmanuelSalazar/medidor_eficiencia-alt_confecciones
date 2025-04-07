@@ -11,7 +11,7 @@ const FechaActual = () => {
     const fechaMes = formatearFecha(fecha.getMonth() + 1);
     const fechaDia = formatearFecha(fecha.getDate());
     const fechaActualDia = fecha.getFullYear()+"-"+fechaMes+"-"+fechaDia;
-
+    const tiempoUnix = Date.now();
     // MARCAR CORTE
         let fechaActual = fecha;
         let mesActual = fechaActual.getMonth()+1;
@@ -22,7 +22,7 @@ const FechaActual = () => {
             } else {
                 corteQuincena = corte.segundoCorte;
             }
-    return {fechaFormateada, fechaActualDia, corteQuincena}
+    return {fechaFormateada, fechaActualDia, corteQuincena, tiempoUnix}
     
 }
 export default FechaActual

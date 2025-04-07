@@ -11,8 +11,10 @@ import RegistroOperaciones from './pages/registro_operaciones'
 import MenuPrincipal from './components/menu'
 import { ListaProvider } from './contexts/informacionGrafico'
 import FormularioLogin from './components/formularios/login';
+import Estadisticas from './pages/estadisticas';
 function App() {
   const token = localStorage.getItem('token') || null;
+  // Verificar que tenga un token almacenado
   if (token === null) {
     return (
       <FormularioLogin />
@@ -20,6 +22,14 @@ function App() {
   } else {
     const userInfo = jwtDecode(token);
     const userRol = userInfo.rol;
+    const userLife = userInfo.exp;
+    // Verificar que el token no haya expirado
+    if (userLife < Date.now() / 1000) {
+      localStorage.removeItem('token');
+      return (
+        <FormularioLogin />
+      )
+    }
     return (
       <Router>
         <ListaProvider>
@@ -31,6 +41,7 @@ function App() {
             {userRol >= 2 && <Route path='/operarios' element={<Operarios />}/>}
             {userRol >= 2 && <Route path='/registro_operaciones' element={<RegistroOperaciones />}/>}
             {userRol >= 2 && <Route path='/tablaRegistros' element={<TablaRegistro />}/>}
+            {userRol > 2 && <Route path='/estadisticas' element={<Estadisticas />}/>}
           </Routes>
         </ListaProvider>
     </Router>

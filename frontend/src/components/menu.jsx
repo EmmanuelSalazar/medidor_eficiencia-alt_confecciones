@@ -48,7 +48,7 @@ const items = [
       key: 'tablaRegistros',
       icon: <DatabaseOutlined />,
   }: null, userRol > 2 ? {
-    label: <NavLink to="/404" className="noDecorativos">Estadisticas</NavLink>,
+    label: <NavLink to="/estadisticas" className="noDecorativos">Estadisticas</NavLink>,
     key: 'estadisticas',
     icon: <BarChartOutlined />
   }: null, {

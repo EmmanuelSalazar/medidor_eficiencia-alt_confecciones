@@ -7,6 +7,7 @@ const FormularioLogin = () => {
     const {exito, error, cargando, iniciarSesion} = IniciarSesion();
     const usuarioRef = React.useRef();
     const contrasenaRef = React.useRef();
+    const recuerdameRef = React.useRef();
     // MANEJO DE ALERTAS EXITO/ALERTA/ERROR
     const [mensajeDeExito, setMensajeDeExito] = React.useState("");
     const [mensajeDeAlerta, setMensajeDeAlerta] = React.useState("");
@@ -25,19 +26,23 @@ const FormularioLogin = () => {
         e.preventDefault();
         const values = {
             usuario: usuarioRef.current.value,
-            contrasena: contrasenaRef.current.value
+            contrasena: contrasenaRef.current.value,
+            recuerdame: recuerdameRef.current.checked
         }
+        console.log(values)
         try {
             await iniciarSesion(values);
-            setMensajeDeExito("Se ha iniciado sesión correctamente")
-            location.reload();
+            setMensajeDeExito("Se ha iniciado sesión correctamente, redirigiendo...");
+            setTimeout(() => {
+                location.reload();
+            }, 3000);
         } catch (error) {
-            setMensajeDeError(`Ha ocurrido un error: ${error}`); 
+            setMensajeDeError(`Ha ocurrido un error: ${error}`);
             console.log(error);
         }
     }
     if (cargando) return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
-    if (error) return <Alert variant='danger'>Error: {error.message}</Alert>;
+    if (error) return <Alert variant='danger'>{error && setTimeout(() => {location.reload();}, 3000)}</Alert>;
     return (
         <Container style={{height: '90vh', display: 'flex', flexDirection: 'column', gap: '5rem'}} className="justify-content-top mt-5" >
             <Row className="text-center text-bg-primary rounded mb-5x">
@@ -58,12 +63,15 @@ const FormularioLogin = () => {
                             <Form.Control ref={contrasenaRef} type="password" placeholder="Ingrese su contraseña" />
                         </Form.Group>
                         <Form.Group>
+                            <Form.Check ref={recuerdameRef} type="checkbox" label="Recuerdame" />
+                        </Form.Group>
+                        <Form.Group>
                             <Button type="submit">Iniciar Sesión</Button>
                         </Form.Group>
                     </Form>
                 </Col>
                 <Col lg={6} style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}} className="text-primary flex">
-                    <img src={logo} alt="logo" style={{width: '40%', height: '100%'}} className="img-fluid" />
+                    <img src={logo} alt="logo" style={{width: '45%', height: '100%'}} className="img-fluid" />
                     <h6>Alt-Confecciones</h6>
                 </Col>
             </Row>

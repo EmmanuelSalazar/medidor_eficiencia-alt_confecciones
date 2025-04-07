@@ -12,7 +12,7 @@ const IniciarSesion = () => {
             if (response.data.ok) {
                 let token = response.data.respuesta;
                 localStorage.setItem('token', token);
-                setExito("Se ha iniciado sesión exitosamente ;)")
+                setExito(true)
             } else {
                 setError(response.data.respuesta || "Ha ocurrido un error");
                 console.error(response.data.respuesta || "Ha ocurrido un error");
@@ -20,7 +20,6 @@ const IniciarSesion = () => {
         } catch (error) {
             setError(error || "Ha ocurrido un error");
             console.error(error);
-            throw error;
         } finally {
             setCargando(false);
         } 
