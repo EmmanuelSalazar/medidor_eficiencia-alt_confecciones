@@ -1,6 +1,8 @@
 import data from '../utils/json/cortePorQuincena.json'
+import cortes from '../utils/json/cortes.json'
 const FechaActual = () => {
     var corteQuincena = "";
+    var corteQuincenaFormateado = "";
     const formatearFecha = (num) => {
         return num < 10 ? `0${num}` : `${num}`;
     };
@@ -16,13 +18,17 @@ const FechaActual = () => {
         let fechaActual = fecha;
         let mesActual = fechaActual.getMonth()+1;
         let diaActual = fechaActual.getDate();
+        let anioActual = fechaActual.getFullYear();
         const corte = data.find(corte => corte.mes == mesActual);
+        const corteFormateado = cortes.find(corte => corte.mes == mesActual)
             if (diaActual <= 15) {
                 corteQuincena = corte.primerCorte;
+                corteQuincenaFormateado = corteFormateado.primerCorte;
             } else {
                 corteQuincena = corte.segundoCorte;
+                corteQuincenaFormateado = corteFormateado.segundoCorte;
             }
-    return {fechaFormateada, fechaActualDia, corteQuincena, tiempoUnix}
+    return {fechaFormateada, fechaActualDia, corteQuincena, tiempoUnix, corteQuincenaFormateado, anioActual}
     
 }
 export default FechaActual

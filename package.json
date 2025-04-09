@@ -8,6 +8,7 @@
     },
     "dependencies": {
         "howler": "^2.2.4",
-        "jwt-decode": "^4.0.0"
+        "jwt-decode": "^4.0.0",
+        "moment": "^2.30.1"
     }
 }

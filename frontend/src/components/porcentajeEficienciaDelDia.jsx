@@ -1,26 +1,46 @@
 import React, { useEffect, useState } from "react";
 import FechaActual from './fechaActual'
 import { ListaContext } from "../contexts/informacionGrafico";
+import { ListaContext as RegistroOperaciones } from "../contexts/actualizarRegistroOperaciones";
+import { useSearchParams } from "react-router-dom";
 const PorcentajeDeEficienciaDiaria = () => {
     // CONTEXTOS
-    const { lista } = React.useContext(ListaContext);
-    // COMPONENTE DE FECHAS
-    const { fechaFormateada } = FechaActual();
+    const { lista, actualizarListaRegistro, listaRegistro } = React.useContext(ListaContext);
+    // OBTENER MODULO CON URL
+    const { fechaActualDia } = FechaActual();
+        const [buscarParametro] = useSearchParams();
+        let moduloEnLaUrl = parseInt(buscarParametro.get('modulo'));
     //
     const [porcentaje, setPorcentaje] = useState("--");
     // ACTUALIZAR AL RECIBIR NUEVOS DATOS
     useEffect(() => {
-        establecerEficiencia();
-    }, [lista]);
-    // Establecer el operario que calcula la eficiencia del modulo
-    const operarioCalculador = lista.find(operario => operario.calculador_final === 1);
-    const establecerEficiencia = () => {
-        if (operarioCalculador) {
-            const eficienciaCalculada = operarioCalculador.eficiencia_int;
-            setPorcentaje(eficienciaCalculada);
-
+        const actualizarRegistros = async () => {
+            try {
+                await actualizarListaRegistro(moduloEnLaUrl, fechaActualDia, fechaActualDia, null, null, 1, false);
+            } catch (error) {
+                console.log('Error: ', error)
+            } finally {
+                establecerEficiencia();
+            }
         }
-    }
+    actualizarRegistros();
+    }, [lista]);
+    
+       
+        const establecerEficiencia = () => {
+            // OBTENER REGISTRO CONTADOR
+            const registroCalculador = listaRegistro.filter((registro) => registro.modulo === moduloEnLaUrl && registro.rol === 1)
+        // CALCULAR EL TOTAL PRODUCIDO
+            let totalProducido = registroCalculador.map(item => item.unidadesProducidas || 0);
+            totalProducido = totalProducido.reduce((a,b) => a + b, 0);
+        // CALCULAR EL TOTAL DE LA META
+            let totalMeta = registroCalculador.map(item => item.metaDecimal || 0);
+            totalMeta = totalMeta.reduce((a,b) => a + b, 2);
+        // RETORNAR EFICIENCIA
+            const eficienciaCalculada = ((totalProducido / totalMeta) * 100).toFixed(1);
+        // ESTABLECER EFICIENCIA
+            setPorcentaje(eficienciaCalculada);
+        }
     // DAR COLOR AL RECUADRO SEGUN EFICIENCIA
     const obtenerColorEficiencia = () => {
         if (porcentaje > 70) {

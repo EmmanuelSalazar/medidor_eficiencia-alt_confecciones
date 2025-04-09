@@ -69,7 +69,7 @@ const ListaRegistroOperaciones = () => {
         }
         try {
             await actualizarRegistroOperacion(values);
-            await setListaRegistro(window.moduloSeleccionado);
+            await setListaRegistro(window.moduloSeleccionado,null,null,null,null,0);
             setVisible(false)
             setMensajeDeExito("El registro ha sido modificado con exito");
         } catch (error) {

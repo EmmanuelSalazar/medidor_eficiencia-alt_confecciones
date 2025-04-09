@@ -35,9 +35,11 @@ function Tablero() {
     )
 
   return (
-    <Container className="mt-2" style={{minWidth: '100%'}}>
+   
+      <Container className="mt-2" style={{minWidth: '100%'}}>
       {pantalla === 1 ? tableroPorcentajes : tableroMensajes}
-    </Container>
+      </Container>
+    
   )
 }
 

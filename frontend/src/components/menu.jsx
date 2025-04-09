@@ -5,10 +5,11 @@ import { NavLink } from 'react-router-dom'
 import { ListaContext } from "../contexts/informacionGrafico";
 import { jwtDecode } from 'jwt-decode';
 import CerrarSesion from './cuenta/cerrarSesion';
+import { useSearchParams } from "react-router-dom";
+import FechaActual from '../components/fechaActual';
 let token = localStorage.getItem('token') ?? null;
 const userInfo = token != null ? jwtDecode(token) : null;
 const userRol = userInfo != null ? userInfo.rol : 0;
-console.log( userRol)
 const items = [
   userRol >= 1 ? {
           label: <NavLink to="/tablero" className="noDecorativos">Tablero</NavLink>,
@@ -52,8 +53,8 @@ const items = [
     key: 'estadisticas',
     icon: <BarChartOutlined />
   }: null, {
-    label: <NavLink to="/logout" className="noDecorativos">Cuenta</NavLink>,
-    key: 'logout',
+    label: <NavLink to="/#" className="noDecorativos">Cuenta</NavLink>,
+    key: 'cuenta',
     icon: <SolutionOutlined />,
     children: [
       {
@@ -64,15 +65,18 @@ const items = [
     ]
   }
 ].filter(item => item != null);
-console.log(items);
 const MenuPrincipal = () => {
-  const { actualizarLista } = React.useContext(ListaContext);
+  const { fechaActualDia } = FechaActual();
+  const [buscarParametro] = useSearchParams();
+  let moduloEnLaUrl = parseInt(buscarParametro.get('modulo'));
+  const { actualizarLista, actualizarListaRegistro } = React.useContext(ListaContext);
   const [current, setCurrent] = useState('modulos');
   const onClick =  async (e) => {
     const { key } = e;
     let moduloSeleccionado = parseInt(key) ?? null;
     if (typeof moduloSeleccionado === 'number') {
       try  {
+        await actualizarListaRegistro(moduloSeleccionado, fechaActualDia, fechaActualDia, null, null, 1, false);
         await actualizarLista(null, moduloSeleccionado);
       } catch (error) {
         console.error("Ha ocurrido un error: ", error)

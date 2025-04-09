@@ -5,17 +5,17 @@ import { Alert } from 'react-bootstrap';
 import 'chart.js/auto';
 import moment from 'moment';
 import useFetchData from '../../services/api/read/mostrarRendimientoHistorico';
-const EstadisticaMensual = () => {
+const EstadisticaTrimestral = () => {
     // RECIBIR DATOS DE LA API
-    const { data, loading, error } = useFetchData(1);
+    const { data, loading, error } = useFetchData(2);
     // FILTRAR LOS REGISTROS POR MODULO
     const infoModulo1 = data.filter((item) => item.modulo === 1).map((item) => item.TotalUnidadesProducidas);
     const infoModulo2 = data.filter((item) => item.modulo === 2).map((item) => item.TotalUnidadesProducidas);
     const infoModulo3 = data.filter((item) => item.modulo === 3).map((item) => item.TotalUnidadesProducidas);    // MAPEO DE LOS DIAS DEL MES
     const dias = () => {
         let dias = [];
-        for (let i = 0; i <= 30; i++) {
-            const fechaHaceUnMes = moment().subtract((30-i), 'days').format('MM-DD');
+        for (let i = 0; i <= 90; i++) {
+            const fechaHaceUnMes = moment().subtract((90-i), 'days').format('MM-DD');
             dias.push(fechaHaceUnMes);
         }
         return dias;
@@ -45,6 +45,7 @@ const EstadisticaMensual = () => {
         }
     ]
     };
+
     if (loading) return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
     if (error) return <Alert variant='danger'>Error: {error.message}</Alert>;
     return (
@@ -53,4 +54,4 @@ const EstadisticaMensual = () => {
         </div>
     )
 }
-export default EstadisticaMensual
+export default EstadisticaTrimestral
