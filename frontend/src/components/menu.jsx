@@ -66,7 +66,8 @@ const items = [
   }
 ].filter(item => item != null);
 const MenuPrincipal = () => {
-  const { fechaActualDia } = FechaActual();
+  const {fechaActualDia, corteQuincenaFormateado, anioActual} = FechaActual();
+    let corteQuincena = `${anioActual}-${corteQuincenaFormateado[0].fechaInicial}`;
   const [buscarParametro] = useSearchParams();
   let moduloEnLaUrl = parseInt(buscarParametro.get('modulo'));
   const { actualizarLista, actualizarListaRegistro } = React.useContext(ListaContext);
@@ -76,7 +77,8 @@ const MenuPrincipal = () => {
     let moduloSeleccionado = parseInt(key) ?? null;
     if (typeof moduloSeleccionado === 'number') {
       try  {
-        await actualizarListaRegistro(moduloSeleccionado, fechaActualDia, fechaActualDia, null, null, 1, false);
+        await actualizarListaRegistro(moduloSeleccionado, fechaActualDia, fechaActualDia, null, null, 1, 0);
+        await actualizarListaRegistro(moduloSeleccionado, corteQuincena, fechaActualDia, null, null, 1, 1);
         await actualizarLista(null, moduloSeleccionado);
       } catch (error) {
         console.error("Ha ocurrido un error: ", error)

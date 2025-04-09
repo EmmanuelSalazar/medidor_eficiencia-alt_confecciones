@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import FechaActual from './fechaActual'
 import { ListaContext } from "../contexts/informacionGrafico";
-import { ListaContext as RegistroOperaciones } from "../contexts/actualizarRegistroOperaciones";
 import { useSearchParams } from "react-router-dom";
 const PorcentajeDeEficienciaDiaria = () => {
     // CONTEXTOS
@@ -10,17 +9,22 @@ const PorcentajeDeEficienciaDiaria = () => {
     const { fechaActualDia } = FechaActual();
         const [buscarParametro] = useSearchParams();
         let moduloEnLaUrl = parseInt(buscarParametro.get('modulo'));
-    //
+    // 
+    const modulo = moduloEnLaUrl || window.ModuloSeleccionado;
     const [porcentaje, setPorcentaje] = useState("--");
+    const [cargando, setCargando] = useState(false);
     // ACTUALIZAR AL RECIBIR NUEVOS DATOS
     useEffect(() => {
+        
         const actualizarRegistros = async () => {
+            setCargando(true);
             try {
-                await actualizarListaRegistro(moduloEnLaUrl, fechaActualDia, fechaActualDia, null, null, 1, false);
+                await actualizarListaRegistro(modulo, window.fechaSeleccionada, window.fechaSeleccionada, null, null, 1, false);
             } catch (error) {
                 console.log('Error: ', error)
             } finally {
                 establecerEficiencia();
+                setCargando(false);
             }
         }
     actualizarRegistros();
@@ -29,8 +33,8 @@ const PorcentajeDeEficienciaDiaria = () => {
        
         const establecerEficiencia = () => {
             // OBTENER REGISTRO CONTADOR
-            const registroCalculador = listaRegistro.filter((registro) => registro.modulo === moduloEnLaUrl && registro.rol === 1)
-        // CALCULAR EL TOTAL PRODUCIDO
+            const registroCalculador = listaRegistro.filter((registro) => registro.modulo === modulo && registro.rol === 1)
+            // CALCULAR EL TOTAL PRODUCIDO
             let totalProducido = registroCalculador.map(item => item.unidadesProducidas || 0);
             totalProducido = totalProducido.reduce((a,b) => a + b, 0);
         // CALCULAR EL TOTAL DE LA META

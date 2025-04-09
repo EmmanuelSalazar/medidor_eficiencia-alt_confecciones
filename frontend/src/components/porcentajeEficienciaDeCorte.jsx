@@ -1,28 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { ListaContext } from "../contexts/informacionGrafico";
-import { ListaContext as RegistroOperaciones } from "../contexts/actualizarRegistroOperaciones";
 import { useSearchParams } from "react-router-dom";
 import FechaActual from "./fechaActual";
-import cortes from "../utils/json/cortes.json";
+import { Spin } from 'antd';
 const PorcentajeDeEficienciaPorCorte = () => {
-    const {fechaActualDia, corteQuincenaFormateado, anioActual} = FechaActual();
+    const {corteQuincenaFormateado, anioActual} = FechaActual();
     let corteQuincena = `${anioActual}-${corteQuincenaFormateado[0].fechaInicial}`;
     // CONTEXTOS
-    const { lista, listaRegistroQuincenal, actualizarListaRegistro } = React.useContext(ListaContext);
-    console.log(listaRegistroQuincenal);
-    //OBTENER MODULO
+    const { lista, listaRegistroQuincenal, actualizarListaRegistro } = React.useContext(ListaContext);    //OBTENER MODULO
     const [buscarParametro] = useSearchParams();
     let moduloEnLaUrl = parseInt(buscarParametro.get('modulo'));
     const [porcentaje, setPorcentaje] = useState("--");
+    const [cargando, setCargando] = useState(false);
+    const modulo = moduloEnLaUrl || window.ModuloSeleccionado;
     // ACTUALIZAR AL RECIBIR NUEVOS DATOS
     useEffect(() => {
             const actualizarRegistros = async () => {
+                setCargando(true);
                 try {
-                    await actualizarListaRegistro(moduloEnLaUrl, corteQuincena, null, null, null, 1, 1);
+                    await actualizarListaRegistro(modulo, corteQuincena, null, null, null, 1, 1);
                 } catch (error) {
                     console.log('Error: ', error)
                 } finally {
                     establecerEficiencia();
+                    setCargando(false);
                 }
             }
         actualizarRegistros();
@@ -30,7 +31,7 @@ const PorcentajeDeEficienciaPorCorte = () => {
          
             const establecerEficiencia = () => {
                 // OBTENER REGISTRO CONTADOR
-                const registroCalculador = listaRegistroQuincenal.filter((registro) => registro.modulo === moduloEnLaUrl && registro.rol === 1)
+                const registroCalculador = listaRegistroQuincenal.filter((registro) => registro.modulo === modulo && registro.rol === 1)
             // CALCULAR EL TOTAL PRODUCIDO
                 let totalProducido = registroCalculador.map(item => item.unidadesProducidas || 0);
                 totalProducido = totalProducido.reduce((a,b) => a + b, 0);
@@ -56,6 +57,7 @@ const PorcentajeDeEficienciaPorCorte = () => {
             }
         }
         /* -------------------- */
+        if (cargando) return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
     return (
         <div className={`p-2 rounded ${obtenerColorEficiencia()} numeroConPorcentaje`}><strong className="porcentajeEficienciaTitulo">{porcentaje}%</strong></div>
     )

@@ -39,7 +39,6 @@ export const ListaProvider = ({ children }) => {
   // HOOK API REGISTRO DE OPERACIONES
   const actualizarListaRegistro = async (modulo, fecha_inicio, fecha_final, hora_inicio, hora_fin, rol, tipo) => {
     modulo = modulo ?? moduloEnLaUrl;
-    console.log(fecha_inicio, fecha_final);
     try {
       const nuevaLista = await fetchDataRegistro(modulo, fecha_inicio, fecha_final, hora_inicio, hora_fin, rol);
       if(tipo === 1) {
