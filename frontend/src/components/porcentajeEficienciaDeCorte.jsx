@@ -41,12 +41,11 @@ const PorcentajeDeEficienciaPorCorte = () => {
             // RETORNAR EFICIENCIA
                 const eficienciaCalculada = ((totalProducido / totalMeta) * 100).toFixed(1);
             // ESTABLECER EFICIENCIA
-                setPorcentaje(eficienciaCalculada);
+                setPorcentaje(parseFloat(eficienciaCalculada));
             }
-    
     //DAR COLOR AL RECUADRO SEGUN EFICIENCIA
     const obtenerColorEficiencia = () => {
-        if (porcentaje > 70) {
+        if (porcentaje > 69.9) {
             return 'bg-success text-light'
             } else if (porcentaje == 69) {
                 return 'bg-success text-white' 

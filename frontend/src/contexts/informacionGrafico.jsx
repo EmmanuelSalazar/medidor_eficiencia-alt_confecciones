@@ -14,14 +14,14 @@ export const ListaProvider = ({ children }) => {
    // GRAFICA
   const { data, loading, error, fetchData } = useFetchData();
   // REGISTRO DE OPERACIONES
-  const { data: dataRegistro, loading: loadingRegistro, error: errorRegistro, fetchData: fetchDataRegistro } = RegistroOperaciones();
+  const { fetchData: fetchDataRegistro } = RegistroOperaciones();
   // ALMACENAR LOS DATOS DE LAS API
   const [lista, setLista] = useState([]);
   const [listaRegistro, setListaRegistro] = useState([]);
   const [listaRegistroQuincenal, setListaRegistroQuincenal] = useState([]);
-  // HOOK PARA REALIZAR Y ALMACENAR IFORMACION
+  // HOOK PARA REALIZAR Y ALMACENAR INsFORMACION
   const actualizarLista = async (fecha, modulo, operarios) => {
-    window.moduloConsultado = modulo;
+    window.moduloConsultado = modulo || moduloEnLaUrl || window.moduloConsultado;
     window.fechaConsultada = fecha ?? fechaActualDia;
     window.operariosConsultados = operarios
     try {

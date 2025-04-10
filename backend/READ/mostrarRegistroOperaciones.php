@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $fechaFin = $_GET['fecha_fin'] ?? null; // Fecha final (opcional)
     $horaInicio = $_GET['hora_inicio'] ?? null; // Hora inicial (opcional)
     $horaFin = $_GET['hora_fin'] ?? null; // Hora final (opcional)
-
+    $rol = $_GET['rol'] ?? null; // Rol (opcional, por defecto es false)
     // Validar el módulo
     if (!empty($modulo) && is_numeric($modulo)) {
         $moduloFiltro = intval($modulo);
@@ -61,6 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             RP.modulo,
             RP.adicionales as Comentarios,
             horario,
+            rol,
             O.nombre AS NombreOperario,
             R.referencia AS Referencia,
             RP.unidadesProducidas,
@@ -88,7 +89,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     } elseif ($fechaFin) {
         $sql .= " AND RP.fecha <= '$fechaFin 23:59:59'";
     }
-
+    // Agregar filtro por rol si se proporciona
+    if ($rol) {
+        $sql .= " AND RP.rol = 1";
+    }
     // Agregar filtro por rango de horas si se proporcionan
     if ($horaInicio && $horaFin) {
         $sql .= " AND TIME(RP.fecha) BETWEEN '$horaInicio:00' AND '$horaFin:59'";
@@ -135,9 +139,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 "fecha" => $row["fecha"],
                 "unidadesProducidas" => $row["unidadesProducidas"],
                 "metaAjustada" => round($row["MetaAjustada"]),
+                "metaDecimal" => (float)$row['MetaAjustada'],
                 "eficiencia" => $eficiencia,
                 "modulo" => $row['modulo'],
                 "comentarios" => $row['Comentarios'] ?? "N/A",
+                "rol" => $row['rol'] ?? 0,
             ];
         }
         $respuesta["ok"] = true;

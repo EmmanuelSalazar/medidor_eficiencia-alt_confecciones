@@ -14,6 +14,4 @@ if($query = mysqli_query($mysqli, $query)) {
     ];
     echo json_encode($respuesta, JSON_PRETTY_PRINT);
 }
-
-
 ?>

@@ -50,4 +50,8 @@
     .tablaLimitadaLargo {
         max-height: 300px;
     }
+    .ant-picker-dropdown {
+        width: 100% !important;
+        max-width: 90vw;
+    }
 }

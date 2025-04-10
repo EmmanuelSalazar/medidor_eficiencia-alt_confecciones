@@ -6,10 +6,9 @@ import datos from '../../utils/json/menuModulos.json'
 import FechaActual from "../fechaActual";
 const BotonesSeleccionModulos = () => {
     const { listaActualizada } = React.useContext(ListaContext);
-    const { actualizarLista, actualizarListaRegistro, listaRegistro } = React.useContext(ContextoLista);
+    const { actualizarLista, actualizarListaRegistro } = React.useContext(ContextoLista);
       const {fechaActualDia, corteQuincenaFormateado, anioActual} = FechaActual();
         let corteQuincena = `${anioActual}-${corteQuincenaFormateado[0].fechaInicial}`;
-    
     const handleButtonClick = async (modulo, index) => {
       window.ModuloSeleccionado = modulo;
       const fechaSeleccionada = window.fechaSeleccionada;
