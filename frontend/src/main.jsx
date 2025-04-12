@@ -7,7 +7,16 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/es';
 dayjs.locale('es');
 import App from './App.jsx'
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5* 60 * 1000, // 5 minutos hasta que los datos se consideren obsoletos
+      cacheTime: 15 * 60 * 1000, // 15 minutos en caché
+      retry: 2,
+      refetchOnWindowFocus: false
+    }
+  }
+});
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

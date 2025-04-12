@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Menu } from 'antd'
-import { CaretDownOutlined, TeamOutlined, BarsOutlined, FileAddOutlined, DatabaseOutlined, BarChartOutlined, SolutionOutlined, LogoutOutlined } from '@ant-design/icons'
+import { CaretDownOutlined, TeamOutlined, BarsOutlined, FileAddOutlined, DatabaseOutlined, BarChartOutlined, SolutionOutlined, LogoutOutlined, SettingOutlined } from '@ant-design/icons'
 import { NavLink } from 'react-router-dom'
 import { ListaContext } from "../contexts/informacionGrafico";
 import { jwtDecode } from 'jwt-decode';
@@ -45,13 +45,17 @@ const items = [
         key: 'operaciones',
         icon: <FileAddOutlined />,
     }: null, userRol >= 2 ? {
-      label: <NavLink to="/tablaRegistros" className="noDecorativos">Tabla de registros</NavLink>,
+      label: <NavLink to="/tablaRegistros" className="noDecorativos">Lista de registros</NavLink>,
       key: 'tablaRegistros',
       icon: <DatabaseOutlined />,
-  }: null, userRol > 2 ? {
+  }: null, userRol >= 2 ? {
     label: <NavLink to="/estadisticas" className="noDecorativos">Estadisticas</NavLink>,
     key: 'estadisticas',
     icon: <BarChartOutlined />
+  }: null, userRol > 2 ? {
+    label: <NavLink to="/admin" className="noDecorativos">Admin</NavLink>,
+    key: 'admin',
+    icon: <SettingOutlined />
   }: null, {
     label: <NavLink to="/#" className="noDecorativos">Cuenta</NavLink>,
     key: 'cuenta',

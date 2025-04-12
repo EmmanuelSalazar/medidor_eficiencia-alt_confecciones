@@ -1,13 +1,16 @@
 import React from "react";
 import { ListaContext } from '../contexts/informacionGrafico';
+import { useSearchParams } from "react-router-dom";
 import { Stack } from 'react-bootstrap'
 const IncentivoQuincena = () => {
     const { lista } = React.useContext(ListaContext);
     const [beneficio, setBeneficio] = React.useState("--");
     const [porcentaje, setPorcentaje] = React.useState();
     const [porcentajeEstatico, setPorcentajeEstatico] = React.useState("--");
-    const operarioCalculador = lista.find(operario => operario.calculador_final === 1);
-    
+    const { listaRegistroQuincenal } = React.useContext(ListaContext);    //OBTENER MODULO
+    const [buscarParametro] = useSearchParams();
+    let moduloEnLaUrl = parseInt(buscarParametro.get('modulo'));
+    const modulo = moduloEnLaUrl || window.ModuloSeleccionado;
     // ACTUALIZAR COMPONENTES
     React.useEffect( () => {
         establecerEficiencia();
@@ -44,11 +47,19 @@ const IncentivoQuincena = () => {
         }
     }
     //OBTENER EFICIENCIA PARA ESTABLECER BENEFICIO
-    const establecerEficiencia = () => { 
-        if (operarioCalculador) {
-            const eficienciaCalculada = operarioCalculador.eficiencia_quincenal;
-            setPorcentaje(eficienciaCalculada);
-        }
+    const establecerEficiencia = () => {
+        // OBTENER REGISTRO CONTADOR
+        const registroCalculador = listaRegistroQuincenal.filter((registro) => registro.modulo === modulo && registro.rol === 1)
+    // CALCULAR EL TOTAL PRODUCIDO
+        let totalProducido = registroCalculador.map(item => item.unidadesProducidas || 0);
+        totalProducido = totalProducido.reduce((a,b) => a + b, 0);
+    // CALCULAR EL TOTAL DE LA META
+        let totalMeta = registroCalculador.map(item => item.metaDecimal || 0);
+        totalMeta = totalMeta.reduce((a,b) => a + b, 2);
+    // RETORNAR EFICIENCIA
+        const eficienciaCalculada = ((totalProducido / totalMeta) * 100).toFixed(1);
+    // ESTABLECER EFICIENCIA
+        setPorcentaje(parseFloat(eficienciaCalculada));
     }
 
     return (

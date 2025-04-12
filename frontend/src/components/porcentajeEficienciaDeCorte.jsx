@@ -37,7 +37,7 @@ const PorcentajeDeEficienciaPorCorte = () => {
                 totalProducido = totalProducido.reduce((a,b) => a + b, 0);
             // CALCULAR EL TOTAL DE LA META
                 let totalMeta = registroCalculador.map(item => item.metaDecimal || 0);
-                totalMeta = totalMeta.reduce((a,b) => a + b, 2);
+                totalMeta = totalMeta.reduce((a,b) => a + b, 0);
             // RETORNAR EFICIENCIA
                 const eficienciaCalculada = ((totalProducido / totalMeta) * 100).toFixed(1);
             // ESTABLECER EFICIENCIA

@@ -12,6 +12,7 @@ import MenuPrincipal from './components/menu'
 import { ListaProvider } from './contexts/informacionGrafico'
 import FormularioLogin from './components/formularios/login';
 import Estadisticas from './pages/estadisticas';
+import Admin from './pages/admin';
 function App() {
   const token = localStorage.getItem('token') || null;
   // Verificar que tenga un token almacenado
@@ -41,7 +42,8 @@ function App() {
             {userRol >= 2 && <Route path='/operarios' element={<Operarios />}/>}
             {userRol >= 2 && <Route path='/registro_operaciones' element={<RegistroOperaciones />}/>}
             {userRol >= 2 && <Route path='/tablaRegistros' element={<TablaRegistro />}/>}
-            {userRol > 2 && <Route path='/estadisticas' element={<Estadisticas />}/>}
+            {userRol >= 2 && <Route path='/estadisticas' element={<Estadisticas />}/>}
+            {userRol > 2 && <Route path='/admin' element={<Admin />}/>}
           </Routes>
         </ListaProvider>
     </Router>

@@ -37,13 +37,14 @@ const PorcentajeDeEficienciaDiaria = () => {
             // CALCULAR EL TOTAL PRODUCIDO
             let totalProducido = registroCalculador.map(item => item.unidadesProducidas || 0);
             totalProducido = totalProducido.reduce((a,b) => a + b, 0);
+            
         // CALCULAR EL TOTAL DE LA META
             let totalMeta = registroCalculador.map(item => item.metaDecimal || 0);
-            totalMeta = totalMeta.reduce((a,b) => a + b, 2);
+            totalMeta = totalMeta.reduce((a,b) => a + b, 0);            
         // RETORNAR EFICIENCIA
             const eficienciaCalculada = ((totalProducido / totalMeta) * 100).toFixed(1);
         // ESTABLECER EFICIENCIA
-            setPorcentaje(eficienciaCalculada);
+            setPorcentaje(parseFloat(eficienciaCalculada));
         }
     // DAR COLOR AL RECUADRO SEGUN EFICIENCIA
     const obtenerColorEficiencia = () => {

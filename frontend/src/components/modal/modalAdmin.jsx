@@ -88,7 +88,7 @@ const FechasDuales = () => {
                </ButtonBS>,
             ]}>
                     <Row className=" g-2">
-                        <Col style={{width: '100%'}} lg={5} md={12} sm={12}>
+                        <Col lg={5} md={12} sm={12}>
                             <strong className="mx-1">Seleccionar fecha</strong>
                             <RangePicker onChange={onPanelChange} />
                         </Col>

@@ -5,7 +5,7 @@ const AlmacenarOperario = async (values) => {
   try {
     const response = await axios.post(`${apiURL}/CREATE/almacenarOperarios.php`, values)
     if (!response.data.ok) {
-      throw new Error("Ha ocurrido un error al almacenar la venta, si el error persiste, contacta al administrador")
+      throw new Error("Ha ocurrido un error al almacenar el operario, si el error persiste, contacta al administrador")
     }
     //console.log("Datos almacenados correctamente:", response.data)
     return response.data

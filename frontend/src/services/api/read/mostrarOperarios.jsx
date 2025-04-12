@@ -9,7 +9,6 @@ const useFetchData = () => {
         setLoading(true)
         let moduloFinal = modulo ?? null;
         let reduxFinal = redux ?? false;
-        console.log(moduloFinal, reduxFinal)
             try {
                 const response = await axios.get(`${apiURL}/READ/mostrarOperarios.php?modulo=${moduloFinal}&redux=${reduxFinal}`)
                 if (response.data.ok) {
