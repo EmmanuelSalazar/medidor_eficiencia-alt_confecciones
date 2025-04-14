@@ -1,6 +1,6 @@
 import React from "react";
-import { Modal, Button, DatePicker, Space} from 'antd'
-import { Row, Col , Button as ButtonBS} from 'react-bootstrap'
+import { Modal, Button, DatePicker, Spin} from 'antd'
+import { Row, Col , Button as ButtonBS, Alert} from 'react-bootstrap'
 import ListaRegistroOperaciones from "../listas/listaRegistroOperaciones";
 import {ListaContext } from "../../contexts/actualizarRegistroOperaciones";
 import ExportToExcel from "../exportarExcel";
@@ -26,6 +26,15 @@ const FechasDuales = () => {
                     return () => clearTimeout(timer);
                     }
                 }, [mensajeDeExito, mensajeDeAlerta, mensajeDeError]);
+    // CARGAR DATOS DE LA API AL INICIO
+                React.useEffect(()=> {
+                        try {
+                            fetchData();
+                        } catch (error) {
+                            setMensajeDeError("Ha ocurrido un error: ", error);
+                        }
+                },[]);
+
     // FUNCION PARA DESHABILITAR HORAS EN LA SELECCION
     const disabledTime = (current) => {
         if (!current) return {};
@@ -37,7 +46,6 @@ const FechasDuales = () => {
     // DESCARGAR RESUMEN
     const handleDownload = async () => {
         try {
-            console.log(window.moduloSeleccionado, window.fechaInicio, window.fechaFin);
             await fetchData(window.moduloSeleccionado, window.fechaInicio, window.fechaFin);
         } catch (error) {
             setMensajeDeError("Ha ocurrido un error: ", error);
@@ -78,6 +86,7 @@ const FechasDuales = () => {
             console.error("Ha ocurrido un error: ",error)
         }  
     }
+    
     return (
         <>
             <Button type="primary" onClick={showModal}>Seleccionar rango de fechas</Button>

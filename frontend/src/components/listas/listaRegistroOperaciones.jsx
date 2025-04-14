@@ -1,7 +1,7 @@
 import React, { useContext, useState, useRef, useEffect } from 'react';
 import { ListaContext } from '../../contexts/actualizarRegistroOperaciones';
-import { Table, Input, Button, Space, Spin } from 'antd';
-import { Button as ButtonBS, Modal, Form, Alert } from 'react-bootstrap';
+import { Table, Input, Button, Space, Spin, Popconfirm } from 'antd';
+import { Button as ButtonBS, Modal, Form, Alert, Toast } from 'react-bootstrap';
 import { SearchOutlined } from '@ant-design/icons';
 import { ListaContext as ListaContexto} from "../../contexts/actualizarReferencias";
 import ActualizarRegistroOperacion from '../../services/api/update/actualizarRegistroOperacion';
@@ -52,7 +52,7 @@ const ListaRegistroOperaciones = () => {
         try {
             await fetchData(id);
             await setListaRegistro(window.moduloSeleccionado);
-            setMensajeDeAlerta(data || "El registro se la eliminado con exito");  
+            setMensajeDeAlerta(data || "El registro se la eliminado con exito");
         } catch (error) {
             console.log("Ha ocurrido un error: ", error)
             setMensajeDeError("Ha ocurrido un error al eliminar el registro: ", error);
@@ -137,7 +137,9 @@ const ListaRegistroOperaciones = () => {
                     <ButtonBS variant="warning" className="mb-1" onClick={() => showModal(record)}>
                         Editar
                     </ButtonBS>
-                    <ButtonBS variant="danger" onClick={() => handleDelete(record.regProd_id)}>Eliminar</ButtonBS>
+                    <Popconfirm title="Eliminar registro" description="¿Estás seguro de eliminar este registro?" onConfirm={() => handleDelete(record.regProd_id)} okText="Sí" cancelText="No" >
+                    <ButtonBS variant="danger">Eliminar</ButtonBS>
+                    </Popconfirm>
                 </span>
             ),
             width: 100 

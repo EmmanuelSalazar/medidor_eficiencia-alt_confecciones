@@ -52,7 +52,7 @@ const items = [
     label: <NavLink to="/estadisticas" className="noDecorativos">Estadisticas</NavLink>,
     key: 'estadisticas',
     icon: <BarChartOutlined />
-  }: null, userRol > 2 ? {
+  }: null, userRol >= 2 ? {
     label: <NavLink to="/admin" className="noDecorativos">Admin</NavLink>,
     key: 'admin',
     icon: <SettingOutlined />
@@ -71,9 +71,7 @@ const items = [
 ].filter(item => item != null);
 const MenuPrincipal = () => {
   const {fechaActualDia, corteQuincenaFormateado, anioActual} = FechaActual();
-    let corteQuincena = `${anioActual}-${corteQuincenaFormateado[0].fechaInicial}`;
-  const [buscarParametro] = useSearchParams();
-  let moduloEnLaUrl = parseInt(buscarParametro.get('modulo'));
+  let corteQuincena = `${anioActual}-${corteQuincenaFormateado[0].fechaInicial}`;
   const { actualizarLista, actualizarListaRegistro } = React.useContext(ListaContext);
   const [current, setCurrent] = useState('modulos');
   const onClick =  async (e) => {

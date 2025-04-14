@@ -128,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 // Si MetaAjustada es 0 o NULL, establecer eficiencia en "0%"
                 $eficiencia = "0%";
             }
-    
+            
             $datosCompuestos[] = [
                 "regProd_id" => $row["regProd_id"],
                 "ref_id" => $row["ref_id"],
@@ -148,6 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         }
         $respuesta["ok"] = true;
         $respuesta["respuesta"] = $datosCompuestos;
+        
     } else {
         $respuesta["ok"] = false;
         $respuesta["respuesta"] = "No se encontraron resultados.";

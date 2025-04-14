@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import FechaActual from './fechaActual'
+import { Spin } from "antd";
 import { ListaContext } from "../contexts/informacionGrafico";
 import { useSearchParams } from "react-router-dom";
 const PorcentajeDeEficienciaDiaria = () => {
     // CONTEXTOS
     const { lista, actualizarListaRegistro, listaRegistro } = React.useContext(ListaContext);
     // OBTENER MODULO CON URL
-    const { fechaActualDia } = FechaActual();
         const [buscarParametro] = useSearchParams();
         let moduloEnLaUrl = parseInt(buscarParametro.get('modulo'));
     // 
@@ -30,7 +29,7 @@ const PorcentajeDeEficienciaDiaria = () => {
     actualizarRegistros();
     }, [lista]);
     
-       
+
         const establecerEficiencia = () => {
             // OBTENER REGISTRO CONTADOR
             const registroCalculador = listaRegistro.filter((registro) => registro.modulo === modulo && registro.rol === 1)
@@ -48,16 +47,15 @@ const PorcentajeDeEficienciaDiaria = () => {
         }
     // DAR COLOR AL RECUADRO SEGUN EFICIENCIA
     const obtenerColorEficiencia = () => {
-        if (porcentaje > 70) {
+        if (porcentaje > 69.9) {
             return 'bg-success text-light'
-            } else if (porcentaje == 69) {
-                return 'bg-success text-white' 
             } else if(porcentaje == "--") {
                 return 'bg-warning  text-danger'
             } else {
                 return 'bg-danger  text-light'
             }
         }
+    if (cargando) return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
     return (
             <div className={`p-2 rounded ${obtenerColorEficiencia()} numeroConPorcentaje`}><strong className="porcentajeEficienciaTitulo">{porcentaje}%</strong></div>
     )

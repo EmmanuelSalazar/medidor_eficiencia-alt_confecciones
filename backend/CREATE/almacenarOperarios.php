@@ -3,11 +3,6 @@
 require_once '../config/cors.php';
 require_once '../config/baseDeDatos.php';
 
-// Manejar solicitud OPTIONS (preflight)
-if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    http_response_code(200);
-    exit(); // Termina la ejecución aquí
-}
 
 // Manejar solicitud POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

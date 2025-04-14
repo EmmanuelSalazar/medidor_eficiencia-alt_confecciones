@@ -7,8 +7,8 @@ const ListaUsuarios = () => {
     const { data, status, error } = useMostrarContadoresFinales();
     const columns = [
         { title: 'ID', dataIndex: 'user_id', key: 'user_id', width: 50 },
-        { title: 'Nombre de usuario', dataIndex: 'nombre', key: 'nombre' },
-        { title: 'Rol', dataIndex: 'rol', key: 'rol' },
+        { title: 'Nombre de usuario', dataIndex: 'nombre', key: 'nombre', width: 155 },
+        { title: 'Rol', dataIndex: 'rol', key: 'rol', width: 135 },
         { title: 'Acciones', key: 'acciones', render: (text, record) => (
             <span>
             <Button variant="warning" className="m-1" onClick={() => showModal(record)}>
@@ -18,7 +18,7 @@ const ListaUsuarios = () => {
                 Eliminar
             </Button>
         </span>     
-        )}
+        ), width: 160}
     ]
 
     // MANEJO DEL ESTADO DE LA SOLICITUD

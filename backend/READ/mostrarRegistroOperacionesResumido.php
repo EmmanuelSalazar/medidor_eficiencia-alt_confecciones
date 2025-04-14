@@ -7,7 +7,7 @@
         $modulo = $_GET['modulo'] ?? NULL;
         $fechaInicio = $_GET['fecha_inicio'] ?? date('Y-m-d');
         $fechaFin = $_GET['fecha_fin'] ?? date('Y-m-d');
-
+        
         if (!empty($fechaInicio) && !strtotime($fechaInicio)) {
             $respuesta["ok"] = false;
             $respuesta["respuesta"] = "La fecha de inicio no es válida.";

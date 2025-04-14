@@ -64,8 +64,6 @@ export const ListaProvider = ({ children }) => {
   actualizarListaRegistro(window.moduloConsultado || moduloEnLaUrl, fechaActualDia, null, null, null, 1);
   }, [fetchData]);
   
-  
-
   return (
     <ListaContext.Provider value={{ lista, loading, error, actualizarLista, actualizarListaRegistro, listaRegistro, listaRegistroQuincenal }}>
       {children}

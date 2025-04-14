@@ -9,8 +9,6 @@ import BotonesSeleccionModulos from '../components/botonesSeleccion/botonesSelec
 import CalendarioSeleccion from "../components/calendarioSeleccionAdmin";
 import GraficaAdministrativa from "../components/graficos/graficoAdmin";
 import FechasDuales from "../components/modal/modalAdmin";
-import PanelAdministrativo from '../components/modal/seleccionarOperarioContador'
-import TiempoDeMontaje from "../components/modal/ingresarTiempoDeMontaje";
 import PorcentajeDeEficienciaDiaria from "../components/porcentajeEficienciaDelDia";
 import PorcentajeDeEficienciaQuincenal from "../components/porcentajeEficienciaDeCorte";
 function TablaRegistro() {
@@ -54,14 +52,7 @@ function TablaRegistro() {
                         </Row>
                     </ProveedorDeLista>
                 </ListaProvider>
-                <Row className="mb-2 g-2">
-                    <Col lg={3}>
-                        <PanelAdministrativo />
-                    </Col>
-                    <Col>
-                        <TiempoDeMontaje />
-                    </Col>
-                </Row>
+                
             </ProveedorDeLista3>
         </Container>
     )

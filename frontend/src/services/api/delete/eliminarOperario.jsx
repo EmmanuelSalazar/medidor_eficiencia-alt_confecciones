@@ -9,22 +9,23 @@ const EliminarOperario = () => {
         setLoading(true)
             try {
                 const response = await axios.delete(`${apiURL}/DELETE/eliminarOperario.php?id=${id}`)
-                if (!response.data.ok) {
-                    return console.error('Ha ocurrido un error, reinicie, si este persiste, contacte al administrador')
+                if (response.data.ok) {
+                    console.log("Operario eliminado correctamente");
+                } else {
+                    return console.error(response.data.respuesta || 'Ha ocurrido un error, reinicie, si este persiste, contacte al administrador')
                 }
                 //console.log(response.data.respuesta);
                 setData(response.data.respuesta)
                 return response.data.respuesta
             }  catch (error) {
                 setError(error instanceof Error ? error : new Error("Ha ocurrido un error desconocido"))
-                throw error;
                 console.error("Error al eliminar:", error)
-                return [];
+                throw error;
             } finally {
                 setLoading(false)
             }
         },[]);
 
-        return {data, error, fetchData}
+        return {data, error, fetchData, loading}
 }
 export default EliminarOperario;

@@ -43,7 +43,7 @@ function App() {
             {userRol >= 2 && <Route path='/registro_operaciones' element={<RegistroOperaciones />}/>}
             {userRol >= 2 && <Route path='/tablaRegistros' element={<TablaRegistro />}/>}
             {userRol >= 2 && <Route path='/estadisticas' element={<Estadisticas />}/>}
-            {userRol > 2 && <Route path='/admin' element={<Admin />}/>}
+            {userRol >= 2 && <Route path='/admin' element={<Admin />}/>}
           </Routes>
         </ListaProvider>
     </Router>
