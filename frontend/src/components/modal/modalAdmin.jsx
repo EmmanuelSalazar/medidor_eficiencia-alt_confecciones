@@ -27,13 +27,13 @@ const FechasDuales = () => {
                     }
                 }, [mensajeDeExito, mensajeDeAlerta, mensajeDeError]);
     // CARGAR DATOS DE LA API AL INICIO
-                React.useEffect(()=> {
-                        try {
-                            fetchData();
-                        } catch (error) {
-                            setMensajeDeError("Ha ocurrido un error: ", error);
-                        }
-                },[]);
+        React.useEffect(()=> {
+            try {
+                fetchData();
+            } catch (error) {
+                setMensajeDeError("Ha ocurrido un error: ", error);
+            }
+        },[]);
 
     // FUNCION PARA DESHABILITAR HORAS EN LA SELECCION
     const disabledTime = (current) => {
@@ -67,7 +67,6 @@ const FechasDuales = () => {
     const onChangeHours = async (time, timeStrings) => {
         window.horaInicio = `${timeStrings[0]}:00`;
         window.horaFin = `${timeStrings[1]}:59`;
-        console.log(horaInicio, horaFin)
         try {
             await setListaRegistro(window.moduloSeleccionado, window.fechaInicio, window.fechaFin, window.horaInicio, window.horaFin);
         } catch (error) {
@@ -91,7 +90,7 @@ const FechasDuales = () => {
         <>
             <Button type="primary" onClick={showModal}>Seleccionar rango de fechas</Button>
             <Modal title="Selecciona dos fechas" open={visible} onOk={handleOk} onCancel={handleCancel} width={{xl: '70%', xxl: '70%'}} footer={[
-                <ExportToExcel datos={datos} texto="Descargar resumen" onClick={handleDownload}/>,
+                <ExportToExcel key={1} datos={datos} texto="Descargar resumen" onClick={handleDownload}/>,
                <ButtonBS key="submit" type="primary" onClick={handleOk}>
                  Aceptar
                </ButtonBS>,

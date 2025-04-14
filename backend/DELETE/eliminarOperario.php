@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
     }
 
     // Preparar consulta
-    if (!$stmt = $mysqli->prepare('DELETE operarios WHERE op_id = ?')) {
+    if (!$stmt = $mysqli->prepare('DELETE FROM operarios WHERE op_id = ?')) {
         http_response_code(500);
         echo json_encode([
             'ok' => false,

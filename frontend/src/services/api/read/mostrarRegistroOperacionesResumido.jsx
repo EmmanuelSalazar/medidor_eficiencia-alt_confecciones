@@ -13,7 +13,6 @@ const useFetchData = () => {
       let fetchaFinSeleccionado = typeof fechaFin != 'undefined' ? fechaFin : fechaActualDia;
       setLoading(true);
         try {
-          console.log(`${apiURL}/READ/mostrarRegistroOperacionesResumido.php?fecha_inicio=${fechaInicioSeleccionado}&modulo=${moduloSeleccionado}&fecha_fin=${fetchaFinSeleccionado}`)
           const response = await axios.get(`${apiURL}/READ/mostrarRegistroOperacionesResumido.php?fecha_inicio=${fechaInicioSeleccionado}&modulo=${moduloSeleccionado}&fecha_fin=${fetchaFinSeleccionado}`);
           // Validar estructura de respuesta
           if (response.data.ok) {

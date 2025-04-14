@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useRef, act } from 'react';
+import { useContext, useEffect, useState, useRef } from 'react';
 import { ListaContext } from '../../contexts/actualizarReferencias';
 import EliminarReferencia from '../../services/api/delete/eliminarReferencia';
 import ActualizarReferencia from '../../services/api/update/actualizarReferencia';

@@ -51,7 +51,6 @@ function TablaRegistro() {
                         </Row>
                     </ProveedorDeLista>
                 </ListaProvider>
-                
             </ProveedorDeLista3>
         </Container>
     )

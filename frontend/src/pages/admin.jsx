@@ -1,4 +1,3 @@
-import Ract from 'react';
 import { Collapse } from 'antd';
 import { Container, Row, Col } from 'react-bootstrap';
 import { jwtDecode } from 'jwt-decode';
@@ -45,7 +44,6 @@ function Admin() {
         </Row>
         }: null
     ].filter(item => item != null);
-    console.log(typeof userRol)
     return (
         <Container>
             <Row>
