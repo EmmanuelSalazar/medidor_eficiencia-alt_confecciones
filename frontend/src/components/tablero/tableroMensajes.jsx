@@ -2,6 +2,9 @@ import React from "react";
 import { Row, Col } from "react-bootstrap";
 import tableroMensajes from "../../utils/json/tableroMensajes.json";
 /* import { Howl, Howler } from 'howler';
+####################
+DEPRECATED: Esta función ha sido marcada como en desuso y no se recomienda su uso.
+####################
  */const TableroMensajes = () => {
     const [mensaje, setMensaje] = React.useState("");
     React.useEffect(() => {

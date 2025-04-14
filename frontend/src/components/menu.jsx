@@ -5,7 +5,6 @@ import { NavLink } from 'react-router-dom'
 import { ListaContext } from "../contexts/informacionGrafico";
 import { jwtDecode } from 'jwt-decode';
 import CerrarSesion from './cuenta/cerrarSesion';
-import { useSearchParams } from "react-router-dom";
 import FechaActual from '../components/fechaActual';
 let token = localStorage.getItem('token') ?? null;
 const userInfo = token != null ? jwtDecode(token) : null;
@@ -85,7 +84,6 @@ const MenuPrincipal = () => {
       } catch (error) {
         console.error("Ha ocurrido un error: ", error)
       }
-    } else {
     }
     setCurrent(key);
   };
