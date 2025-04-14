@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Menu } from 'antd'
-import { CaretDownOutlined, TeamOutlined, BarsOutlined, FileAddOutlined, DatabaseOutlined, BarChartOutlined, SolutionOutlined, LogoutOutlined, SettingOutlined } from '@ant-design/icons'
+import { DesktopOutlined, TeamOutlined, BarsOutlined, FileAddOutlined, DatabaseOutlined, BarChartOutlined, SolutionOutlined, LogoutOutlined, SettingOutlined, MenuUnfoldOutlined, ApartmentOutlined } from '@ant-design/icons'
 import { NavLink } from 'react-router-dom'
 import { ListaContext } from "../contexts/informacionGrafico";
 import { jwtDecode } from 'jwt-decode';
@@ -10,10 +10,49 @@ let token = localStorage.getItem('token') ?? null;
 const userInfo = token != null ? jwtDecode(token) : null;
 const userRol = userInfo != null ? userInfo.rol : 0;
 const items = [
-  userRol >= 1 ? {
-          label: <NavLink to="/tablero" className="noDecorativos">Tablero</NavLink>,
+    userRol >= 2 ? {
+        label:  <NavLink to="/registro_operaciones" className="noDecorativos">Registrar operaciones</NavLink>,
+        key: 'operaciones',
+        icon: <FileAddOutlined />,
+      }: null, userRol >= 2 ? {
+        label: <NavLink to="/tablaRegistros" className="noDecorativos">Lista de registros</NavLink>,
+        key: 'tablaRegistros',
+        icon: <DatabaseOutlined />,
+      }: null, userRol >= 2 ? {
+        label: "Recursos",
+        key: 'recursos',
+        icon: <MenuUnfoldOutlined />,
+        children: [
+            {
+              label: <NavLink to="/referencias" className="noDecorativos">Referencias</NavLink>,
+              key: 'referencias',
+              icon: <BarsOutlined />,
+          },{
+              label: <NavLink to="/operarios" className="noDecorativos">Operarios</NavLink>,
+              key: 'operarios',
+              icon: <TeamOutlined />
+          }
+        ]
+      } : null, userRol >= 2 ? {
+        label: "Administración",
+        key:'administracion',
+        icon: <ApartmentOutlined />,
+        children: [
+            {
+            label: <NavLink to="/estadisticas" className="noDecorativos">Estadisticas</NavLink>,
+            key: 'estadisticas',
+            icon: <BarChartOutlined />
+          }, {
+            label: <NavLink to="/admin" className="noDecorativos">Configuración</NavLink>,
+            key: 'admin',
+            icon: <SettingOutlined />
+          }
+        ]
+      }: null,
+    userRol >= 1 ? {
+          label: "Tableros",
           key: 'tablero',
-          icon: <CaretDownOutlined />,
+          icon: <DesktopOutlined />,
           children: [
             {
               label: <NavLink to="/tablero?modulo=1" className="noDecorativos">Modulo 1</NavLink>,
@@ -31,32 +70,8 @@ const items = [
               key: '4'
             },
           ]
-      }: null, userRol >= 2 ? {
-          label: <NavLink to="/referencias" className="noDecorativos">Referencias</NavLink>,
-          key: 'referencias',
-          icon: <BarsOutlined />,
-      }: null, userRol >= 2 ? {
-          label: <NavLink to="/operarios" className="noDecorativos">Operarios</NavLink>,
-          key: 'operarios',
-          icon: <TeamOutlined />
-      }: null, userRol >= 2 ? {
-        label:  <NavLink to="/registro_operaciones" className="noDecorativos">Registrar operaciones</NavLink>,
-        key: 'operaciones',
-        icon: <FileAddOutlined />,
-    }: null, userRol >= 2 ? {
-      label: <NavLink to="/tablaRegistros" className="noDecorativos">Lista de registros</NavLink>,
-      key: 'tablaRegistros',
-      icon: <DatabaseOutlined />,
-  }: null, userRol >= 2 ? {
-    label: <NavLink to="/estadisticas" className="noDecorativos">Estadisticas</NavLink>,
-    key: 'estadisticas',
-    icon: <BarChartOutlined />
-  }: null, userRol >= 2 ? {
-    label: <NavLink to="/admin" className="noDecorativos">Admin</NavLink>,
-    key: 'admin',
-    icon: <SettingOutlined />
-  }: null, {
-    label: <NavLink to="/#" className="noDecorativos">Cuenta</NavLink>,
+      }: null, {
+    label: "Cuenta",
     key: 'cuenta',
     icon: <SolutionOutlined />,
     children: [

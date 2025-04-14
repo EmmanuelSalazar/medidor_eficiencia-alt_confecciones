@@ -1,4 +1,3 @@
-import React from "react";
 import { Row, Col, Container, Stack } from 'react-bootstrap'
 import TablaRegistros from '../components/listas/listaRegistro'
 import { ListaProvider} from "../contexts/actualizarRegistros";
@@ -46,7 +45,7 @@ function TablaRegistro() {
                             </Col>
                         </Row>
                         <Row>
-                            <Col lg={12} xs={12} md={6} className="bg-primary bg-opacity-50 rounded border border-primary my-2">
+                            <Col lg={12} xs={12} md={12} className="bg-primary bg-opacity-50 rounded border border-primary my-2">
                                 <GraficaAdministrativa />
                             </Col>
                         </Row>
