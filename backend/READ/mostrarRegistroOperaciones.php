@@ -1,7 +1,7 @@
 <?php 
 require_once '../config/cors.php';
 require_once '../config/baseDeDatos.php';
-
+require_once '../config/cortes.php';
 $respuesta = [
     "ok" => false,
     "respuesta" => []
@@ -15,13 +15,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $horaInicio = $_GET['hora_inicio'] ?? null; // Hora inicial (opcional)
     $horaFin = $_GET['hora_fin'] ?? null; // Hora final (opcional)
     $rol = $_GET['rol'] ?? null; // Rol (opcional, por defecto es false)
+    $tipo = $_GET['tipo']?? null; // Tipo (opcional, por defecto es false)
     // Validar el módulo
     if (!empty($modulo) && is_numeric($modulo)) {
         $moduloFiltro = intval($modulo);
     } else {
         $moduloFiltro = null; // No filtrar por módulo si no se proporciona un valor válido
     }
-
+    if ($tipo) {
+        // Obtener el rango de fechas de corte
+        $fechasDeCortes = explode('-', $fechaInicio);
+        $fechasDeCortes = obtenerCorte($fechasDeCortes);
+        $fechaInicio = $fechasDeCortes[0];
+        $fechaFin = $fechasDeCortes[1];
+    }
     // Validar las fechas
     if (!empty($fechaInicio) && !strtotime($fechaInicio)) {
         $respuesta["ok"] = false;

@@ -6,7 +6,7 @@ const FechaActual = () => {
     const formatearFecha = (num) => {
         return num < 10 ? `0${num}` : `${num}`;
     };
-
+    
     const fecha = new Date();
     const opciones = {year: 'numeric', month: 'long', day: 'numeric'}
     const fechaFormateada = fecha.toLocaleDateString('es-ES', opciones);
@@ -28,7 +28,28 @@ const FechaActual = () => {
                 corteQuincena = corte.segundoCorte;
                 corteQuincenaFormateado = corteFormateado.segundoCorte;
             }
-    return {fechaFormateada, fechaActualDia, corteQuincena, tiempoUnix, corteQuincenaFormateado, anioActual}
+
+            function obtenerCortes(fecha) {
+                let fechaProporcionada = fecha;
+                let fechaSeparada = fechaProporcionada.split("-")
+                let mesDeCorte = fechaSeparada[1];
+                let diaDeCorte = fechaSeparada[2];
+                var cortesFormateados = cortes.find(corte => corte.mes == mesDeCorte);
+                if (diaDeCorte <= 15) {
+                    const cortesSeparados = cortesFormateados.primerCorte;
+                    let fechaInicio = `${anioActual}-${cortesSeparados[0].fechaInicial}`;
+                    let fechaFinal = `${anioActual}-${cortesSeparados[0].fechaFinal}`;
+                    return {fechaInicio, fechaFinal}
+                } else {
+                    const cortesSeparados = cortesFormateados.segundoCorte;
+                    let fechaInicio = `${anioActual}-${cortesSeparados[0].fechaInicial}`;
+                    let fechaFinal = `${anioActual}-${cortesSeparados[0].fechaFinal}`;
+                    return {fechaInicio, fechaFinal}
+                }
+                
+            }
+            
+    return {fechaFormateada, fechaActualDia, corteQuincena, tiempoUnix, corteQuincenaFormateado, anioActual, obtenerCortes}
     
 }
 export default FechaActual

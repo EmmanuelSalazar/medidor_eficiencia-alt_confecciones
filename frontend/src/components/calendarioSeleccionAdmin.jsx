@@ -4,9 +4,11 @@ import { ListaContext } from "../contexts/actualizarRegistros";
 import { ListaContext as ContextoLista } from '../contexts/informacionGrafico'
 import dayjs from 'dayjs';
 import 'dayjs/locale/es';
+import { useNavigate } from "react-router-dom";
+
 dayjs.locale('es');
-const { RangePicker } = DatePicker;
 const CalendarioSeleccion = () => {
+    const navigate = useNavigate();
     const { listaActualizada } = React.useContext(ListaContext);
     const { actualizarLista } = React.useContext(ContextoLista);
     
@@ -14,6 +16,7 @@ const CalendarioSeleccion = () => {
         const fecha = value.format('YYYY-MM-DD');
         const modulo = window.ModuloSeleccionado
         window.fechaSeleccionada = value.format('YYYY-MM-DD');
+        navigate(`?fecha=${fecha}`)
         try {
             await listaActualizada(fecha, modulo)
             await actualizarLista(fecha, modulo);

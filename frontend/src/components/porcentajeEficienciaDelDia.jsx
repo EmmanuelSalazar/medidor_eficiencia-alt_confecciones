@@ -2,23 +2,30 @@ import React, { useEffect, useState } from "react";
 import { Spin } from "antd";
 import { ListaContext } from "../contexts/informacionGrafico";
 import { useSearchParams } from "react-router-dom";
+import FechaActual from "./fechaActual";
 const PorcentajeDeEficienciaDiaria = () => {
+    const { fechaActualDia } = FechaActual();
     // CONTEXTOS
-    const { lista, actualizarListaRegistro, listaRegistro } = React.useContext(ListaContext);
+    const { lista, listaRegistro, actualizarListaRegistro } = React.useContext(ListaContext);
     // OBTENER MODULO CON URL
         const [buscarParametro] = useSearchParams();
         let moduloEnLaUrl = parseInt(buscarParametro.get('modulo'));
-    // 
+    // OBTENER FECHA CON URL
+        let fechaEnLaUrl = buscarParametro.get('fecha');  
     const modulo = moduloEnLaUrl || window.ModuloSeleccionado;
     const [porcentaje, setPorcentaje] = useState("--");
     const [cargando, setCargando] = useState(false);
     // ACTUALIZAR AL RECIBIR NUEVOS DATOS
     useEffect(() => {
-        
+        actualizarRegistros();
+    }, [lista]);
+
+    // Esta función está bajo revisión por futura obsolecencia
         const actualizarRegistros = async () => {
             setCargando(true);
+            let fechaSeleccionada = fechaEnLaUrl || fechaActualDia;
             try {
-                await actualizarListaRegistro(modulo, window.fechaSeleccionada, window.fechaSeleccionada, null, null, 1, false);
+                await actualizarListaRegistro(modulo, fechaSeleccionada, fechaSeleccionada, null, null, 1, false);
             } catch (error) {
                 console.log('Error: ', error)
             } finally {
@@ -26,9 +33,6 @@ const PorcentajeDeEficienciaDiaria = () => {
                 setCargando(false);
             }
         }
-    actualizarRegistros();
-    }, [lista]);
-    
 
         const establecerEficiencia = () => {
             // OBTENER REGISTRO CONTADOR

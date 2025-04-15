@@ -7,9 +7,11 @@ import FechaActual from '../components/fechaActual';
 
 export const ListaProvider = ({ children }) => {
   // COMPONENTE DE FECHA
-  const { fechaActualDia } = FechaActual();
+  const { fechaActualDia, corteQuincena, obtenerCortes } = FechaActual();
+  const cortes = obtenerCortes(fechaActualDia);
   const [buscarParametro] = useSearchParams();
   let moduloEnLaUrl = parseInt(buscarParametro.get('modulo'));
+  let fechaEnLaUrl = buscarParametro.get('fecha');
   // RECIBIR DATOS DE LA API
    // GRAFICA
   const { data, loading, error, fetchData } = useFetchData();
@@ -58,10 +60,13 @@ export const ListaProvider = ({ children }) => {
     }, 60000);
     return () => clearInterval(interval);
   }, []);
-        
+       
   useEffect(() => {
     actualizarLista();
-  actualizarListaRegistro(window.moduloConsultado || moduloEnLaUrl, fechaActualDia, null, null, null, 1);
+    // EFICIENCIA DEL DÍA
+    actualizarListaRegistro(moduloEnLaUrl|| window.moduloConsultado, fechaEnLaUrl || fechaActualDia, null, null, null, 1, 0);
+    // EFICIENCIA DE QUINCENA
+    actualizarListaRegistro(moduloEnLaUrl|| window.moduloConsultado, cortes.fechaInicio, cortes.fechaFinal, null, null, 1, 1);
   }, [fetchData]);
   
   return (

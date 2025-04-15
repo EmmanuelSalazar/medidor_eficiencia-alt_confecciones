@@ -74,7 +74,7 @@ const TablaRegistros = () => {
             <Table rowSelection={rowSelection} dataSource={lista} columns={columns} rowKey="op_id" size="middle" scroll={{y: 55 * 5}} pagination={false}/>
         </div>
         <Stack direction="horizontal" gap={2} className="my-2">
-            <Button variant="primary" onClick={realizarBusqueda}>Buscar</Button>
+            <Button variant="primary" onClick={realizarBusqueda}>Graficar</Button>
             <ExportToExcel datos={lista} />
         </Stack>
         </>

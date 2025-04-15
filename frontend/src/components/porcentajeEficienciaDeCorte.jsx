@@ -4,31 +4,38 @@ import { useSearchParams } from "react-router-dom";
 import FechaActual from "./fechaActual";
 import { Spin } from 'antd';
 const PorcentajeDeEficienciaPorCorte = () => {
-    const {corteQuincenaFormateado, anioActual} = FechaActual();
+    const {corteQuincenaFormateado, anioActual, obtenerCortes, fechaActualDia} = FechaActual();
     let corteQuincena = `${anioActual}-${corteQuincenaFormateado[0].fechaInicial}`;
+    const [buscarParametro] = useSearchParams();
+    let fechaEnLaUrl = buscarParametro.get('fecha');
+    let moduloEnLaUrl = parseInt(buscarParametro.get('modulo'));
+
     // CONTEXTOS
     const { lista, listaRegistroQuincenal, actualizarListaRegistro } = React.useContext(ListaContext);    //OBTENER MODULO
-    const [buscarParametro] = useSearchParams();
-    let moduloEnLaUrl = parseInt(buscarParametro.get('modulo'));
     const [porcentaje, setPorcentaje] = useState("--");
     const [cargando, setCargando] = useState(false);
     const modulo = moduloEnLaUrl || window.ModuloSeleccionado;
+
     // ACTUALIZAR AL RECIBIR NUEVOS DATOS
     useEffect(() => {
-            const actualizarRegistros = async () => {
-                setCargando(true);
-                try {
-                    await actualizarListaRegistro(modulo, corteQuincena, null, null, null, 1, 1);
-                } catch (error) {
-                    console.log('Error: ', error)
-                } finally {
-                    establecerEficiencia();
-                    setCargando(false);
-                }
-            }
         actualizarRegistros();
-        }, [lista]);
-         
+    }, [lista]); 
+        
+        // ESTA FUNCIÓN ESTÁ BAJO REVISIÓN POR FUTURA OBSOLECENCIA
+         const actualizarRegistros = async () => {
+            const fechasDeCortes = obtenerCortes(fechaEnLaUrl || fechaActualDia);
+            let fechaInicio = fechasDeCortes.fechaInicio;
+            let fechaFinal = fechasDeCortes.fechaFinal;
+            setCargando(true);
+            try {
+                await actualizarListaRegistro(modulo, fechaInicio, fechaFinal, null, null, 1, 1);
+            } catch (error) {
+                console.log('Error: ', error)
+            } finally {
+                establecerEficiencia();
+                setCargando(false);
+            }
+        }
             const establecerEficiencia = () => {
                 // OBTENER REGISTRO CONTADOR
                 const registroCalculador = listaRegistroQuincenal.filter((registro) => registro.modulo === modulo && registro.rol === 1)

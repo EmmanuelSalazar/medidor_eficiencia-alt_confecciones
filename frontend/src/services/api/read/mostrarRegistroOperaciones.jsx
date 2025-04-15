@@ -15,7 +15,6 @@ export const useFetchData = () => {
         let horaInicioSeleccionada = hora_inicio ?? '00:00'
         let horaFinSeleccionada = hora_fin ?? '23:59'
         let rolSeleccionado = rol ?? 0;
-        setLoading(true)
             try {
                 const response = await axios.get(`${apiURL}/READ/mostrarRegistroOperaciones.php?modulo=${moduloSeleccionado}&fecha_inicio=${fechaInicioSeleccionada}&fecha_fin=${fechaFinSeleccionada}&hora_inicio=${horaInicioSeleccionada}&hora_fin=${horaFinSeleccionada}&rol=${rolSeleccionado}`)
                 if (response.data.ok) {
