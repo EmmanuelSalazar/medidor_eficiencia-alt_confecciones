@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button, Form, Alert, Col } from 'react-bootstrap'
 import AlmacenarUsuario from "../../services/api/create/almacenarUsuario";
 import useMostrarUsuarios from "../../hooks/mostrarUsuarios.hook";
@@ -23,6 +23,7 @@ const AgregarUsuarios = () => {
                 const nombreUsuarioRef = useRef();
                 const rolRef = useRef();
                 const contrasenaRef = useRef();
+                const contrasenaVerRef = useRef();
                 const formRef = useRef(null);
         // PROCESAR Y ENVIAR INFORMACIÓN
             const enviarInformacion = async (e) => {
@@ -50,15 +51,19 @@ return (
                         {mensajeDeExito && <Alert variant="success">{mensajeDeExito}</Alert>}
                         {mensajeDeAlerta && <Alert variant="warning">{mensajeDeAlerta}</Alert>}
                         {mensajeDeError && <Alert variant="danger">{mensajeDeError}</Alert>}
-                        <Form.Group className="mx-5 mb-5">
+                        <Form.Group className="mx-5 mb-3">
                             <Form.Label>Ingresa el nombre de usuario</Form.Label>
                             <Form.Control type="text" placeholder="John_Doe" required ref={nombreUsuarioRef}/>
                         </Form.Group>
-                        <Form.Group className="mx-5 my-5">
+                        <Form.Group className="mx-5 my-2">
                             <Form.Label>Ingresa la contraseña de acceso</Form.Label>
                             <Form.Control type="text" placeholder="##" required ref={contrasenaRef}/>
                         </Form.Group>
-                        <Form.Group className="mx-5 my-5">
+                        <Form.Group className="mx-5 my-2">
+                            <Form.Label>Repite la contraseña de acceso</Form.Label>
+                            <Form.Control type="text" placeholder="##" required ref={contrasenaVerRef}/>
+                        </Form.Group>
+                        <Form.Group className="mx-5 my-4">
                             <Form.Label>Selecciona el rol</Form.Label>
                             <Form.Select ref={rolRef} required>
                                 <option value="1">Tablero</option>
@@ -66,7 +71,7 @@ return (
                                 <option value="3">Administrador/a</option>
                             </Form.Select>
                         </Form.Group>
-                        <Button className="mx-5 my-2" variant="primary" type="submit">Registrar usuario</Button>
+                        <Button className="mx-5 my-3" variant="primary" type="submit">Registrar usuario</Button>
                     </Form>
                 </Col>
 )

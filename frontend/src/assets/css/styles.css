@@ -46,11 +46,36 @@
     min-width: 50%;
     font-size: 25px;
 }
+
+.imprimir {
+   display: none; 
+}
 @media screen and (width < 768px) {
     .tablaLimitadaLargo {
         max-height: 300px;
     }
     .ant-picker-dropdown {
         max-width: 90vw;    
+    }
+}
+@media print {
+    .noImprimir {
+        display: none;
+    }
+    body {
+        margin: 0;
+    }
+    .container {
+        margin: 0;
+        padding: 0;
+        min-width: 100vw;
+        max-width: 100vw;
+    }
+    .graficoInformes {
+        width: 80vw;
+        max-width: 80vw;
+    }
+    .imprimir {
+        display: block;
     }
 }

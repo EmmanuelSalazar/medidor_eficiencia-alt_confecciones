@@ -7,7 +7,6 @@
         $modulo = $_GET['modulo'] ?? NULL;
         $fechaInicio = $_GET['fecha_inicio'] ?? date('Y-m-d');
         $fechaFin = $_GET['fecha_fin'] ?? date('Y-m-d');
-        
         if (!empty($fechaInicio) && !strtotime($fechaInicio)) {
             $respuesta["ok"] = false;
             $respuesta["respuesta"] = "La fecha de inicio no es válida.";
@@ -25,32 +24,32 @@
         $sql = "SELECT
     O.nombre AS NombreOperario,
     COALESCE(SUM(RP.unidadesProducidas), 0) AS TotalUnidadesProducidas,
-    ROUND(COALESCE(SUM(RP.MetaPorEficiencia), 0), 1) AS TotalMeta,
+    ROUND(COALESCE(SUM(RP.MetaPorEficiencia), 0), 0) AS TotalMeta,
     ROUND(COALESCE(AVG(RP.eficiencia), 0), 1) AS PromedioEficiencia, -- Evita NULLs
     COALESCE(
 		CASE
-			WHEN COUNT(DISTINCT CASE WHEN RP.modulo = 1 THEN DATE(RP.fecha) END) >= 10
+			WHEN COUNT(DISTINCT CASE WHEN RP.modulo = 1 THEN DATE(RP.fecha) END) >= 11
 		 	THEN 'Ok'
 			ELSE COUNT(DISTINCT CASE WHEN RP.modulo = 1 THEN DATE(RP.fecha) END)
 		END
 	, 0) AS modulo_1,
 	COALESCE(
 		CASE
-			WHEN COUNT(DISTINCT CASE WHEN RP.modulo = 2 THEN DATE(RP.fecha) END) >= 10
+			WHEN COUNT(DISTINCT CASE WHEN RP.modulo = 2 THEN DATE(RP.fecha) END) >= 11
 		 	THEN 'Ok'
 			ELSE COUNT(DISTINCT CASE WHEN RP.modulo = 2 THEN DATE(RP.fecha) END)
 		END
 	, 0) AS modulo_2,
 	COALESCE(
 		CASE
-			WHEN COUNT(DISTINCT CASE WHEN RP.modulo = 3 THEN DATE(RP.fecha) END) >= 10
+			WHEN COUNT(DISTINCT CASE WHEN RP.modulo = 3 THEN DATE(RP.fecha) END) >= 11
 		 	THEN 'Ok'
 			ELSE COUNT(DISTINCT CASE WHEN RP.modulo = 3 THEN DATE(RP.fecha) END)
 		END
 	, 0) AS modulo_3,
 	COALESCE(
 		CASE
-			WHEN COUNT(DISTINCT CASE WHEN RP.modulo = 4 THEN DATE(RP.fecha) END) >= 10
+			WHEN COUNT(DISTINCT CASE WHEN RP.modulo = 4 THEN DATE(RP.fecha) END) >= 11
 		 	THEN 'Ok'
 			ELSE COUNT(DISTINCT CASE WHEN RP.modulo = 4 THEN DATE(RP.fecha) END)
 		END

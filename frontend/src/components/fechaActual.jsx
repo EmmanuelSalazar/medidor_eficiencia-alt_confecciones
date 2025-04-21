@@ -30,7 +30,7 @@ const FechaActual = () => {
             }
 
             function obtenerCortes(fecha) {
-                let fechaProporcionada = fecha;
+                let fechaProporcionada = fecha || fechaActualDia;
                 let fechaSeparada = fechaProporcionada.split("-")
                 let mesDeCorte = fechaSeparada[1];
                 let diaDeCorte = fechaSeparada[2];

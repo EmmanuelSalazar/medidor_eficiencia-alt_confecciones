@@ -8,10 +8,10 @@ import FechaActual from '../components/fechaActual';
 export const ListaProvider = ({ children }) => {
   // COMPONENTE DE FECHA
   const { fechaActualDia, corteQuincena, obtenerCortes } = FechaActual();
-  const cortes = obtenerCortes(fechaActualDia);
   const [buscarParametro] = useSearchParams();
   let moduloEnLaUrl = parseInt(buscarParametro.get('modulo'));
   let fechaEnLaUrl = buscarParametro.get('fecha');
+  const cortes = obtenerCortes(fechaEnLaUrl || fechaActualDia);
   // RECIBIR DATOS DE LA API
    // GRAFICA
   const { data, loading, error, fetchData } = useFetchData();

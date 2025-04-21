@@ -61,16 +61,17 @@ const IncentivoQuincena = () => {
     // ESTABLECER EFICIENCIA
         setPorcentaje(parseFloat(eficienciaCalculada));
     }
-
-    return (
-        <Stack style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
+    const PanelCompleto = () => {
+        return (<Stack style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
                   <div className="p-2"><h4><strong>BENEFICIO</strong></h4></div>
                   <Stack direction="horizontal" gap={2} className="mb-2">
                     <div className={`p-2 rounded bg-dark numeroConPorcentaje`}><strong className="beneficios">{beneficio}</strong></div>
                     <div className={`p-2 rounded bg-dark numeroConPorcentaje`}><strong className="beneficios">{porcentajeEstatico}</strong></div>
                   </Stack>
                   
-        </Stack>
-    );
+        </Stack>)
+    }
+    return { beneficio, porcentajeEstatico, PanelCompleto }
+
 }
 export default IncentivoQuincena;

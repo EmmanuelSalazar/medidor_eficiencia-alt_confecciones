@@ -9,6 +9,7 @@ import Operarios from "./pages/operarios";
 import TablaRegistro from './pages/tablaRegistros';
 import RegistroOperaciones from './pages/registro_operaciones'
 import MenuPrincipal from './components/menu'
+import Informes from './pages/informes';
 import { ListaProvider } from './contexts/informacionGrafico'
 import FormularioLogin from './components/formularios/login';
 import Estadisticas from './pages/estadisticas';
@@ -34,7 +35,9 @@ function App() {
     return (
       <Router>
         <ListaProvider>
+          <div className='noImprimir'>
           <MenuPrincipal />
+          </div>
           <Routes>
             {userRol >= 1 && <Route path="/" element={<Tablero />} />}
             {userRol >= 1 && <Route path='/Tablero' element={<Tablero />}/>}
@@ -44,6 +47,7 @@ function App() {
             {userRol >= 2 && <Route path='/tablaRegistros' element={<TablaRegistro />}/>}
             {userRol >= 2 && <Route path='/estadisticas' element={<Estadisticas />}/>}
             {userRol >= 2 && <Route path='/admin' element={<Admin />}/>}
+            {userRol >= 2 && <Route path='/informes' element={<Informes />}/>}
           </Routes>
         </ListaProvider>
     </Router>

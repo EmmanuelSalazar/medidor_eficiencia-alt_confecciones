@@ -11,6 +11,7 @@ import { ListaProvider } from "../../contexts/actualizarRegistroOperaciones";
 import logo from '../../assets/img/logo.png'
 
 const TableroGrafico = () => {
+  const { PanelCompleto } = IncentivoQuincena();
   const {fechaFormateada, corteQuincena} = FechaActual();  
     const [moduloConMarca, setModuloConMarca] = React.useState("");
     // MOSTRAR TABLERO EN USO
@@ -42,7 +43,7 @@ const TableroGrafico = () => {
             <Col lg={3} xs={12} sm={12} md={4} >
               <Row className='border border-black mb-2 me-1 bg-black  rounded text-light'>
                 <ListaProvider>
-                  <IncentivoQuincena />
+                  <PanelCompleto />
                 </ListaProvider>
               </Row>
               <Row className='border border-black mb-2 me-1 bg-black  rounded text-light' >
@@ -66,7 +67,7 @@ const TableroGrafico = () => {
               </Row>
             </Col>
             <Col lg={9} xs={12} sm={12} md={4} className='bg-black rounded border border-primary text-light text-center' >            
-              <h1 className="text-white"><strong>TABLERO MODULO {moduloConMarca}</strong></h1>
+              <h1 className="text-white"><strong>MODULO {moduloConMarca}</strong></h1>
               <div style={{display: 'flex', justifyContent: 'center'}}>
                     <HorizontalBarChart />
               </div>
