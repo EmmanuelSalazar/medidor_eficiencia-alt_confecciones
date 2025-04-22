@@ -1,7 +1,7 @@
 <?php 
 require_once '../config/cors.php';
 require_once '../config/baseDeDatos.php';
-
+// DEPRECATED: Este archivo está obsoleto y será eliminado en futuras versiones. (12/04/25) ATT:Mr Farenhate ;)
 if ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
     $id = $_GET['id'] ?? null;
 

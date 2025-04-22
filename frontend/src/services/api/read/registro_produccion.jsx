@@ -13,7 +13,6 @@ const useFetchData = () => {
           const response = await axios.get(`${apiURL}/READ/calcularEficienciaDiaria.php?fecha=${fecha}&modulo=${modulo}&operarios=${operarios}`);
           // Validar estructura de respuesta
           if (response.data.ok) {
-            console.log(response.data.respuesta);
             setData(response.data.respuesta);
             return response.data.respuesta;
           } else {

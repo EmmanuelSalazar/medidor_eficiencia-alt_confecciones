@@ -1,38 +1,65 @@
 import React, { useEffect, useState } from "react";
-import FechaActual from './fechaActual'
+import { Spin } from "antd";
 import { ListaContext } from "../contexts/informacionGrafico";
+import { useSearchParams } from "react-router-dom";
+import FechaActual from "./fechaActual";
 const PorcentajeDeEficienciaDiaria = () => {
+    const { fechaActualDia } = FechaActual();
     // CONTEXTOS
-    const { lista } = React.useContext(ListaContext);
-    // COMPONENTE DE FECHAS
-    const { fechaFormateada } = FechaActual();
-    //
+    const { lista, listaRegistro, actualizarListaRegistro } = React.useContext(ListaContext);
+    // OBTENER MODULO CON URL
+        const [buscarParametro] = useSearchParams();
+        let moduloEnLaUrl = parseInt(buscarParametro.get('modulo'));
+    // OBTENER FECHA CON URL
+        let fechaEnLaUrl = buscarParametro.get('fecha');  
+    const modulo = moduloEnLaUrl || window.ModuloSeleccionado;
     const [porcentaje, setPorcentaje] = useState("--");
+    const [cargando, setCargando] = useState(false);
     // ACTUALIZAR AL RECIBIR NUEVOS DATOS
     useEffect(() => {
-        establecerEficiencia();
+        actualizarRegistros();
     }, [lista]);
-    // Establecer el operario que calcula la eficiencia del modulo
-    const operarioCalculador = lista.find(operario => operario.calculador_final === 1);
-    const establecerEficiencia = () => {
-        if (operarioCalculador) {
-            const eficienciaCalculada = operarioCalculador.eficiencia_int;
-            setPorcentaje(eficienciaCalculada);
 
+    // Esta función está bajo revisión por futura obsolecencia
+        const actualizarRegistros = async () => {
+            setCargando(true);
+            let fechaSeleccionada = fechaEnLaUrl || fechaActualDia;
+            try {
+                await actualizarListaRegistro(modulo, fechaSeleccionada, fechaSeleccionada, null, null, 1, false);
+            } catch (error) {
+                console.log('Error: ', error)
+            } finally {
+                establecerEficiencia();
+                setCargando(false);
+            }
         }
-    }
+
+        const establecerEficiencia = () => {
+            // OBTENER REGISTRO CONTADOR
+            const registroCalculador = listaRegistro.filter((registro) => registro.modulo === modulo && registro.rol === 1)
+            // CALCULAR EL TOTAL PRODUCIDO
+            let totalProducido = registroCalculador.map(item => item.unidadesProducidas || 0);
+            totalProducido = totalProducido.reduce((a,b) => a + b, 0);
+            
+        // CALCULAR EL TOTAL DE LA META
+            let totalMeta = registroCalculador.map(item => item.metaDecimal || 0);
+            totalMeta = totalMeta.reduce((a,b) => a + b, 0);            
+        // RETORNAR EFICIENCIA
+            const eficienciaCalculada = ((totalProducido / totalMeta) * 100).toFixed(1);
+        // ESTABLECER EFICIENCIA
+            setPorcentaje(parseFloat(eficienciaCalculada));
+        }
     // DAR COLOR AL RECUADRO SEGUN EFICIENCIA
     const obtenerColorEficiencia = () => {
-        if (porcentaje > 70) {
+        if (porcentaje > 69.9) {
             return 'bg-success text-light'
-            } else if (porcentaje == 69) {
-                return 'bg-success text-white' 
             } else if(porcentaje == "--") {
                 return 'bg-warning  text-danger'
             } else {
                 return 'bg-danger  text-light'
             }
         }
+    if (cargando) return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
     return (
             <div className={`p-2 rounded ${obtenerColorEficiencia()} numeroConPorcentaje`}><strong className="porcentajeEficienciaTitulo">{porcentaje}%</strong></div>
     )

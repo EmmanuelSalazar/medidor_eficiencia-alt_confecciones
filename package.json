@@ -7,6 +7,10 @@
         "build:front": "cd frontend && npm run build"
     },
     "dependencies": {
-        "howler": "^2.2.4"
+        "howler": "^2.2.4",
+        "jwt-decode": "^4.0.0",
+        "moment": "^2.30.1",
+        "react-countup": "^6.5.3",
+        "react-popconfirm": "^0.1.1"
     }
 }

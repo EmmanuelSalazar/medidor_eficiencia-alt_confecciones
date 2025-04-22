@@ -1,4 +1,3 @@
-import React from "react";
 import { Container, Col, Row } from 'react-bootstrap'
 import AgregarReferencia from '../components/formularios/agregarReferencia'
 import { ListaProvider } from "../contexts/actualizarReferencias";
@@ -7,7 +6,7 @@ import BotonesSeleccionModulos from "../components/botonesSeleccion/botonesSelec
 function Referencias() {
     return (
         <Container>
-            <Row className="g-5">
+            <Row>
                 <ListaProvider>
                     <Col lg="5">
                         <h1>Registrar Referencia</h1>

@@ -4,7 +4,13 @@ import TableroMensajes from "../components/tablero/tableroMensajes";
 import TableroGrafico from "../components/tablero/tableroGrafica";
 function Tablero() {
   const [pantalla, setPantalla] = React.useState(1);
-  const [tiempo, setTiempo] = React.useState(3600000);
+  /* 
+    const [tiempo, setTiempo] = React.useState(3600000);
+  #####################
+  DEPRECATED: Algunas funciones de este componente ya no se usan, pero se dejan para referencia en caso de que se necesite
+  #####################
+  */
+ 
     // CAMBIO DE TIEMPO
     /* React.useEffect(() => {
       if(pantalla === 1){
@@ -20,12 +26,12 @@ function Tablero() {
       }
     },[pantalla]) */
     // CAMBIO DE PANTALLA
-    const cambioDePantalla = () => {
+    /* const cambioDePantalla = () => {
         const interval = setInterval(() => {
           setPantalla((pantalla) => (pantalla === 1 ? 2 : 1));
         }, tiempo);
         return () => clearInterval(interval);
-    }
+    } */
     // TABLEROS
     const tableroPorcentajes = (
        <TableroGrafico />
@@ -35,9 +41,11 @@ function Tablero() {
     )
 
   return (
-    <Container className="mt-2" style={{minWidth: '100%'}}>
+   
+      <Container className="mt-2" style={{minWidth: '100%'}}>
       {pantalla === 1 ? tableroPorcentajes : tableroMensajes}
-    </Container>
+      </Container>
+    
   )
 }
 

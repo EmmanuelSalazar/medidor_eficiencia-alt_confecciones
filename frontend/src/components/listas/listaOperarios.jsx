@@ -1,8 +1,8 @@
-import React, { useContext, useState, useEffect, useRef } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
 import { ListaContext } from '../../contexts/actualizarOperarios';
 import EliminarOperario from '../../services/api/delete/eliminarOperario';
 import ActualizarOperario from '../../services/api/update/actualizarOperario';
-import { Table, Spin } from 'antd';
+import { Table, Spin, Popconfirm } from 'antd';
 import { Alert, Button, Modal, Form } from 'react-bootstrap';
 
 const ListaOperarios = () => {
@@ -72,25 +72,30 @@ const ListaOperarios = () => {
     }
     // COLUMNAS DE LA TABLA
     const columns = [
-        { title: 'ID', dataIndex: 'op_id', key: 'op_id' },
-        { title: 'Nombre', dataIndex: 'nombre', key: 'nombre' },
-        { title: 'Módulo', dataIndex: 'modulo', key: 'modulo' },
-        { title: 'Estado', dataIndex: 'estado', key: 'estado' },
-        { title: 'Revisor', dataIndex: 'revisor', key: 'revisor' },
+        { title: 'ID', dataIndex: 'op_id', key: 'op_id', width: 65 },
+        { title: 'Nombre', dataIndex: 'nombre', key: 'nombre', width: 100 },
+        { title: 'Módulo', dataIndex: 'modulo', key: 'modulo', width: 83},
+        { title: 'Estado', dataIndex: 'estado', key: 'estado', width: 76 },
+        { title: 'Revisor', dataIndex: 'revisor', key: 'revisor', width: 100 },
         {
             title: 'Acciones',
             key: 'acciones',
             render: (text, record) => (
                 <span>
+                    
                     <Button variant="warning" className="mx-1 mb-1" onClick={() => handleShow(record)}>
                         Editar
                     </Button>
-                    <Button variant="danger" onClick={() => handleDelete(record.op_id)}>
-                        Eliminar
-                    </Button>
+                    <Popconfirm
+                    title="Eliminar operario" description="¿Estás seguro de eliminar este operario?" onConfirm={() => handleDelete(record.op_id)} okText="Sí" cancelText="No">
+                        <Button variant="danger" className="mx-1 mb-1">
+                            Eliminar
+                        </Button>
+                    </Popconfirm>
                 </span>
             ),
             fixed: 'right'
+            , width: 100
         },
     ];
 

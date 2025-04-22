@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 FROM 
                     operarios o
                 WHERE 
-                    o.modulo = ? AND o.activo = 1
+                    o.modulo = ? AND o.activo = 1 AND O.eliminado = 0
                     AND NOT EXISTS (
                         SELECT 1
                         FROM registro_produccion ro
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 FROM 
                     operarios
                 WHERE 
-                    modulo = ?
+                    modulo = ? AND eliminado = 0
                 ORDER BY 
                     op_id DESC;
             ";
@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     NOT EXISTS (
                         SELECT 1
                         FROM registro_produccion ro
-                        WHERE ro.op_id = o.op_id
+                        WHERE ro.op_id = o.op_id AND O.eliminado = 0
                           AND ro.fecha >= DATE_SUB(NOW(), INTERVAL 20 MINUTE)
                     )
                 ORDER BY 

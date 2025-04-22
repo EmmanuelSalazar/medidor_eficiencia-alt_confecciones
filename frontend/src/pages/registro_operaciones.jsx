@@ -1,4 +1,3 @@
-import React from "react";
 import RegistrarOperaciones from '../components/formularios/registrarOperaciones'
 import ListaRegistroOperaciones from "../components/listas/listaRegistroOperaciones";
 import { ListaProvider } from "../contexts/actualizarOperarios";
