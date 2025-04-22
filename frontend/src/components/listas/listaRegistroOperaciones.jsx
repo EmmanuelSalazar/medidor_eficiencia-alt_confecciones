@@ -1,7 +1,7 @@
 import React, { useContext, useState, useRef, useEffect } from 'react';
 import { ListaContext } from '../../contexts/actualizarRegistroOperaciones';
 import { Table, Input, Button, Space, Spin, Popconfirm } from 'antd';
-import { Button as ButtonBS, Modal, Form, Alert, Toast } from 'react-bootstrap';
+import { Button as ButtonBS, Modal, Form, Alert } from 'react-bootstrap';
 import { SearchOutlined } from '@ant-design/icons';
 import { ListaContext as ListaContexto} from "../../contexts/actualizarReferencias";
 import ActualizarRegistroOperacion from '../../services/api/update/actualizarRegistroOperacion';

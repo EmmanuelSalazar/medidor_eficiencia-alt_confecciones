@@ -28,6 +28,10 @@ const AgregarUsuarios = () => {
         // PROCESAR Y ENVIAR INFORMACIÓN
             const enviarInformacion = async (e) => {
                 e.preventDefault();
+                if (contrasenaRef.current.value !== contrasenaVerRef.current.value) {
+                    setMensajeDeError("Las contraseñas no coinciden");
+                    return;
+                }
                 const values = {
                     "nombreUsuario": nombreUsuarioRef.current.value,
                     "contrasenaUsuario": contrasenaRef.current.value,

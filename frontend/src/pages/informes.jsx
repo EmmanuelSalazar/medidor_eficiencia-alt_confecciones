@@ -7,6 +7,7 @@ import useRegistroOperacionesResumido from "../hooks/mostrarRegistroOperacionesR
 import IncentivoQuincena from "../components/incentivoQuincena";
 import FechaActual from "../components/fechaActual";
 import EstadisticaInforme from "../components/graficos/estadisticaInformes";
+import logo from '../assets/img/logo.png'
 function Informes() {
     const { beneficio, porcentajeEstatico } = IncentivoQuincena();
     const { obtenerCortes } = FechaActual();
@@ -51,7 +52,10 @@ function Informes() {
                 </Col>
                 <Col>
                     <Row>
-                        <h1 className="imprimir">Modulo {seccion}</h1>
+                        <div className="d-flex justify-content-between align-items-center">
+                            <h1 className="imprimir">Modulo {seccion}</h1>
+                            <img className="imprimir" src={logo} alt="Logo" style={{width: '45px', height: '45px'}} />
+                        </div>
                         <Col className="text-start">
                             <h5>{cortes.fechaInicio} / {cortes.fechaFinal}</h5>
                             <p className="text-secondary">Formato: AAAA-MM-DD</p>
