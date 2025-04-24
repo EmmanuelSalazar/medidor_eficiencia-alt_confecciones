@@ -5,11 +5,11 @@ import PorcentajeDeEficienciaPorCorte from "..//porcentajeEficienciaDeCorte";
 import PorcentajeDeEficienciaDiaria from "..//porcentajeEficienciaDelDia";
 import PanelNotificaciones from "..//panelNotificaciones";
 import IncentivoQuincena from "..//incentivoQuincena";
+import DiasDeTrabajo from "../panelDiasDeTrabajo";
 import { useSearchParams } from "react-router-dom";
 import FechaActual from "../fechaActual";
 import { ListaProvider } from "../../contexts/actualizarRegistroOperaciones";
 import logo from '../../assets/img/logo.png'
-
 const TableroGrafico = () => {
   const { PanelCompleto } = IncentivoQuincena();
   const {fechaFormateada, corteQuincena} = FechaActual();  
@@ -62,8 +62,9 @@ const TableroGrafico = () => {
                   <div className="p-2"><h5><strong>{fechaFormateada}</strong></h5></div>
                 </Stack>
               </Row>
-              <Row className='border border-white pe-3 bg-white  rounded text-light justify-content-center'>
-                <img src={logo} alt="logo" style={{width: '70%', height: '100%'}} className="img-fluid" />
+              <Row className='border border-primary me-2 pe-3 bg-black  rounded text-light justify-content-center'>
+                <div className="p-2 text-center"><h4><strong>DIAS DE TRABAJO</strong></h4></div>
+                  <DiasDeTrabajo />
               </Row>
             </Col>
             <Col lg={9} xs={12} sm={12} md={4} className='bg-black rounded border border-primary text-light text-center' >            

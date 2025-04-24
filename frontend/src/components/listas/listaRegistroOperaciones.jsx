@@ -1,6 +1,6 @@
 import React, { useContext, useState, useRef, useEffect } from 'react';
 import { ListaContext } from '../../contexts/actualizarRegistroOperaciones';
-import { Table, Input, Button, Space, Spin, Popconfirm } from 'antd';
+import { Table, Input, Button, Space, Spin, Popconfirm, Pagination } from 'antd';
 import { Button as ButtonBS, Modal, Form, Alert } from 'react-bootstrap';
 import { SearchOutlined } from '@ant-design/icons';
 import { ListaContext as ListaContexto} from "../../contexts/actualizarReferencias";
@@ -16,6 +16,7 @@ const ListaRegistroOperaciones = () => {
     //
     const [visible, setVisible] = useState(false);
     const [registroSeleccionado, setRegistroSeleccionado] = useState("");
+    const [pagina, setPagina] = useState(1);
     // Almacenar Formulario
     const referenciaRef = useRef();
     const unidadesProducidasRef = useRef();
@@ -58,7 +59,10 @@ const ListaRegistroOperaciones = () => {
             setMensajeDeError("Ha ocurrido un error al eliminar el registro: ", error);
         }
     }
-
+    // Paginación
+        const paginacion = (pagina) => {
+            console.log
+        }
     // Funcion para procesar los cambios
     const handleOk = async () => {
         const values = {
@@ -156,6 +160,7 @@ const ListaRegistroOperaciones = () => {
             {mensajeDeAlerta && <Alert variant="warning">{mensajeDeAlerta}</Alert>}
             {mensajeDeError && <Alert variant="danger">{mensajeDeError}</Alert>}
             <Table dataSource={listaRegistro} columns={columns} rowKey="reg_id" scroll={{y: 520}} pagination={false}/>
+            <Pagination onChange={paginacion} />
             <Modal show={visible} onHide={handleCancel}>
                 <Modal.Header closeButton>
                     <Modal.Title>Editar Registro</Modal.Title>

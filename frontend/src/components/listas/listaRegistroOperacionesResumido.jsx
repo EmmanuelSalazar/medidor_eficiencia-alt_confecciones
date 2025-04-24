@@ -1,8 +1,13 @@
 import { Table, Spin } from "antd";
 import { Alert } from "react-bootstrap";
 import useRegistroOperacionesResumido from "../../hooks/mostrarRegistroOperacionesResumido.hook";
+import FechaActual from "../fechaActual";
 const ListaRegistroOperacionesResumido = ({ modulo }) => {
-    const { data, status, error } = useRegistroOperacionesResumido(modulo);
+    const { obtenerCortes } = FechaActual();
+    const cortes = obtenerCortes();
+    const fechaInicio = cortes.fechaInicio;
+    const fechaFin = cortes.fechaFinal;
+    const { data, status, error } = useRegistroOperacionesResumido(modulo, fechaInicio, fechaFin);
     const columns = [
         { title: 'Nombre', dataIndex: 'NombreOperario', key: 'nombre', width: 300 },
         { title: 'Total UND', dataIndex: 'TotalUnidadesProducidas', key: 'totalUnidades', width: 165},

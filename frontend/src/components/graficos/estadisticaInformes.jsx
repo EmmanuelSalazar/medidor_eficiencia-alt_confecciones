@@ -3,10 +3,14 @@ import { Spin } from 'antd';
 import { Alert } from 'react-bootstrap';
 import 'chart.js/auto';
 import useRegistroOperacionesResumido from "../../hooks/mostrarRegistroOperacionesResumido.hook";
-import { HeartFilled } from '@ant-design/icons';
+import FechaActual from '../fechaActual';
 const EstadisticaInforme = ({ modulo }) => {
     // RECIBIR DATOS DE LA API
-    const { data, status, error } = useRegistroOperacionesResumido(modulo);
+    const { obtenerCortes } = FechaActual();
+    const cortes = obtenerCortes();
+    const fechaInicio = cortes.fechaInicio;
+    const fechaFin = cortes.fechaFinal;
+    const { data, status, error } = useRegistroOperacionesResumido(modulo, fechaInicio, fechaFin);
     if (!data) {
         return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
     }

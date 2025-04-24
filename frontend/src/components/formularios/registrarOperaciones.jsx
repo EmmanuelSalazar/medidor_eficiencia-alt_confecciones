@@ -58,7 +58,7 @@ const RegistrarOperaciones = () => {
             operario: operarioRef.current.value,
             unidadesProducidas: unidadesProducidasRef.current.value,
             referencia: referenciaRef.current.value,
-            adicionales: adicionalesRef.current.value ?? NULL
+            adicionales: adicionalesRef.current.value ?? null
         };
         if (window.moduloSeleccionado == "" || window.moduloSeleccionado == null){
             setMensajeDeError("No se ha seleccionado un modulo");

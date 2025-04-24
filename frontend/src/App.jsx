@@ -14,6 +14,8 @@ import { ListaProvider } from './contexts/informacionGrafico'
 import FormularioLogin from './components/formularios/login';
 import Estadisticas from './pages/estadisticas';
 import Admin from './pages/admin';
+import NotFoundPage from './pages/404';
+import Bodega from './pages/bodega';
 function App() {
   const token = localStorage.getItem('token') || null;
   // Verificar que tenga un token almacenado
@@ -48,6 +50,8 @@ function App() {
             {userRol >= 2 && <Route path='/estadisticas' element={<Estadisticas />}/>}
             {userRol >= 2 && <Route path='/admin' element={<Admin />}/>}
             {userRol >= 2 && <Route path='/informes' element={<Informes />}/>}
+            {userRol === 4 || userRol === 9 && <Route path='/bodega' element={<Bodega />}/>}
+            <Route path='*' element={<NotFoundPage />}/>
           </Routes>
         </ListaProvider>
     </Router>

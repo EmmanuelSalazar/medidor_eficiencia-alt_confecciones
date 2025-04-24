@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Menu } from 'antd'
-import { DesktopOutlined, TeamOutlined, BarsOutlined, FileAddOutlined, DatabaseOutlined, BarChartOutlined, SolutionOutlined, LogoutOutlined, SettingOutlined, MenuUnfoldOutlined, ApartmentOutlined, SnippetsOutlined } from '@ant-design/icons'
+import { AppstoreOutlined, DesktopOutlined, TeamOutlined, BarsOutlined, FileAddOutlined, DatabaseOutlined, BarChartOutlined, SolutionOutlined, LogoutOutlined, SettingOutlined, MenuUnfoldOutlined, ApartmentOutlined, SnippetsOutlined } from '@ant-design/icons'
 import { NavLink } from 'react-router-dom'
 import { ListaContext } from "../contexts/informacionGrafico";
 import { jwtDecode } from 'jwt-decode';
@@ -10,15 +10,15 @@ let token = localStorage.getItem('token') ?? null;
 const userInfo = token != null ? jwtDecode(token) : null;
 const userRol = userInfo != null ? userInfo.rol : 0;
 const items = [
-    userRol >= 2 ? {
+    userRol === 2 || userRol === 9 ? {
         label:  <NavLink to="/registro_operaciones" className="noDecorativos">Registrar operaciones</NavLink>,
         key: 'operaciones',
         icon: <FileAddOutlined />,
-      }: null, userRol >= 2 ? {
+      }: null, userRol === 2 || userRol === 9 ? {
         label: <NavLink to="/tablaRegistros" className="noDecorativos">Lista de registros</NavLink>,
         key: 'tablaRegistros',
         icon: <DatabaseOutlined />,
-      }: null, userRol >= 2 ? {
+      }: null, userRol === 2 || userRol === 9 ? {
         label: "Recursos",
         key: 'recursos',
         icon: <MenuUnfoldOutlined />,
@@ -33,7 +33,7 @@ const items = [
               icon: <TeamOutlined />
           }
         ]
-      } : null, userRol >= 2 ? {
+      } : null, userRol === 2 || userRol === 9 ? {
         label: "Administración",
         key:'administracion',
         icon: <ApartmentOutlined />,
@@ -53,7 +53,7 @@ const items = [
           }
         ]
       }: null,
-    userRol >= 1 ? {
+      userRol === 1 || userRol === 2 || userRol === 9 ? {
           label: "Tableros",
           key: 'tablero',
           icon: <DesktopOutlined />,
@@ -74,7 +74,17 @@ const items = [
               key: '4'
             },
           ]
-      }: null, {
+      }: null, userRol === 3 || userRol === 9 ? {
+        label: "Bodega",
+        key: 'bodega',
+        icon: <AppstoreOutlined />,
+        children: [
+          {
+            label: <NavLink to="/bodega" className="noDecorativos">Encargos</NavLink>,
+            key: 'encargos'
+          }
+        ]
+      } : null, {
     label: "Cuenta",
     key: 'cuenta',
     icon: <SolutionOutlined />,
