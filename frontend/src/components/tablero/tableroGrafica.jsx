@@ -5,11 +5,11 @@ import PorcentajeDeEficienciaPorCorte from "..//porcentajeEficienciaDeCorte";
 import PorcentajeDeEficienciaDiaria from "..//porcentajeEficienciaDelDia";
 import PanelNotificaciones from "..//panelNotificaciones";
 import IncentivoQuincena from "..//incentivoQuincena";
-import DiasDeTrabajo from "../panelDiasDeTrabajo";
+import InformacionProduccion from "../panelInformacionProduccion";
+import PanelInformacionProduccionGeneralizada from "../panelInformacionProduccionGeneralizada";
 import { useSearchParams } from "react-router-dom";
 import FechaActual from "../fechaActual";
 import { ListaProvider } from "../../contexts/actualizarRegistroOperaciones";
-import logo from '../../assets/img/logo.png'
 const TableroGrafico = () => {
   const { PanelCompleto } = IncentivoQuincena();
   const {fechaFormateada, corteQuincena} = FechaActual();  
@@ -36,24 +36,24 @@ const TableroGrafico = () => {
 
     return (
         <>
-          <Row className="border border-black p-1 mb-2 bg-black bg-opacity-50 rounded text-light">
+          {/* <Row className="border border-black p-1 mb-2 bg-black bg-opacity-50 rounded text-light">
             <PanelNotificaciones />
-          </Row>
+          </Row> */}
           <Row>
             <Col lg={3} xs={12} sm={12} md={4} >
-              <Row className='border border-black mb-2 me-1 bg-black  rounded text-light'>
+              <Row className='border border-black rounded rounded-top rounded-bottom-0  me-1 bg-black  text-light'>
                 <ListaProvider>
                   <PanelCompleto />
                 </ListaProvider>
               </Row>
-              <Row className='border border-black mb-2 me-1 bg-black  rounded text-light' >
+              <Row className='border border-black  me-1 bg-black   text-light' >
                 <Stack style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
                   <div className="p-2"><h4><strong>INCENTIVO QUINCENA</strong></h4></div>
                   <PorcentajeDeEficienciaPorCorte />
                   <div className="p-2"><h5><strong>{corteQuincena}</strong></h5></div>
                 </Stack>
               </Row>
-              <Row className='border border-black mb-2 me-1 bg-black  rounded text-light'>
+              <Row className='border border-black mb-2 me-1 bg-black rounded rounded-top-0  text-light'>
                 <Stack style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
                   <div className="p-2"><h4><strong>EFICIENCIA DEL DÍA</strong></h4></div>
                   <ListaProvider>
@@ -62,9 +62,11 @@ const TableroGrafico = () => {
                   <div className="p-2"><h5><strong>{fechaFormateada}</strong></h5></div>
                 </Stack>
               </Row>
-              <Row className='border border-primary me-2 pe-3 bg-black  rounded text-light justify-content-center'>
-                <div className="p-2 text-center"><h4><strong>DIAS DE TRABAJO</strong></h4></div>
-                  <DiasDeTrabajo />
+              <Row className='border border-black me-1 bg-black rounded-top rounded-bottom-0   text-light justify-content-center'>
+                  <InformacionProduccion />
+              </Row>
+              <Row className='border border-black me-1 bg-black   text-light justify-content-center'>
+                  <PanelInformacionProduccionGeneralizada />
               </Row>
             </Col>
             <Col lg={9} xs={12} sm={12} md={4} className='bg-black rounded border border-primary text-light text-center' >            

@@ -5,6 +5,7 @@ const useMostrarProduccion = () => {
     const { status, data, error, refetch } = useQuery({
     queryKey: ['ordenProduccion'],
     queryFn: FetchProduccion,
+    refetchInterval: 3000 * 60 * 10 
   })
     return { data, status, error, reload: refetch }
 }

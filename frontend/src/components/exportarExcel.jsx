@@ -16,7 +16,7 @@ const ExportToExcel = ({ datos, texto, onClick }) => {
             } finally {
                 setCargando(false);
             }  
-        } 
+        }
         const workSheet = XLSX.utils.json_to_sheet(datos);
         const workBook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workBook, workSheet, "Datos");

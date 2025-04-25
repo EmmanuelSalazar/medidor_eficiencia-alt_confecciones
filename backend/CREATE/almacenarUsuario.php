@@ -22,6 +22,10 @@
             exit();
         }
 
+        // CIFRAR CONTRASEÑA
+
+        $contrasenaUsuario = password_hash($contrasenaUsuario, PASSWORD_BCRYPT);
+
         $sql = "INSERT INTO usuarios (nombre, contrasena, rol) VALUES (?, ?, ?)";
         $stmt = $mysqli->prepare($sql);
         $stmt->bind_param("ssi", $nombreUsuario, $contrasenaUsuario, $rolUsuario);

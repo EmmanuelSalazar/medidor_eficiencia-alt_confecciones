@@ -3,6 +3,7 @@ import { Stack, Col } from 'react-bootstrap';
 import { ListaContext } from '../contexts/informacionGrafico';
 const PanelNotificaciones = () => {
     const { lista } = React.useContext(ListaContext);
+    // DEPRECATED: Esta función ha sido marcada en desuso, posiblemente sea eliminada en el futuro.
     return (
             <>
                 <Stack direction="horizontal" gap={2}>
