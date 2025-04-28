@@ -16,6 +16,8 @@ import Estadisticas from './pages/estadisticas';
 import Admin from './pages/admin';
 import NotFoundPage from './pages/404';
 import Bodega from './pages/bodega';
+import BodegaClientes from './pages/bodega_clientes';
+import BodegaDespachos from './pages/bodega_despachos';
 function App() {
   const token = localStorage.getItem('token') || null;
   // Verificar que tenga un token almacenado
@@ -50,7 +52,9 @@ function App() {
             {userRol >= 2 && <Route path='/estadisticas' element={<Estadisticas />}/>}
             {userRol >= 2 && <Route path='/admin' element={<Admin />}/>}
             {userRol >= 2 && <Route path='/informes' element={<Informes />}/>}
+            {userRol === 4 || userRol === 9 && <Route path='/bodega_clientes' element={<BodegaClientes />}/>}
             {userRol === 4 || userRol === 9 && <Route path='/bodega' element={<Bodega />}/>}
+            {userRol === 4 || userRol === 9 && <Route path='/bodega_despacho' element={<BodegaDespachos />}/>}
             <Route path='*' element={<NotFoundPage />}/>
           </Routes>
         </ListaProvider>

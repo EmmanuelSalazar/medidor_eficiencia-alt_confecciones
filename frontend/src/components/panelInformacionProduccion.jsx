@@ -14,7 +14,6 @@ const InformacionProduccion = () => {
     function infoProduccion() {
         // FILTRAR POR MODULO
        const datos = data.filter((datos) => datos.modulo === modulo && datos.estado === 1);
-       console.log(datos);
        var datosFiltrados
         // VERTIFICAR SI HAY O NO DATOS
        if (datos.length === 0) {
@@ -34,17 +33,13 @@ const InformacionProduccion = () => {
             })
         return datosFiltrados
        }}; 
-   
 
-    
-    console.log(infoProduccion()[0]);
-
-    /* if (status === 'pending') {
+    if (status === 'pending') {
         return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>
     }
     if (status === 'error') {
         return <Alert variant='danger'>Error: {error.message}</Alert>;
-    } */
+    }
 
     return (
             <Row className="p-1 d-flex ms-2">

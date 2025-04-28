@@ -10,7 +10,7 @@ let token = localStorage.getItem('token') ?? null;
 const userInfo = token != null ? jwtDecode(token) : null;
 const userRol = userInfo != null ? userInfo.rol : 0;
 const items = [
-    userRol === 2 || userRol === 9 ? {
+    userRol === 2 || userRol === 9  || userRol === 3 ? {
         label:  <NavLink to="/registro_operaciones" className="noDecorativos">Registrar operaciones</NavLink>,
         key: 'operaciones',
         icon: <FileAddOutlined />,
@@ -74,7 +74,7 @@ const items = [
               key: '4'
             },
           ]
-      }: null, userRol === 3 || userRol === 9 ? {
+      }: null, userRol === 4 || userRol === 9 ? {
         label: "Bodega",
         key: 'bodega',
         icon: <AppstoreOutlined />,
@@ -82,6 +82,12 @@ const items = [
           {
             label: <NavLink to="/bodega" className="noDecorativos">Encargos</NavLink>,
             key: 'encargos'
+          },{
+            label: <NavLink to="/bodega_despacho" className="noDecorativos">Despacho</NavLink>,
+            key: 'despacho'
+          },{
+            label: <NavLink to="/bodega_clientes" className="noDecorativos">Clientes</NavLink>,
+            key: 'clientes'
           }
         ]
       } : null, {
