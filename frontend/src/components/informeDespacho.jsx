@@ -34,7 +34,7 @@ const InformeDespacho = () => {
                 </Col>
             </Row>
             <table className='table table-bordered'>
-	            <tbody>
+	            <tbody className='plantilla'>
                     <tr>
                         <th colSpan="4">Cliente</th>
                         <td colSpan="8">{informacionCliente[0].nombre}</td>
@@ -61,21 +61,24 @@ const InformeDespacho = () => {
                         <th colSpan="4">Observaciones</th>
                         <td colSpan="13">{observaciones}</td>
                     </tr>
-
-                    <tr>
-                        <th colSpan="4">Orden de produccion</th>
-                        <th colSpan="4">Referencia</th>
-                        <th colSpan="4">Talla</th>
-                        <th colSpan="4">Color</th>
-                        <th colSpan="4">UNIDADES</th>
-                    </tr>
-                    <tr>
-                        <td colSpan="4">{informacionODP[0].orden_produccion || "N/A"}</td>
-                        <td colSpan="4">{informacionODP[0].referencia}</td>
-                        <td colSpan="4">{informacionODP[0].talla}</td>
-                        <td colSpan="4">{informacionODP[0].color}</td>
-                        <td colSpan="4">{unidades}</td>
-                    </tr>
+                </tbody>
+            </table>
+            <table className='table table-bordered'>
+                    <tbody>
+                        <tr>
+                            <th colSpan="4">Orden de produccion</th>
+                            <th colSpan="4">Referencia</th>
+                            <th colSpan="4">Talla</th>
+                            <th colSpan="4">Color</th>
+                            <th colSpan="4">UNIDADES</th>
+                        </tr>
+                        <tr>
+                            <td colSpan="4">{informacionODP[0].orden_produccion || "N/A"}</td>
+                            <td colSpan="4">{informacionODP[0].referencia}</td>
+                            <td colSpan="4">{informacionODP[0].talla}</td>
+                            <td colSpan="4">{informacionODP[0].color}</td>
+                            <td colSpan="4">{unidades}</td>
+                        </tr>
                 </tbody>
             </table>
             <Row className='d-flex mt-5'>

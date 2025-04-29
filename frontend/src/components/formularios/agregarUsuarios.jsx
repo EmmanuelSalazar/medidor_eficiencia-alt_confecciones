@@ -76,7 +76,9 @@ return (
                             <Form.Select ref={rolRef} required>
                                 <option value="1">Tablero</option>
                                 <option value="2">Supervisor/a</option>
-                                <option value="3">Administrador/a</option>
+                                <option value="3">Lider de modulo</option>
+                                <option value="4">Bodega</option>
+                                <option value="9">Administrador/a</option>
                             </Form.Select>
                         </Form.Group>
                         <Button className="mx-5 my-3" variant="primary" type="submit">Registrar usuario</Button>

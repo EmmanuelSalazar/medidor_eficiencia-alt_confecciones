@@ -1,7 +1,7 @@
 #root {
     width: 100%;
 }
-th {
+.plantilla > tr > th {
     text-transform: uppercase;
 }
 .tablaResponsiva {

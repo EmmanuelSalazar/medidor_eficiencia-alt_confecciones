@@ -4,6 +4,7 @@ import { AppstoreOutlined, DesktopOutlined, TeamOutlined, BarsOutlined, FileAddO
 import { NavLink } from 'react-router-dom'
 import { ListaContext } from "../contexts/informacionGrafico";
 import { jwtDecode } from 'jwt-decode';
+import useMostrarProduccion from '../hooks/mostrarProduccion.hook';
 import CerrarSesion from './cuenta/cerrarSesion';
 import FechaActual from '../components/fechaActual';
 let token = localStorage.getItem('token') ?? null;
@@ -104,6 +105,7 @@ const items = [
   }
 ].filter(item => item != null);
 const MenuPrincipal = () => {
+  const { reload } = useMostrarProduccion();
   const {fechaActualDia, corteQuincenaFormateado, anioActual} = FechaActual();
   let corteQuincena = `${anioActual}-${corteQuincenaFormateado[0].fechaInicial}`;
   const { actualizarLista, actualizarListaRegistro } = React.useContext(ListaContext);
@@ -116,6 +118,7 @@ const MenuPrincipal = () => {
         await actualizarListaRegistro(moduloSeleccionado, fechaActualDia, fechaActualDia, null, null, 1, 0);
         await actualizarListaRegistro(moduloSeleccionado, corteQuincena, fechaActualDia, null, null, 1, 1);
         await actualizarLista(null, moduloSeleccionado);
+        await reload();
       } catch (error) {
         console.error("Ha ocurrido un error: ", error)
       }

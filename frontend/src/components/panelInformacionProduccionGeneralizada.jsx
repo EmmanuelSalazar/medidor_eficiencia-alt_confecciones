@@ -10,7 +10,8 @@ const PanelInformacionProduccionGeneralizada = () => {
         return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
     }
     const infoProduccion =  () => {
-        let informacionFiltrada = data.filter((datos) => datos.modulo === moduloEnLaUrl)
+        let informacionFiltrada = data.filter((datos) => datos.modulo === moduloEnLaUrl && datos.estado == 1 || datos.estado == 3)
+        console.log(informacionFiltrada)
         // TOTAL DE DÍAS DE TRABAJO DISPONIBLES
         let diasArray = informacionFiltrada.map((datos) => parseFloat(datos.DiasDeTrabajo));
         let diasTotales = diasArray.reduce((a,b) => a + b, 0);
@@ -22,7 +23,7 @@ const PanelInformacionProduccionGeneralizada = () => {
             }
         });
         // UNIDADES POR REFERENCIA
-        let unidadesPorReferencia = informacionFiltrada.map((datos) => parseInt(datos.cantidad))
+        let unidadesPorReferencia = informacionFiltrada.map((datos) => parseInt(datos.cantidad_producida))
         // TOTAL UNIDADES POR REFERENCIA
         let totalUnidadesPorReferencia = unidadesPorReferencia.reduce((a,b) => a + b, 0);
         return {diasTotales, referencias, unidadesPorReferencia, totalUnidadesPorReferencia};
@@ -35,7 +36,7 @@ const PanelInformacionProduccionGeneralizada = () => {
                     <h3><strong>Días</strong></h3>
                     </Row>
                     <Row>
-                        <strong style={{fontSize: '2rem'}} >{infoProduccion().diasTotales}</strong>
+                        <strong style={{fontSize: '2rem'}} >{Math.round(infoProduccion().diasTotales)}</strong>
                     </Row>
                 </Col>
                 <Col>

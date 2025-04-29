@@ -65,7 +65,7 @@ const TableroGrafico = () => {
               <Row className='border border-black me-1 bg-black rounded-top rounded-bottom-0   text-light justify-content-center'>
                   <InformacionProduccion />
               </Row>
-              <Row className='border border-black me-1 bg-black   text-light justify-content-center'>
+              <Row className='border border-black me-1 bg-black rounded rounded-top-0   text-light justify-content-center'>
                   <PanelInformacionProduccionGeneralizada />
               </Row>
             </Col>

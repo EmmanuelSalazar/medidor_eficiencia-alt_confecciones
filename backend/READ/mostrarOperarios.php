@@ -14,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     o.op_id,
                     o.nombre,
                     o.modulo,
+                    o.posicion,
                     O.activo,
                     CASE 
                         WHEN o.activo = 1 THEN 'Activo'
@@ -31,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                           AND ro.fecha >= DATE_SUB(NOW(), INTERVAL 20 MINUTE)
                     )
                 ORDER BY 
-                    o.op_id ASC;
+                    o.posicion ASC;
             ";
             $stmt = $mysqli->prepare($sql);
             $stmt->bind_param("i", $modulo);
@@ -71,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     o.nombre,
                     o.modulo,
                     o.activo,
+                    o.posicion,
                     CASE 
                         WHEN o.activo = 1 THEN 'Activo'
                         WHEN o.activo = 0 THEN 'Inactivo'
@@ -87,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                           AND ro.fecha >= DATE_SUB(NOW(), INTERVAL 20 MINUTE)
                     )
                 ORDER BY 
-                    o.op_id ASC;
+                    o.posicion ASC;
             ";
             $stmt = $mysqli->prepare($sql);
         } else {
