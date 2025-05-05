@@ -4,13 +4,13 @@ import { Alert } from 'react-bootstrap';
 import 'chart.js/auto';
 import useRegistroOperacionesResumido from "../../hooks/mostrarRegistroOperacionesResumido.hook";
 import FechaActual from '../fechaActual';
-const EstadisticaInforme = ({ modulo }) => {
+const EstadisticaInforme = ({ modulo, fechaFin, fechaInicio }) => {
     // RECIBIR DATOS DE LA API
     const { obtenerCortes } = FechaActual();
     const cortes = obtenerCortes();
-    const fechaInicio = cortes.fechaInicio;
-    const fechaFin = cortes.fechaFinal;
-    const { data, status, error } = useRegistroOperacionesResumido(modulo, fechaInicio, fechaFin);
+    const fechaInicioSeleccionada = fechaInicio || cortes.fechaInicio;
+    const fechaFinSeleccionada = fechaFin || cortes.fechaFinal;
+    const { data, status, error } = useRegistroOperacionesResumido(modulo, fechaInicioSeleccionada, fechaFinSeleccionada);
     if (!data) {
         return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
     }

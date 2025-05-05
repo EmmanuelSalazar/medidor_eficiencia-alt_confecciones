@@ -1,17 +1,13 @@
 import { useContext, useState, useEffect, useRef } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
-import { Spin } from 'antd';
+import { Spin, Popconfirm } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import useMostrarClientes from '../../hooks/mostrarClientes.hook';
 import useMostrarProduccion from '../../hooks/mostrarProduccion.hook';
 import { PlantillaDespachoContext } from '../../contexts/plantillaDespacho';
 import AlmacenarDatos from '../../services/api/create/almacenarRemision';
 const RegistrarDespacho = () => {
-    // AÑADIR INPUTS N CANTIDAD DE VECES
-    const [input, setInput] = useState([]);
-    const agregarInput = () => {
-        setInput([...input, input.length + 1]);
-    }
-    //
+    // REFERENCIAS FORMULARIO
     const clienteRef = useRef(null);
     const odpRef = useRef(null);
     const unidadesRef = useRef(null);
@@ -34,12 +30,11 @@ const RegistrarDespacho = () => {
     // CONTEXTOS
     const { data } = useMostrarClientes();
     const { data: produccion } = useMostrarProduccion();
-    const { setCliente, setOdp, setUnidades, setObservaciones } = useContext(PlantillaDespachoContext);
-    console.log(produccion)
+    const { setCliente, setObservaciones, despachos, setDespachos } = useContext(PlantillaDespachoContext);
+
     // ESPERAR A QUE LOS DATOS ESTEN CARGADOS
-    if (!data || !produccion) {
-        return <Spin className='mt-5' tip="Cargando..."><div></div></Spin> 
-    }
+    if (!data || !produccion) return <Spin className='mt-5' tip="Cargando..."><div></div></Spin> 
+    
     // MAPEO DE INFORMACION
     const clientes = data.map((datos) => {
         return {
@@ -55,6 +50,33 @@ const RegistrarDespacho = () => {
     })
 
     // ENVIAR DATOS AL CONTEXTO
+    const agregarDespacho = () => {
+        setDespachos([...despachos, {
+            id: Date.now(),
+            odp_id: 0,
+            unidadesDespachadas: 0,
+            observaciones: null,
+        }])
+    }
+    const alCambiarOdp = (despachoId, odpId) => {
+        const despachosActualizados = despachos.map((despacho) => {
+            if (despacho.id === despachoId) {
+                const odpCompleta = produccion.filter((opd) => opd.odp_id === parseInt(odpId))
+                return { ...despacho, odp_id: odpId, informacionODP: odpCompleta }
+            }
+            return despacho;
+        });
+            setDespachos(despachosActualizados);   
+      }
+    const alCambiarUnidades = (despachoId, unidades) => {
+        const despachosActualizados = despachos.map((despacho) => {
+            if (despacho.id === despachoId) {
+                return {...despacho, unidadesDespachadas: parseInt(unidades) }
+            }
+            return despacho;
+        });
+        setDespachos(despachosActualizados);
+    }
     const cargarDatosCliente = (e) => {
         let seleccionado = parseInt(e.target.value);
         if (seleccionado === 0) {
@@ -67,54 +89,33 @@ const RegistrarDespacho = () => {
             setCliente(informacionCliente)
         }
     }
-    const cargarDatosOPD = (e) => {
-        let seleccionado = parseInt(e.target.value);
-        if (seleccionado === 0) {
-            setMensajeDeAlerta("Debes seleccionar una opción valida")
-            return;
-        } else {
-            const informacionOPD = produccion.filter((opd) => {
-                return opd.odp_id === seleccionado
-            })
-            setOdp(informacionOPD)
-        }
-       
-    }
-    const cargarDatosUnidades = (e) => {
-        let seleccionado = parseInt(e.target.value);
-        if (seleccionado < 0) {
-            setMensajeDeAlerta("Las unidades a despachar no pueden ser negativas")
-            return;
-        }
-        setUnidades(seleccionado)
-    }
     const cargarObservaciones = (e) => {
         let seleccionado = e.target.value;
         setObservaciones(seleccionado)
     }
+    
     // ENVIAR DATOS AL BACKEND
     const enviarDatos = async (e) => {
         e.preventDefault();
+        const odpInfo = despachos.map((despacho) => {
+            let odp = despacho.odp_id;
+            let unidades = despacho.unidadesDespachadas;
+            return {odp, unidades}
+        })
         let observaciones = observacionesRef.current.value === "" ? null : observacionesRef.current.value;
         const values = {
             clientID: clienteRef.current.value,
-            odpID: odpRef.current.value,
-            unidadesDespachadas: unidadesRef.current.value,
+            odpInfo : odpInfo,
             observaciones: observaciones,
         }
+        console.log(values)
         try {
             var respuesta = await AlmacenarDatos(values);
-            if (respuesta.ok) {
-                setMensajeDeExito(respuesta.respuesta);
+
+                setMensajeDeExito("El registro se ha almacenado exitosamente");
                 formRef.current.reset();
-                respuesta = null;
-                return;
-            } else {
+                setDespachos([]);
                 console.log(respuesta)
-                setMensajeDeError(respuesta.respuesta || "Ha ocurrido un error al registrar el despacho, si el error persiste, contacta al administrativo");
-                respuesta = null;
-                return;
-            }
         } catch (error) {
             setMensajeDeError("Ha ocurrido un error al registrar el despacho, si el error persiste, contacta al administrativo");
             console.log(error)
@@ -122,13 +123,10 @@ const RegistrarDespacho = () => {
         }
     }
     return (
-        <Form onSubmit={enviarDatos} ref={formRef} className='d-flex flex-column gap-3'>
-            <Form.Text className='noImprimir'>
-            Al seleccionar los datos, se actualizara la información de la plantilla de remisión
-            </Form.Text>
+        <Form style={{height: '550px', overflow: 'auto'}} onSubmit={enviarDatos} ref={formRef} className='noImprimir d-flex flex-column gap-3'>
                 {mensajeDeExito && <Alert variant="success">{mensajeDeExito}</Alert>}
                 {mensajeDeAlerta && <Alert variant="warning">{mensajeDeAlerta}</Alert>}
-                {mensajeDeError && <Alert variant="danger">{mensajeDeError}</Alert>}
+                {mensajeDeError && <Alert variant="danger">{mensajeDeError}</Alert>}           
             <Form.Group className='noImprimir'>
                 <Form.Label>Selecciona el cliente</Form.Label>
                 <Form.Select ref={clienteRef} onChange={cargarDatosCliente} required>
@@ -139,32 +137,50 @@ const RegistrarDespacho = () => {
                     )
                 })}
                 </Form.Select>
-
+                
             </Form.Group>
-            <Form.Group className='noImprimir'>
-                <Form.Label>Selecciona la orden de producción</Form.Label>
-                <Form.Select ref={odpRef} onChange={cargarDatosOPD} required>
-                    <option value={0} className='disabled'>Selecciona una orden de producción</option>
-                {ordenesDeProduccion.map((orden) => {
+                {despachos.map((despacho, index) => {
                     return (
-                        <option value={orden.opd_id} key={orden.opd_id}>{orden.orden_produccion}</option>
-                    )
-                })}
-                </Form.Select>
-            </Form.Group>
+                        <div key={index} className='noImprimir border p-2 rounded border-2'>
+                            <Form.Group className='noImprimir'>
+                                <Form.Label>Selecciona la orden de producción</Form.Label>
+                                <Form.Select id={index + 1} ref={odpRef} onChange={(e) => alCambiarOdp(despacho.id, e.target.value)} required>
+                                        <option value={0} className='disabled'>Selecciona una orden de producción</option>
+                                    {ordenesDeProduccion.map((orden) => {
+                                        return (
+                                            <option value={orden.opd_id} key={orden.opd_id}>{orden.orden_produccion}</option>
+                                        )
+                                    })}
+                                    </Form.Select>
+                            </Form.Group>
+                            <Form.Group className='noImprimir'>
+                                <Form.Label>Unidades a despachar</Form.Label>
+                                <Form.Control ref={unidadesRef} onChange={(e) => alCambiarUnidades(despacho.id, e.target.value)} type="number" placeholder="Ingresa las unidades a despachar" required />
+                            </Form.Group>
+                            <div className='noImprimir'>
+                                <Form.Text>
+                                    #{index + 1}
+                                </Form.Text>
+                            </div>
+                        </div>  
+                     )
+                    })}            
             <Form.Group className='noImprimir'>
-                <Form.Label>Unidades a despachar</Form.Label>
-                <Form.Control ref={unidadesRef} onChange={cargarDatosUnidades} type="number" placeholder="Ingresa las unidades a despachar" required />
+                <Button variant="secondary" onClick={agregarDespacho}>
+                <PlusOutlined/> <span >Añadir orden</span>
+                </Button>
             </Form.Group>
             <Form.Group className='noImprimir'>
                 <Form.Label>Observaciones</Form.Label>
                 <Form.Control ref={observacionesRef} onChange={cargarObservaciones} as="textarea" rows={3} />
             </Form.Group>
-            <Form.Group className='noImprimir'>
-                <Button variant="secondary">Agregar despacho</Button>
-                <Button variant="primary" type="submit">
-                    Registrar despacho
-                </Button>
+            <Form.Group className='noImprimir d-flex gap-2'>
+                <Popconfirm title="¿Estás seguro de que deseas registrar estos despachos? Al hacerlo, no habrá vuelta a atrás">
+                    <Button variant="primary" type="submit">
+                        Registrar despacho
+                    </Button>
+                </Popconfirm>
+                
             </Form.Group>
         </Form>
     )

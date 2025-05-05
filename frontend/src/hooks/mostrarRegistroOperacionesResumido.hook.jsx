@@ -7,9 +7,8 @@ const useRegistroOperacionesResumido = (modulo, fechaInicio, fechaFin) => {
   
   // Corrección: Manejo correcto de parámetros por defecto
   const moduloSeleccionado = modulo || null;
-  const fechaInicioSeleccionado = fechaInicio ?? fechaActualDia;
-  const fechaFinSeleccionado = fechaFin ?? fechaActualDia;
-
+  const fechaInicioSeleccionado = fechaInicio || fechaActualDia;
+  const fechaFinSeleccionado = fechaFin || fechaActualDia;
   const { status, data, error, refetch } = useQuery({
       queryKey: ['registroOperacionesResumido', moduloSeleccionado, fechaInicioSeleccionado, fechaFinSeleccionado],
       queryFn: () => fetchRegistrosResumidos(moduloSeleccionado, fechaInicioSeleccionado, fechaFinSeleccionado),

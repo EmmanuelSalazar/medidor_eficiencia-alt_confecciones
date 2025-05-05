@@ -1,13 +1,19 @@
+import React from "react";
 import { Table, Spin } from "antd";
 import { Alert } from "react-bootstrap";
 import useRegistroOperacionesResumido from "../../hooks/mostrarRegistroOperacionesResumido.hook";
 import FechaActual from "../fechaActual";
-const ListaRegistroOperacionesResumido = ({ modulo }) => {
+const ListaRegistroOperacionesResumido = ({ modulo, fechaInicio, fechaFin }) => {
     const { obtenerCortes } = FechaActual();
     const cortes = obtenerCortes();
-    const fechaInicio = cortes.fechaInicio;
-    const fechaFin = cortes.fechaFinal;
-    const { data, status, error } = useRegistroOperacionesResumido(modulo, fechaInicio, fechaFin);
+    React.useEffect(() => {
+        console.log(fechaInicio);
+
+    }, [fechaInicio, fechaFin])
+    const fechaInicioSeleccionada = fechaInicio || cortes.fechaInicio;
+    const fechaFinSeleccionada = fechaFin || cortes.fechaFinal;
+
+    const { data, status, error } = useRegistroOperacionesResumido(modulo, fechaInicioSeleccionada, fechaFinSeleccionada);
     const columns = [
         { title: 'Nombre', dataIndex: 'NombreOperario', key: 'nombre', width: 300 },
         { title: 'Total UND', dataIndex: 'TotalUnidadesProducidas', key: 'totalUnidades', width: 165},

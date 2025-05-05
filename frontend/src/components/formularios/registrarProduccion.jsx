@@ -15,6 +15,7 @@ const RegistrarProduccion = () => {
     const colorRef = useRef();
     const cantidadRef = useRef();
     const referenciaRef = useRef();
+    const moduloRef = useRef();
     // CARGAR REFERENCIAS SEGÚN MODULO
     const cargarReferencias = async (e) => {
         const modulo = e.target.value;
@@ -24,6 +25,7 @@ const RegistrarProduccion = () => {
     const alEnviar = async (e) => {
         e.preventDefault();
         const values = {
+            modulo: moduloRef.current.value,
             odp: odpRef.current.value,
             talla: tallaRef.current.value,
             color: colorRef.current.value,
@@ -48,7 +50,7 @@ const RegistrarProduccion = () => {
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Modulo</Form.Label>
-                    <Form.Select required onChange={cargarReferencias}>
+                    <Form.Select ref={moduloRef} required onChange={cargarReferencias}>
                         {datos.map((dato, index) => (
                             <option key={index} value={dato.value}>
                                 {dato.label}

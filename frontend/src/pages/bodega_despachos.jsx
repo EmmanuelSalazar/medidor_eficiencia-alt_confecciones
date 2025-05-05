@@ -1,12 +1,15 @@
 import { useState } from 'react';
-import { Row, Col, Container, Button } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
 import RegistrarDespacho from '../components/formularios/registrarDespacho';
 import InformeDespacho from '../components/informeDespacho';
 import { PlantillaDespachoProvider } from '../contexts/plantillaDespacho';
+import { ReloadOutlined } from '@ant-design/icons';
 import { Segmented } from 'antd';
 import ListaRemision from '../components/listas/listaRemision';
+import useMostrarRemision from '../hooks/mostrarRemisiones.hook';
 function BodegaDespachos() {
     const [seccion, setSeccion] = useState(1);
+    const { reload } = useMostrarRemision();
     const alCambio = (e) => {
         setSeccion(e);
     }
@@ -25,14 +28,17 @@ function BodegaDespachos() {
             <Row className='mt-2'> 
                 <Col lg={2} className='d-flex align-items-center flex-column gap-3'>
                 <div className='noImprimir'>
-                    <Segmented options={secciones} onChange={alCambio} vertical/>
+                    <div className='d-flex flex-column gap-3'>
+                        <Segmented options={secciones} onChange={alCambio} vertical/>
+                        <Button variant="secondary" onClick={() => reload()}><ReloadOutlined /> Actualizar datos</Button>
+                    </div>
                 </div>
                 </Col>
-                <Col lg={3}>
+                <Col className='noImprimir' lg={3}>
                     <h1 className='noImprimir'>Remisión</h1>
                     <RegistrarDespacho/>
                 </Col>
-                <Col>
+                <Col lg={6}>
                    {seccion === 1 ? <InformeDespacho/> : <ListaRemision />} 
                 </Col>
                 <Col lg={1}>

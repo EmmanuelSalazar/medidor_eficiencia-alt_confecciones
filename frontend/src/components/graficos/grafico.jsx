@@ -87,7 +87,7 @@ const HorizontalBarChart = () => {
 
   const styles = {
     width: '1320px',
-    height: '900px',
+    height: '1000px',
     display: 'flex',
     justifyContent: 'center',
   };

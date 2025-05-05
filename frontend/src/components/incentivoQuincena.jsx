@@ -7,7 +7,8 @@ const IncentivoQuincena = () => {
     const [beneficio, setBeneficio] = React.useState("--");
     const [porcentaje, setPorcentaje] = React.useState();
     const [porcentajeEstatico, setPorcentajeEstatico] = React.useState("--");
-    const { listaRegistroQuincenal } = React.useContext(ListaContext);    //OBTENER MODULO
+    const { listaRegistroQuincenal } = React.useContext(ListaContext);  
+    //OBTENER MODULO
     const [buscarParametro] = useSearchParams();
     let moduloEnLaUrl = parseInt(buscarParametro.get('modulo'));
     const modulo = moduloEnLaUrl || window.ModuloSeleccionado;

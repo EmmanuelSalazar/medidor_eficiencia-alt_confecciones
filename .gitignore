@@ -1,5 +1,7 @@
 /frontend/node_modules
 /frontend/dist
+/test-app
+/mi-proyecto-dnd
 .astro
 /backend/DESARROLLO
 node_modules

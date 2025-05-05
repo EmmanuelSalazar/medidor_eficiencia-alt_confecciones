@@ -11,8 +11,7 @@ const InformeDespacho = () => {
     const ahora = new Date(); // Configura el locale al montar el componente
     setFecha(format(ahora, 'PPPP', { locale: es }));
   }, []);
-    const { cliente, odp, unidades, observaciones } = useContext(PlantillaDespachoContext);
-    const informacionODP = odp.length != 0 ? odp : [{ color: 'Color', talla: 'Talla', orden_produccion: 'N/A'}];
+    const { cliente, observaciones, despachos } = useContext(PlantillaDespachoContext);
     const informacionCliente = cliente || [{ nombre: 'Nombre', nit: 'NIT', direccion: 'Direccion', ciudad: 'Ciudad', telefono: 'Telefono'}];
     return (
         <>  
@@ -66,19 +65,25 @@ const InformeDespacho = () => {
             <table className='table table-bordered'>
                     <tbody>
                         <tr>
+                            <th>#</th>
                             <th colSpan="4">Orden de produccion</th>
                             <th colSpan="4">Referencia</th>
                             <th colSpan="4">Talla</th>
                             <th colSpan="4">Color</th>
                             <th colSpan="4">UNIDADES</th>
                         </tr>
-                        <tr>
-                            <td colSpan="4">{informacionODP[0].orden_produccion || "N/A"}</td>
-                            <td colSpan="4">{informacionODP[0].referencia}</td>
-                            <td colSpan="4">{informacionODP[0].talla}</td>
-                            <td colSpan="4">{informacionODP[0].color}</td>
-                            <td colSpan="4">{unidades}</td>
-                        </tr>
+                        {despachos.map((despacho, index) => {
+                            return (
+                                <tr key={index}>
+                                <td>{index+1}</td>
+                                <td colSpan="4">{despacho?.informacionODP?.[0]?.orden_produccion || "N/A"}</td>
+                                <td colSpan="4">{despacho?.informacionODP?.[0]?.referencia || "N/A"}</td>
+                                <td colSpan="4">{despacho?.informacionODP?.[0]?.talla || "N/A"}</td>
+                                <td colSpan="4">{despacho?.informacionODP?.[0]?.color || "N/A"}</td>
+                                <td colSpan="4">{despacho?.unidadesDespachadas || "N/A"}</td>
+                                </tr>
+                            )
+                        })}
                 </tbody>
             </table>
             <Row className='d-flex mt-5'>
