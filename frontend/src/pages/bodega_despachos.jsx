@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col, Button, Collapse } from 'react-bootstrap';
 import RegistrarDespacho from '../components/formularios/registrarDespacho';
 import InformeDespacho from '../components/informeDespacho';
 import { PlantillaDespachoProvider } from '../contexts/plantillaDespacho';
@@ -11,16 +11,20 @@ function BodegaDespachos() {
     const [seccion, setSeccion] = useState(1);
     const { reload } = useMostrarRemision();
     const alCambio = (e) => {
-        setSeccion(e);
+        setSeccion(4);
+        setTimeout(() => {
+            setSeccion(e);
+        }, 500)
+                
     }
     const secciones = [
         {
             value: 1,
-            label: 'Plantilla de remisión',
+            label: 'Lista de remisiones',
         },
         {
             value: 2,
-            label: 'Lista de remisiones',
+            label: 'Registrar remisiones',
         },
     ];
   return (
@@ -34,14 +38,23 @@ function BodegaDespachos() {
                     </div>
                 </div>
                 </Col>
-                <Col className='noImprimir' lg={3}>
+                <Col className='noImprimir' lg={seccion === 1 ? 4 : 3}>
                     <h1 className='noImprimir'>Remisión</h1>
-                    <RegistrarDespacho/>
+                    <Collapse in={seccion === 1} dimension='width'>
+                        <div id="collapseExample">
+                            <ListaRemision />
+                        </div>
+                    </Collapse>
+                    <Collapse in={seccion === 2} dimension='width'>
+                        <div id="collapseExample">
+                            <RegistrarDespacho/>
+                        </div>
+                    </Collapse>                
+                </Col>
+                <Col lg={1} className={`${seccion === 1 ? 'invisible' : ''}`}>
                 </Col>
                 <Col lg={6}>
-                   {seccion === 1 ? <InformeDespacho/> : <ListaRemision />} 
-                </Col>
-                <Col lg={1}>
+                <InformeDespacho/>
                 </Col>
             </Row>
         </PlantillaDespachoProvider>

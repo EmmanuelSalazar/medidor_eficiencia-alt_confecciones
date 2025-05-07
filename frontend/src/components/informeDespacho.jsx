@@ -7,11 +7,13 @@ import { es } from 'date-fns/locale';
 
 const InformeDespacho = () => {
     const [fecha, setFecha] = useState('');
+    const ahora = new Date();
     useEffect(() => {
-    const ahora = new Date(); // Configura el locale al montar el componente
+     // Configura el locale al montar el componente
     setFecha(format(ahora, 'PPPP', { locale: es }));
   }, []);
-    const { cliente, observaciones, despachos } = useContext(PlantillaDespachoContext);
+    const { cliente, observaciones, despachos, fecha:fechaRegistro } = useContext(PlantillaDespachoContext);
+    let fechaRegistroFormateada = format(fechaRegistro || ahora, 'PPPP', { locale: es })
     const informacionCliente = cliente || [{ nombre: 'Nombre', nit: 'NIT', direccion: 'Direccion', ciudad: 'Ciudad', telefono: 'Telefono'}];
     return (
         <>  
@@ -54,7 +56,7 @@ const InformeDespacho = () => {
                         <td colSpan="4">{informacionCliente[0].direccion}</td>
                         <td colSpan="4">{informacionCliente[0].ciudad}</td>
                         <td colSpan="4">{informacionCliente[0].telefono}</td>
-                        <td colSpan="5">{fecha}</td>
+                        <td colSpan="5">{fechaRegistroFormateada || fecha}</td>
                     </tr>
                     <tr>
                         <th colSpan="4">Observaciones</th>

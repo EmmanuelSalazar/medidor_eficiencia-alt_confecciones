@@ -6,11 +6,16 @@
         $sql = "SELECT
                 bm.rem_id AS id,
                 b.orden_produccion,
+                b.talla,
+                b.color,
+                b.odp_id,
                 bc.nombre AS nombreCliente,
                 bm.unidadesDespachadas,
+                bm.client_id,
                 COALESCE(bm.observaciones, 'N/A') AS observaciones,
                 bm.fecha,
-                r.referencia
+                r.referencia,
+                bm.numeroDeRemision
             FROM
                 `bodega_remision` bm
             JOIN bodega_clientes bc ON
@@ -20,8 +25,8 @@
             JOIN referencias r ON
                 b.ref_id = r.ref_id
             ORDER BY
-                fecha
-            DESC
+                bm.numeroDeRemision
+            ASC
                 ";
         $stmt = $mysqli->prepare($sql);
         if ($stmt->execute()) {

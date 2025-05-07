@@ -143,7 +143,7 @@ const ListaProduccion = () => {
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Actualizar estado <Form.Text>(Actual: {establecerEstados(informacionModal?.estado)})</Form.Text></Form.Label>
-                        <Form.Select onChange={(e) => setEstado(e.target.value)}>
+                        <Form.Select onChange={(e) => setEstado(e.target.value)} disabled={informacionModal?.estado !== 1 ? true : false}>
                             <option>Seleccionar</option>
                             <option value="1">En produccion</option>
                             <option value="2">Terminada</option>
@@ -151,7 +151,7 @@ const ListaProduccion = () => {
                             <option value="4">Incompleto</option>
                         </Form.Select>
                         <Form.Text>
-                            Solo puede haber una orden con el estado: {establecerEstados(1)}, por lo que si se actualiza a otro estado, la orden anterior se actualiza automaticamente a {establecerEstados(4)}
+                            Solo puede haber una orden por <strong>modulo</strong> con el estado: {establecerEstados(1)}, por lo que si se actualiza a otro estado, la orden anterior se actualiza automaticamente a {establecerEstados(4)}
                         </Form.Text>
                     </Form.Group>
                 </Modal.Body>

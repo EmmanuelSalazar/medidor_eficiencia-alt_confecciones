@@ -1,23 +1,27 @@
-import React,{ useState } from "react";
+import { useState, useEffect } from "react";
 import ListaRegistroOperacionesResumido from "../components/listas/listaRegistroOperacionesResumido";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import { Segmented, Calendar } from "antd";
 import { InfoCircleFilled, PrinterOutlined, ReloadOutlined } from '@ant-design/icons';
 import useRegistroOperacionesResumido from "../hooks/mostrarRegistroOperacionesResumido.hook";
-import IncentivoQuincena from "../components/incentivoQuincena";
+import IncentivoQuincena from "../components/utils/incentivoQuincena";
 import FechaActual from "../components/fechaActual";
 import EstadisticaInforme from "../components/graficos/estadisticaInformes";
 import logo from '../assets/img/logo.png'
 import { useNavigate } from "react-router-dom";
+import { ListaProvider } from "../contexts/actualizarRegistroOperaciones";
 function Informes() {
-    const { beneficio, porcentajeEstatico } = IncentivoQuincena();
     const { obtenerCortes } = FechaActual();
     const navigate = useNavigate();
     const cortes = obtenerCortes();
     const [seccion, setSeccion] = useState(1);
     const [fechaInicio, setFechaInicio] = useState(cortes.fechaInicio);
     const [fechaFin, setFechaFin] = useState(cortes.fechaFinal);
-    const { reload } = useRegistroOperacionesResumido(seccion,fechaInicio, fechaFin);
+    const { reload, data, status } = useRegistroOperacionesResumido(seccion,fechaInicio, fechaFin);
+    /* useEffect(() => {
+        recargarDatos(seccion, fechaInicio, fechaFin);
+
+    }, [seccion, fechaInicio, fechaFin]); */
     const alCambio = (e) => {
         setSeccion(parseInt(e));
         navigate('?modulo=' + e);
@@ -82,8 +86,10 @@ function Informes() {
                         </Col>
                         <Col className="text-end">
                             <h5>Beneficio: </h5>
-                            <span>{beneficio === 'PUEDES' ? 'N /' : beneficio} </span>
-                            <span>{porcentajeEstatico === 'LOGRARLO' ? 'A' : porcentajeEstatico}</span>
+                            <ListaProvider>
+                                <IncentivoQuincena modulo={seccion} fechaInicio={fechaInicio} fechaFinal={fechaFin}/>
+                            </ListaProvider>
+                            
                         </Col>
                     </Row>
                     <Row>

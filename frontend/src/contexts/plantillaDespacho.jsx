@@ -5,6 +5,7 @@ export const PlantillaDespachoProvider = ({ children }) => {
     const [cliente, setCliente] = useState()
     const [observaciones, setObservaciones] = useState()
     const [odp, setOdp] = useState([])
+    const [fecha, setFecha] = useState()
     const [unidades, setUnidades] = useState([])
     const [despachos, setDespachos] = useState([{
         id: Date.now(),
@@ -13,7 +14,7 @@ export const PlantillaDespachoProvider = ({ children }) => {
         informacionODP: null
     }])
     return (
-        <PlantillaDespachoContext.Provider value={{ cliente, setCliente, odp, setOdp, unidades, setUnidades, observaciones, setObservaciones, despachos, setDespachos }}>
+        <PlantillaDespachoContext.Provider value={{ cliente, setCliente, odp, setOdp, unidades, setUnidades, observaciones, setObservaciones, despachos, setDespachos, fecha, setFecha }}>
             {children}
         </PlantillaDespachoContext.Provider>
     )

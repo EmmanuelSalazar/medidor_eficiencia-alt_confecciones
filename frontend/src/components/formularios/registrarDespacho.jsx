@@ -141,7 +141,7 @@ const RegistrarDespacho = () => {
             </Form.Group>
                 {despachos.map((despacho, index) => {
                     return (
-                        <div key={index} className='noImprimir border p-2 rounded border-2'>
+                        <div key={index} className={`noImprimir border ${(index + 1) % 2 !== 0 ? 'border-primary' : ''} p-2 rounded border-2`}>
                             <Form.Group className='noImprimir'>
                                 <Form.Label>Selecciona la orden de producción</Form.Label>
                                 <Form.Select id={index + 1} ref={odpRef} onChange={(e) => alCambiarOdp(despacho.id, e.target.value)} required>
@@ -165,9 +165,12 @@ const RegistrarDespacho = () => {
                         </div>  
                      )
                     })}            
-            <Form.Group className='noImprimir'>
+            <Form.Group className='noImprimir d-flex gap-2'>
                 <Button variant="secondary" onClick={agregarDespacho}>
                 <PlusOutlined/> <span >Añadir orden</span>
+                </Button>
+                <Button variant="danger" onClick={() => setDespachos([])}>
+                    Reiniciar formulario
                 </Button>
             </Form.Group>
             <Form.Group className='noImprimir'>

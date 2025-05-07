@@ -36,6 +36,8 @@ function App() {
         <FormularioLogin />
       )
     }
+    /* Hola, si eres el nuevo dev, disculpame por hacer algo tan enredado, intenté hacerlo lo mas legible posible.
+    Este proyecto fué mucho aprendizaje, por lo que habrán muchas cosas sin sentido (Aunque refactorizo frecuentemente para reducir las inconsistencias) */
     return (
       <Router>
         <ListaProvider>

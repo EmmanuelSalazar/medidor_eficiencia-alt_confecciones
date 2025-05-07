@@ -1,6 +1,9 @@
 #root {
     width: 100%;
 }
+.invisible {
+    display: none;
+}
 .plantilla > tr > th {
     text-transform: uppercase;
 }
