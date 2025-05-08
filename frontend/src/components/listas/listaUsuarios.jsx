@@ -1,4 +1,4 @@
-import { Table, Spin } from 'antd';
+import { Table, Spin, Popconfirm } from 'antd';
 import { Alert } from 'react-bootstrap';
 import useMostrarContadoresFinales from "../../hooks/mostrarUsuarios.hook";
 import { Button } from "react-bootstrap";
@@ -24,9 +24,11 @@ const ListaUsuarios = () => {
         { title: 'Rol', dataIndex: 'rol', key: 'rol', width: 135 },
         { title: 'Acciones', key: 'acciones', render: (text, record) => (
             <span>
-            <Button variant="danger" onClick={() => handleDelete(record.user_id)}>
-                Eliminar
-            </Button>
+                <Popconfirm title="¿Estás seguro de eliminar este usuario?" onConfirm={() => handleDelete(record.user_id)} okText="Sí" cancelText="No">
+                    <Button variant="danger" className="me-2">
+                        Eliminar
+                    </Button>
+                </Popconfirm>
         </span>     
         ), width: 160}
     ]

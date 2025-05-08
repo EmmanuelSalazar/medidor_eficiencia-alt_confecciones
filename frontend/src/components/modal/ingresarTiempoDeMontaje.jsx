@@ -11,6 +11,7 @@ const TiempoDeMontaje = () => {
     const [mensajeDeExito, setMensajeDeExito] = React.useState("");
     const [mensajeDeAlerta, setMensajeDeAlerta] = React.useState("");
     const [mensajeDeError, setMensajeDeError] = React.useState("");
+    const [limite, setLimite] = React.useState(0);
     React.useEffect(() => {
                 if (mensajeDeExito || mensajeDeAlerta || mensajeDeError) {
                     const timer = setTimeout(() => {
@@ -29,8 +30,23 @@ const TiempoDeMontaje = () => {
     const cerrarModal = () => { 
         setVisible(false)
     }
+    // LIMITAR TIEMPO DE MONTAJE
+     const limitarTiempo = (e) => {
+        let limiteTiempo = e.target.value;
+        limiteTiempo = parseInt(limiteTiempo);
+        console.log(limiteTiempo)
+        if (limiteTiempo > 30) {
+            setMensajeDeAlerta("El tiempo de montaje no puede ser mayor a 30 minutos, en caso de ser mayor, repartir en dos horarios distintos");
+            console.log("Haz alcanzado el limite")
+        } else {
+            console.log("No has alcanzado el limite")
+        }
+     }
     // FUNCION PARA ENVIAR LOS DATOS DEL MODAL
     const enviarDatos = async () => {
+        if (tiempoDeMontaje.current.value > 60) {
+            setMensajeDeError("El tiempo de montaje no puede ser mayor a 60 minutos");
+        }
         const datos = {
             "tiempoDeMontaje": tiempoDeMontaje.current.value,
             "moduloDeMontaje": moduloDeMontaje.current.value,
@@ -63,11 +79,11 @@ const TiempoDeMontaje = () => {
                     <Form>
                         <Form.Group>
                             <Form.Label>Ingresa el tiempo de montaje (Minutos)</Form.Label>
-                            <Form.Control type="number" placeholder="##" ref={tiempoDeMontaje}/>
+                            <Form.Control onChange={limitarTiempo} type="number" placeholder="##" ref={tiempoDeMontaje}/>
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Modulo el cual se verá afectado</Form.Label>
-                            <Form.Control type="number" placeholder="Modulo" ref={moduloDeMontaje}/>
+                            <Form.Control  type="number" placeholder="Modulo" ref={moduloDeMontaje}/>
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Horario en el que se hará el montaje</Form.Label>

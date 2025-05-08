@@ -1,6 +1,12 @@
 #root {
     width: 100%;
 }
+.invisible {
+    display: none;
+}
+.plantilla > tr > th {
+    text-transform: uppercase;
+}
 .tablaResponsiva {
     overflow-x: auto;
     width: 100%;
@@ -26,7 +32,7 @@
     text-align: CENTER;
 }
 .beneficios {
-    font-size: 45px;
+    font-size: 35px;
 }
 
 .porcentajeEficienciaTitulo {

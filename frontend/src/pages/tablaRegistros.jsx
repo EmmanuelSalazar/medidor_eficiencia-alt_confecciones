@@ -4,6 +4,7 @@ import { ListaProvider} from "../contexts/actualizarRegistros";
 import { ListaProvider as ProveedorDeLista } from '../contexts/informacionGrafico'
 import { ListaProvider as ProveedorDeLista2 } from '../contexts/actualizarRegistroOperaciones'
 import { ListaProvider as ProveedorDeLista3 } from '../contexts/actualizarReferencias'
+import { ModuloProvider } from '../contexts/botonesSeleccionModuloAdmin';
 import BotonesSeleccionModulos from '../components/botonesSeleccion/botonesSeleccionModuloAdmin'
 import CalendarioSeleccion from "../components/calendarioSeleccionAdmin";
 import GraficaAdministrativa from "../components/graficos/graficoAdmin";
@@ -22,9 +23,11 @@ function TablaRegistro() {
                         <Row className="d-flex justify-content-between">
                             <Col lg={3} xs={12} md={6} className="mb-3">
                                 <CalendarioSeleccion />
-                                <ProveedorDeLista2>
-                                    <FechasDuales />
-                                </ProveedorDeLista2>
+                                <ModuloProvider>
+                                    <ProveedorDeLista2>
+                                        <FechasDuales />
+                                    </ProveedorDeLista2>
+                                </ModuloProvider>
                             </Col>
                             <Col lg={8} xs={12}>
                                 <TablaRegistros />

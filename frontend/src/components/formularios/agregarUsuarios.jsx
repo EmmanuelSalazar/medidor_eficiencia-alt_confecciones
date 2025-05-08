@@ -33,7 +33,7 @@ const AgregarUsuarios = () => {
                     return;
                 }
                 const values = {
-                    "nombreUsuario": nombreUsuarioRef.current.value,
+                    "nombreUsuario": `${nombreUsuarioRef.current.value}_ALT`,
                     "contrasenaUsuario": contrasenaRef.current.value,
                     "rolUsuario": rolRef.current.value
                 };
@@ -58,6 +58,10 @@ return (
                         <Form.Group className="mx-5 mb-3">
                             <Form.Label>Ingresa el nombre de usuario</Form.Label>
                             <Form.Control type="text" placeholder="John_Doe" required ref={nombreUsuarioRef}/>
+                            <Form.Text className="text-muted">
+                                El nombre de usuario debe ser único y no puede contener espacios.<br /> 
+                                Al crear el usuario, se le agregará automaticamente el sufijo <strong>_ALT</strong>
+                            </Form.Text>
                         </Form.Group>
                         <Form.Group className="mx-5 my-2">
                             <Form.Label>Ingresa la contraseña de acceso</Form.Label>
@@ -72,7 +76,9 @@ return (
                             <Form.Select ref={rolRef} required>
                                 <option value="1">Tablero</option>
                                 <option value="2">Supervisor/a</option>
-                                <option value="3">Administrador/a</option>
+                                <option value="3">Lider de modulo</option>
+                                <option value="4">Bodega</option>
+                                <option value="9">Administrador/a</option>
                             </Form.Select>
                         </Form.Group>
                         <Button className="mx-5 my-3" variant="primary" type="submit">Registrar usuario</Button>

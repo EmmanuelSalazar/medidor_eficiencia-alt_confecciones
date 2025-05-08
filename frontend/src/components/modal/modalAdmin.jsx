@@ -4,11 +4,28 @@ import { Row, Col , Button as ButtonBS, Alert} from 'react-bootstrap'
 import ListaRegistroOperaciones from "../listas/listaRegistroOperaciones";
 import {ListaContext } from "../../contexts/actualizarRegistroOperaciones";
 import ExportToExcel from "../exportarExcel";
+import { ContextoModulo } from "../../contexts/botonesSeleccionModuloAdmin";
 import BotonesSelModAdminRegOp from '../botonesSeleccion/botonesSeleccionModuloAdminModal'
-import useFetchData from "../../services/api/read/mostrarRegistroOperacionesResumido";
+import useRegistroOperacionesResumido from "../../hooks/mostrarRegistroOperacionesResumido.hook";
 const { RangePicker } = DatePicker;
 const FechasDuales = () => {
-    const { datos, error, fetchData, loading:useLoading } = useFetchData();
+    const { moduloSeleccionado  } = React.useContext(ContextoModulo);
+    const [params, setParams] = React.useState({
+        modulo: moduloSeleccionado, // Cambiar a 1 si no se selecciona ningun modulo,
+        fechaInicio: null,
+        fechaFin: null,
+    }) 
+    const { data, status, error, reload } = useRegistroOperacionesResumido(
+        params.modulo,
+        params.fechaInicio,
+        params.fechaFin
+    );
+    React.useEffect(() => {
+        setParams({
+            ...params,
+            modulo: moduloSeleccionado,
+        })
+    }, [moduloSeleccionado]);
     const { listaRegistro, setListaRegistro } = React.useContext(ListaContext)
     const [visible, setVisible] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
@@ -29,7 +46,7 @@ const FechasDuales = () => {
     // CARGAR DATOS DE LA API AL INICIO
         React.useEffect(()=> {
             try {
-                fetchData();
+                reload();
             } catch (error) {
                 setMensajeDeError("Ha ocurrido un error: ", error);
             }
@@ -46,7 +63,7 @@ const FechasDuales = () => {
     // DESCARGAR RESUMEN
     const handleDownload = async () => {
         try {
-            await fetchData(window.moduloSeleccionado, window.fechaInicio, window.fechaFin);
+            await reload();
         } catch (error) {
             setMensajeDeError("Ha ocurrido un error: ", error);
         }
@@ -78,8 +95,15 @@ const FechasDuales = () => {
     const onPanelChange = async (dates, dateStrings) => {
         window.fechaInicio = dateStrings[0];
         window.fechaFin = dateStrings[1];
+        setParams({
+            ...params,
+            modulo: moduloSeleccionado,
+            fechaInicio: dateStrings[0],
+            fechaFin: dateStrings[1],
+        });
         try {
             await setListaRegistro(window.moduloSeleccionado, dateStrings[0], dateStrings[1], window.horaInicio, window.horaFin)
+            await reload(); // Actualizar la lista con los datos de la api
         } catch (error) {
             setMensajeDeError("Ha ocurrido un error: ", error);
             console.error("Ha ocurrido un error: ",error)
@@ -90,7 +114,7 @@ const FechasDuales = () => {
         <>
             <Button type="primary" onClick={showModal}>Seleccionar rango de fechas</Button>
             <Modal title="Selecciona dos fechas" open={visible} onOk={handleOk} onCancel={handleCancel} width={{xl: '70%', xxl: '70%'}} footer={[
-                <ExportToExcel key={1} datos={datos} texto="Descargar resumen" onClick={handleDownload}/>,
+                <ExportToExcel key={1} datos={data} texto="Descargar resumen" onClick={handleDownload}/>,
                <ButtonBS key="submit" type="primary" onClick={handleOk}>
                  Aceptar
                </ButtonBS>,

@@ -2,13 +2,17 @@ import React from "react";
 import { Button, ButtonGroup } from 'react-bootstrap';
 import datos from '../../utils/json/menuModulos.json'
 import { ListaContext as ContextoEnLista} from "../../contexts/actualizarRegistroOperaciones";
+import { ContextoModulo } from "../../contexts/botonesSeleccionModuloAdmin";
 const BotonesSelModAdminRegOp = () => {
+    const {setModuloSeleccionado } = React.useContext(ContextoModulo);
     const { setListaRegistro } = React.useContext(ContextoEnLista);
     const [botonSeleccionado, setBotonSeleccionado] = React.useState(null);
     const botones = datos;
     const handleButtonClick = async (modulo, index) => {
         window.moduloSeleccionado = modulo;
         setBotonSeleccionado(index);
+        setModuloSeleccionado(modulo);
+        
         try {
             await setListaRegistro(modulo,window.fechaInicio,window.fechaFin,window.horaInicio,window.horaFin)
         } catch (error) {

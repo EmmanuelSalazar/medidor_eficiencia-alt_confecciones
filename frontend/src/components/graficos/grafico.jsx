@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -44,7 +44,7 @@ const HorizontalBarChart = () => {
         y: {
           ticks: {
             font: {
-              size: 34,
+              size: 40,
               weight: 'bold'
             },
             color: 'white',
@@ -86,8 +86,8 @@ const HorizontalBarChart = () => {
 };
 
   const styles = {
-    width: '1270px',
-    height: '840px',
+    width: '1320px',
+    height: '1000px',
     display: 'flex',
     justifyContent: 'center',
   };

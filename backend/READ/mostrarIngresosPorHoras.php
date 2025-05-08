@@ -47,6 +47,7 @@ $query = "
     SELECT 
         o.op_id,
         o.nombre AS Operario,
+        o.posicion,
         $columnasSQL
     FROM 
         operarios o
@@ -62,7 +63,7 @@ $query .= "
     GROUP BY 
         o.op_id, o.nombre
     ORDER BY 
-        o.nombre
+        o.posicion ASC
 ";
 
 $result = $mysqli->query($query);

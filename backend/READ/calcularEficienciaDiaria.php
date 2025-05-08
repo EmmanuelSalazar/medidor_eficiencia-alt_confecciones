@@ -45,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $sql = "
         SELECT
             RP.op_id AS ID_Operario,
+            O.posicion AS Posicion,
             O.calculadorFinal AS CalculadorFinal,
             DATE(RP.fecha) AS Fecha,
             O.nombre AS NombreOperario,
@@ -90,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         GROUP BY
             RP.op_id, O.nombre, RP.modulo -- Agrupar por operario y módulo
         ORDER BY
-            EficienciaGeneral DESC;
+            Posicion ASC;
     ";
 
     // Preparar la consulta

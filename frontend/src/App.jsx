@@ -14,6 +14,10 @@ import { ListaProvider } from './contexts/informacionGrafico'
 import FormularioLogin from './components/formularios/login';
 import Estadisticas from './pages/estadisticas';
 import Admin from './pages/admin';
+import NotFoundPage from './pages/404';
+import Bodega from './pages/bodega';
+import BodegaClientes from './pages/bodega_clientes';
+import BodegaDespachos from './pages/bodega_despachos';
 function App() {
   const token = localStorage.getItem('token') || null;
   // Verificar que tenga un token almacenado
@@ -32,6 +36,8 @@ function App() {
         <FormularioLogin />
       )
     }
+    /* Hola, si eres el nuevo dev, disculpame por hacer algo tan enredado, intenté hacerlo lo mas legible posible.
+    Este proyecto fué mucho aprendizaje, por lo que habrán muchas cosas sin sentido (Aunque refactorizo frecuentemente para reducir las inconsistencias) */
     return (
       <Router>
         <ListaProvider>
@@ -48,6 +54,10 @@ function App() {
             {userRol >= 2 && <Route path='/estadisticas' element={<Estadisticas />}/>}
             {userRol >= 2 && <Route path='/admin' element={<Admin />}/>}
             {userRol >= 2 && <Route path='/informes' element={<Informes />}/>}
+            <Route path='/bodega_clientes' element={<BodegaClientes />}/>
+            <Route path='/bodega' element={<Bodega />}/>
+            <Route path='/bodega_despacho' element={<BodegaDespachos />}/>
+            <Route path='*' element={<NotFoundPage />}/>
           </Routes>
         </ListaProvider>
     </Router>
