@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 22-04-2025 a las 12:42:12
+-- Tiempo de generación: 08-05-2025 a las 11:05:52
 -- Versión del servidor: 9.1.0
 -- Versión de PHP: 8.3.14
 
@@ -20,6 +20,109 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `eficiencia_produccion`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `bodega`
+--
+
+DROP TABLE IF EXISTS `bodega`;
+CREATE TABLE IF NOT EXISTS `bodega` (
+  `odp_id` int NOT NULL AUTO_INCREMENT,
+  `ref_id` int NOT NULL,
+  `orden_produccion` varchar(255) DEFAULT NULL,
+  `talla` int DEFAULT NULL,
+  `color` varchar(255) DEFAULT NULL,
+  `cantidad` int DEFAULT NULL,
+  `cantidad_producida` int NOT NULL,
+  `estado` int NOT NULL DEFAULT '1',
+  `modulo` int NOT NULL,
+  `fecha_inicio` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `fecha_final` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`odp_id`),
+  KEY `ref_id` (`ref_id`) USING BTREE
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Disparadores `bodega`
+--
+DROP TRIGGER IF EXISTS `BODEGA_verificar_estado`;
+DELIMITER $$
+CREATE TRIGGER `BODEGA_verificar_estado` BEFORE INSERT ON `bodega` FOR EACH ROW BEGIN
+    DECLARE modulo_referencia INT;
+    DECLARE existe_activo INT;
+
+    -- Obtener el módulo asociado al ref_id de la referencia
+    SELECT modulo INTO modulo_referencia
+    FROM referencias
+    WHERE ref_id = NEW.ref_id;
+
+    -- Verificar si hay registros en bodega con el mismo módulo y estado = 1
+    SELECT COUNT(*) INTO existe_activo
+    FROM bodega
+    WHERE estado = 1
+    AND ref_id IN (
+        SELECT ref_id 
+        FROM referencias 
+        WHERE modulo = modulo_referencia
+    );
+
+    -- Si existe un registro activo, establecer estado = 3
+    IF existe_activo > 0 THEN
+        SET NEW.estado = 3;
+    END IF;
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `bodega_clientes`
+--
+
+DROP TABLE IF EXISTS `bodega_clientes`;
+CREATE TABLE IF NOT EXISTS `bodega_clientes` (
+  `client_id` int NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(255) NOT NULL,
+  `nit` int NOT NULL,
+  `direccion` varchar(255) NOT NULL,
+  `ciudad` varchar(255) NOT NULL,
+  `telefono` varchar(255) NOT NULL,
+  PRIMARY KEY (`client_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `bodega_remision`
+--
+
+DROP TABLE IF EXISTS `bodega_remision`;
+CREATE TABLE IF NOT EXISTS `bodega_remision` (
+  `rem_id` int NOT NULL AUTO_INCREMENT,
+  `odp_id` int NOT NULL,
+  `client_id` int NOT NULL,
+  `unidadesDespachadas` int NOT NULL,
+  `observaciones` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `numeroDeRemision` int NOT NULL,
+  `fecha` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`rem_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Disparadores `bodega_remision`
+--
+DROP TRIGGER IF EXISTS `BODEGA_actualizar_cantidad_producida`;
+DELIMITER $$
+CREATE TRIGGER `BODEGA_actualizar_cantidad_producida` AFTER INSERT ON `bodega_remision` FOR EACH ROW BEGIN
+    UPDATE bodega
+    SET cantidad_producida = cantidad_producida - NEW.unidadesDespachadas
+    WHERE odp_id = NEW.odp_id;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -51,6 +154,7 @@ CREATE TABLE IF NOT EXISTS `operarios` (
   `calculadorFinal` int NOT NULL DEFAULT '0',
   `revisador` int NOT NULL DEFAULT '0',
   `eliminado` int NOT NULL,
+  `posicion` int NOT NULL,
   PRIMARY KEY (`op_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -363,9 +467,11 @@ CREATE TRIGGER `calcular_meta_eficiencia` BEFORE INSERT ON `registro_produccion`
     DECLARE horarioTDM INT DEFAULT 0;
     DECLARE meta_inicial INT DEFAULT 0;
     DECLARE meta_eficiencia DECIMAL(10,2) DEFAULT 0;
+    DECLARE meta_eficiencia_redondeada INT;
+    DECLARE decimal_meta DECIMAL(10,2);
     DECLARE ajusteMeta DECIMAL(10,2) DEFAULT 0;
     DECLARE es_revisor INT;
-
+    DECLARE nueva_meta_global INT;
     -- 1. Obtener número de operarios activos en el módulo
     SELECT COUNT(*) INTO numeroOperarios
     FROM operarios
@@ -375,23 +481,36 @@ CREATE TRIGGER `calcular_meta_eficiencia` BEFORE INSERT ON `registro_produccion`
     SELECT tiempoDeProduccion INTO tiempoReferencia
     FROM referencias
     WHERE ref_id = NEW.ref_id;
-
-    -- 3. Calcular base de la meta según horario
-    IF NEW.horario = 9 THEN
-        -- Cálculo especial para horario 9: 1.1*60*N°Operarios / tiempoReferencia
-        IF tiempoReferencia > 0 THEN
-            SET meta_eficiencia = (1.1 * 60 * numeroOperarios) / tiempoReferencia;
-        ELSE
-            SET meta_eficiencia = 0;
-        END IF;
-    ELSE
-        -- Cálculo estándar usando la tabla metas
+    
+    -- OBTENER META GENERAL
+    
         SELECT meta INTO meta_inicial
         FROM metas
         WHERE ref_id = NEW.ref_id
         ORDER BY meta_id DESC
         LIMIT 1;
 
+    -- 3. Calcular base de la meta según horario
+    IF NEW.horario = 9 THEN
+        -- Cálculo especial para horario 9:
+        IF meta_inicial IS NULL THEN
+            SET meta_inicial = 0;
+        END IF;
+      
+        SET meta_eficiencia = meta_inicial / 9.1; -- 546 / 9.1 = 60
+        
+        SET meta_eficiencia_redondeada = FLOOR(ABS(meta_eficiencia));
+    	SET decimal_meta = meta_eficiencia - meta_eficiencia_redondeada;
+    	IF decimal_meta < 0.3 THEN
+        	SET meta_eficiencia = FLOOR(meta_eficiencia);
+        ELSE
+        	SET meta_eficiencia = CEILING(meta_eficiencia);
+    	END IF;
+        SET nueva_meta_global = meta_eficiencia * 8;       
+        SET meta_eficiencia =  meta_inicial - nueva_meta_global ;	
+    ELSE
+        
+	-- Cálculo estándar usando la tabla metas
         IF meta_inicial IS NULL THEN
             SET meta_inicial = 0;
         END IF;
@@ -427,7 +546,14 @@ CREATE TRIGGER `calcular_meta_eficiencia` BEFORE INSERT ON `registro_produccion`
     END IF;
 
     -- 7. Asignar MetaPorEficiencia final
-    SET NEW.MetaPorEficiencia = ROUND(meta_eficiencia, 2);
+    
+	SET meta_eficiencia_redondeada = FLOOR(ABS(meta_eficiencia));
+    SET decimal_meta = meta_eficiencia - meta_eficiencia_redondeada;
+    IF decimal_meta < 0.3 THEN
+    	SET NEW.MetaPorEficiencia = FLOOR(meta_eficiencia);
+    ELSE 
+    	SET NEW.MetaPorEficiencia = CEILING(meta_eficiencia);
+    END IF;
 END
 $$
 DELIMITER ;
