@@ -26,7 +26,11 @@
     "react-countup": "^6.5.3",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.5",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "date-fns": "^4.1.0",
+    "jspdf": "^3.0.1",
+    "react-popconfirm": "^0.1.1",
+    "react-to-print": "^3.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

@@ -178,12 +178,9 @@ const RegistrarDespacho = () => {
                 <Form.Control ref={observacionesRef} onChange={cargarObservaciones} as="textarea" rows={3} />
             </Form.Group>
             <Form.Group className='noImprimir d-flex gap-2'>
-                <Popconfirm title="¿Estás seguro de que deseas registrar estos despachos? Al hacerlo, no habrá vuelta a atrás">
                     <Button variant="primary" type="submit">
                         Registrar despacho
-                    </Button>
-                </Popconfirm>
-                
+                    </Button>   
             </Form.Group>
         </Form>
     )
