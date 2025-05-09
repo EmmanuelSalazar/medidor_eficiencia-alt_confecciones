@@ -10,7 +10,8 @@
                 CASE 
                     WHEN rol = 1 THEN 'Tablero'
                     WHEN rol = 2 THEN 'Supervisor/a'
-                    WHEN rol >= 3 THEN 'Administrador/a'  
+                    WHEN rol = 9 THEN 'Administrador/a'  
+                    WHEN rol = 4 THEN 'Bodeguero/a'
                     ELSE 'ROL DESCONOCIDO' 
                     END AS rol    
             FROM `usuarios` ORDER BY user_id DESC;";
