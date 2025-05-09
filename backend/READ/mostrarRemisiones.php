@@ -26,7 +26,7 @@
                 b.ref_id = r.ref_id
             ORDER BY
                 bm.numeroDeRemision
-            ASC
+            ASC LIMIT 100
                 ";
         $stmt = $mysqli->prepare($sql);
         if ($stmt->execute()) {

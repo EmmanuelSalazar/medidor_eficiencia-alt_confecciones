@@ -13,7 +13,6 @@ const IncentivoQuincena = ({ modulo, fechaInicio, fechaFinal }) => {
     useEffect(() => {
         actualizarLista(modulo, fechaInicio, fechaFinal);
     }, [modulo, fechaInicio, fechaFinal]);
-    console.log(listaRegistro)
 
     
     useEffect(() => {
@@ -56,7 +55,6 @@ const IncentivoQuincena = ({ modulo, fechaInicio, fechaFinal }) => {
         }
     }
 
-    console.log(beneficio)
     //OBTENER EFICIENCIA PARA ESTABLECER BENEFICIO
     const establecerEficiencia = () => {
         // OBTENER REGISTRO CONTADOR

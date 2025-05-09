@@ -143,7 +143,7 @@ const ListaProduccion = () => {
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Actualizar estado <Form.Text>(Actual: {establecerEstados(informacionModal?.estado)})</Form.Text></Form.Label>
-                        <Form.Select onChange={(e) => setEstado(e.target.value)} disabled={informacionModal?.estado !== 1 ? true : false}>
+                        <Form.Select onChange={(e) => setEstado(e.target.value)} disabled={informacionModal?.estado === 2  ? true : false}>
                             <option>Seleccionar</option>
                             <option value="1">En produccion</option>
                             <option value="2">Terminada</option>
