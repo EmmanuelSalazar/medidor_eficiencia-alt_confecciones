@@ -3,5 +3,39 @@ $font-sizes: (
   1: 5rem,
   6: 4rem
 );
-
+.selectCustom { 
+  background-color: rgba(183,95,95,0.5)!important;
+  border-color: rgba(183,95,95,1)!important;
+  color: white!important;
+  transition: all 0.2s ease-in-out!important;
+  &::placeholder {
+      color: rgb(189, 153, 153)!important;
+  }
+  &:hover {
+    background-color: rgba(183,95,95,1)!important;
+    border-color: rgba(183,95,95,1)!important;
+    &::placeholder {
+        color: rgb(119, 63, 63)!important;
+    }
+  }
+}
+body{
+  scrollbar-color: rgba(183,95,95,0.5) rgba(183,95,95,0);
+}
+.botonPersonalizado {
+  background-color: rgba(212, 124, 124, 0.5)!important;
+  border-color: rgb(87, 45, 45)!important;
+  color: white!important;
+  transition: all 0.2s ease-in-out!important;
+  &:hover {
+    background-color: rgba(212, 124, 124, 1)!important;
+    border-color: rgb(87, 45, 45)!important;
+    width: 100px;
+    height: 40px;
+    color: white!important;
+  }
+}
+.textSecondary {
+  color: rgb(189, 153, 153)!important
+}
 @import 'bootstrap/scss/bootstrap';

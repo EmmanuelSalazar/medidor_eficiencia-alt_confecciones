@@ -7,23 +7,30 @@
         $clientID = (int)$datos['clientID'] ?? NULL;
         $odpInfo = $datos['odpInfo']?? NULL;
         $observaciones = $datos['observaciones'] ?? NULL;
+        $numeroRemision = $datos['remision'] ?? NULL;
         $fecha = date('Y-m-d');
         // CALCULAR # DE REMISIÓN
-        $sql = "SELECT numeroDeRemision FROM bodega_remision ORDER BY rem_id DESC LIMIT 1";
-        $stmt = $mysqli->prepare($sql);
-        if($stmt->execute()){
+        if(empty($numeroRemision)){
+            $sql = "SELECT numeroDeRemision FROM bodega_remision ORDER BY rem_id DESC LIMIT 1";
+            $stmt = $mysqli->prepare($sql);
+            if($stmt->execute()){
             $result = $stmt->get_result();
             $result = $result->fetch_all(MYSQLI_ASSOC);
             $numeroDeRemision = (int)$result[0]['numeroDeRemision'] + 1;
         }
+        } else {
+            $numeroDeRemision = $numeroRemision;
+        }
+        
         // REGISTRAR TODAS LAS REMISIONES
         foreach($odpInfo as $odp){
             $odpID = (int)$odp['odp']?? NULL;
             $unidadesDespachadas = (int)$odp['unidades']?? NULL;
+            $segundas = (int)$odp['segundas']?? NULL;
             // ALMACENAR LA REMISION
-            $sql = "INSERT INTO bodega_remision (client_id, odp_id, unidadesDespachadas, observaciones, numeroDeRemision) VALUES (?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO bodega_remision (client_id, odp_id, unidadesDespachadas, segundasDespachadas, observaciones, numeroDeRemision) VALUES (?, ?, ?, ?, ?, ?)";
             $stmt = $mysqli->prepare($sql);
-            $stmt->bind_param("iiisi", $clientID, $odpID, $unidadesDespachadas, $observaciones, $numeroDeRemision);
+            $stmt->bind_param("iiiisi", $clientID, $odpID, $unidadesDespachadas, $segundas, $observaciones, $numeroDeRemision);
             if($stmt->execute()){
                 // ACTUALIZAR EL ESTADO DE LA ORDEN DE PRODUCCION
                 $sql = "SELECT * FROM bodega WHERE odp_id = ?";

@@ -91,6 +91,7 @@ const ListaProduccion = () => {
     const columns = [
         { title: 'Orden de produccion', dataIndex: 'orden_produccion', key: 'orden_produccion', width: 150 },
         { title: 'Referencia', dataIndex: 'referencia', key: 'referencia', width: 100 },
+        { title: 'Detalles', dataIndex:'detalle', key:'detalles', width: 100},
         { title: 'Talla', dataIndex:'talla', key:'talla', width: 65 },
         { title: 'Color', dataIndex:'color', key:'color', width: 70 },
         { title: 'Cantidad', dataIndex:'cantidad', key:'cantidad', width: 90 },
@@ -118,7 +119,7 @@ const ListaProduccion = () => {
         {mensajeDeExito && <Alert variant="success">{mensajeDeExito}</Alert>}
         {mensajeDeAlerta && <Alert variant="warning">{mensajeDeAlerta}</Alert>}
         {mensajeDeError && <Alert variant="danger">{mensajeDeError}</Alert>}
-        <Table rowKey='odp_id' columns={columns} dataSource={data}  scroll={{y: 600}}/>
+        <Table rowKey='odp_id' columns={columns} dataSource={data}  scroll={{y: 600}} pagination={false}/>
         <Modal show={mostrarModal} onHide={cerrarModal}>
             <Modal.Header closeButton>
                 <Modal.Title>Editar registro</Modal.Title>

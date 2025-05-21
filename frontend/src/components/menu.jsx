@@ -81,7 +81,7 @@ const items = [
         icon: <AppstoreOutlined />,
         children: [
           {
-            label: <NavLink to="/bodega" className="noDecorativos">Encargos</NavLink>,
+            label: <NavLink to="/bodega" className="noDecorativos">Ordenes de produccion</NavLink>,
             key: 'encargos'
           },{
             label: <NavLink to="/bodega_despacho" className="noDecorativos">Despacho</NavLink>,

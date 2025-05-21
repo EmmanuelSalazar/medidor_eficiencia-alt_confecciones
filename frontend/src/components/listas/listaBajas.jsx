@@ -5,12 +5,10 @@ import { EyeOutlined } from '@ant-design/icons';
 import useMostrarRemisiones from '../../hooks/mostrarRemisiones.hook';
 import useMostrarClientes from '../../hooks/mostrarClientes.hook';
 import { PlantillaDespachoContext } from '../../contexts/plantillaDespacho';
-const ListaRemision = () => {
+const ListaBajas = () => {
     const { data, status, error } = useMostrarRemisiones();
     const { data:clientes } = useMostrarClientes();
-    console.log(data);
-
-    const { setCliente, setObservaciones, setDespachos, setFecha, setNumeroRemision } = useContext(PlantillaDespachoContext);
+    const { setCliente, setObservaciones, setDespachos, setFecha } = useContext(PlantillaDespachoContext);
      // MANEJO DE ALERTAS EXITO/ALERTA/ERROR
      const [mensajeDeExito, setMensajeDeExito] = useState("");
      const [mensajeDeAlerta, setMensajeDeAlerta] = useState("");
@@ -47,7 +45,6 @@ const ListaRemision = () => {
                 referencia: primerElemento.referencia,
                 ordenesDespachadas: grupos[clave].length, // Obtener la longitud del grupo para obtener el número de ordenes de despachadas
                 unidadesDespachadas: grupos[clave].reduce((a, b) => a + b.unidadesDespachadas, 0),
-                bajas: grupos[clave].reduce((a, b) => a + b.segundasDespachadas, 0),
                 observaciones: primerElemento.observaciones,
                 fecha: primerElemento.fecha,
             }
@@ -63,8 +60,6 @@ const ListaRemision = () => {
         // DATOS DEL CLIENTE
         const datosCliente = clientes.filter((cliente) => cliente.client_id === datosFiltrados[0].client_id)
         setCliente(datosCliente)
-        // CARGAR NUMERO DE REMISION
-        setNumeroRemision(arreglo.numeroDeRemision);
         // OBSERVACIONES
         setObservaciones(datosFiltrados[0].observaciones);
         // DATOS DE LAS ODP
@@ -73,10 +68,6 @@ const ListaRemision = () => {
                 id: Date.now(),
                 odp_id: dato.odp_id,
                 unidadesDespachadas: dato.unidadesDespachadas,
-                bajas: dato.segundasDespachadas,
-                sumatoria: dato.unidadesDespachadas + dato.segundasDespachadas,
-                estado: 1,
-                modificable: 0,
                 informacionODP: [{
                     orden_produccion: dato.orden_produccion,
                     referencia: dato.referencia,
@@ -152,4 +143,4 @@ const ListaRemision = () => {
         </>
     )
 }
-export default ListaRemision;
+export default ListaBajas;

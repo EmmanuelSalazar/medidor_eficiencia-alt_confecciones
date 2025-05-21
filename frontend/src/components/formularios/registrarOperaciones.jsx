@@ -5,6 +5,7 @@ import AlmacenarDatos from "../../services/api/create/almacenarRegistroOperacion
 import { ListaContext as ContextoEnLista } from "../../contexts/actualizarRegistroOperaciones";
 import { ListaContext, ListaProvider } from "../../contexts/actualizarOperarios";
 import { ListaContext as ContextoEnLista2 } from "../../contexts/actualizarReferencias";
+import { throttle } from "lodash";
 
 const RegistrarOperaciones = () => {
     // CONTEXTOS
@@ -46,14 +47,11 @@ const RegistrarOperaciones = () => {
     const activarRegistroMultiple = (valor) => {
         setRegistroMultiple(valor);
     };
-
+    
     const activarComentarios = (checked) => {
         setComentarios(checked); // Actualiza el estado basado en el valor del checkbox
     };
-
-    // ALMACENAR, ENVIAR Y ACTUALIZAR INFORMACIÓN
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const enviarDatos = async () => {
         const values = {
             operario: operarioRef.current.value,
             unidadesProducidas: unidadesProducidasRef.current.value,
@@ -74,7 +72,19 @@ const RegistrarOperaciones = () => {
             setMensajeDeError("Ha ocurrido un error, por favor intente de nuevo más tarde: ", error);
             console.error("Ha ocurrido un error: ", error);
         }
+    }
+    // THROTTLING PARA LIMITAR LA CANTIDAD DE LLAMADAS A LA API
+    const throttlingFormulario = useRef(
+        throttle(async () => {
+            await enviarDatos();
+        }, 1000, { leading: true, trailing: false  })
+    ).current;
+    // ALMACENAR, ENVIAR Y ACTUALIZAR INFORMACIÓN
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        throttlingFormulario()
     };
+    
      if (loading) return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
      if (error) return <Alert variant='danger'>Error: {error.message}</Alert>;
     return (

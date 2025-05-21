@@ -6,10 +6,21 @@
 }
 .plantilla > tr > th {
     text-transform: uppercase;
+    
+}
+.limitToPrint {
+    max-height: 34vh !important;
+    overflow-y: auto;
+}
+.tablaCentrada {
+    text-align: center;
 }
 .tablaResponsiva {
     overflow-x: auto;
     width: 100%;
+}
+.tablaImprimir {
+    max-width: 50vw !important;
 }
 .tablaLimitadaLargo {
     max-height: 300px;
@@ -48,13 +59,24 @@
     display: flex;
     gap: 0.5rem;
 }
+
 .notificacion > div {
     min-width: 50%;
     font-size: 25px;
 }
-
 .imprimir {
    display: none; 
+}
+.cortarTexto {
+    overflow-wrap: anywhere;
+}
+.listaRotulos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    max-height: 60vh;
+    overflow-y: auto;
+    margin-bottom: 2rem;
 }
 @media screen and (width < 768px) {
     .tablaLimitadaLargo {
@@ -84,4 +106,17 @@
     .imprimir {
         display: block;
     }
+    .tablaImprimir {
+        margin-left: 1rem;
+        margin-right: 1rem;
+        max-width: 96%!important;
+    }
+    .limitToPrint {
+        max-height: none !important;
+    }
+    .listaRotulos {
+        max-height: none;
+        overflow-y: unset;
+    }
+    
 }

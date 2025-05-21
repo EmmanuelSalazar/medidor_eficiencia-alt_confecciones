@@ -34,27 +34,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
 
-    // Calcular la hora límite (1 hora antes de la fecha actual)
-/*     $horaLimite = (new DateTime())->modify('-1 hour')->format('Y-m-d H:i:s');
- */
+    // Calcular la hora límite (1 hora antes de la fecha actual) ESTA FUNCION ES UTIL, PERO ESTÁ BAJO REVISIÓN POR QUE NO SE TERMINA DE INTEGRARA AL SISTEMA
+    $horaLimite = (new DateTime())->modify('-10 seconds')->format('Y-m-d H:i:s');
+
     // Verificar si ya existe un registro para el mismo op_id en la última hora
-    /* $stmtVerificacion = $mysqli->prepare("SELECT COUNT(*) AS count FROM registro_produccion WHERE op_id = ? AND fecha >= ?");
+    $stmtVerificacion = $mysqli->prepare("SELECT COUNT(*) AS count FROM registro_produccion WHERE op_id = ? AND fecha >= ?");
     $stmtVerificacion->bind_param("is", $operador, $horaLimite);
     $stmtVerificacion->execute();
     $result = $stmtVerificacion->get_result();
-    $row = $result->fetch_assoc(); */
+    $row = $result->fetch_assoc();
 
-    /* if ($row['count'] > 0) { */
+    if ($row['count'] > 0) {
         // Ya existe un registro para este operario en la última hora
-       /*  http_response_code(response_code: 400);
+        http_response_code(response_code: 400);
         $respuesta = [
             'ok' => false,
-            'respuesta' => 'Ya existe un registro para este operario en la última hora (CONERR6)'
+            'respuesta' => '¿Horario duplicado? (CONERR6)'
         ];
         echo json_encode($respuesta, true);
         $stmtVerificacion->close();
         exit();
-    } */
+    }
 
     // Insertar en base de datos
     $stmt = $mysqli->prepare("INSERT INTO registro_produccion (fecha, op_id, ref_id, unidadesProducidas, adicionales) VALUES (?, ?, ?, ?, ?)");

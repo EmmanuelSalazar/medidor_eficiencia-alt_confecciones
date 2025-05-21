@@ -11,6 +11,7 @@
                 b.odp_id,
                 bc.nombre AS nombreCliente,
                 bm.unidadesDespachadas,
+                bm.segundasDespachadas,
                 bm.client_id,
                 COALESCE(bm.observaciones, 'N/A') AS observaciones,
                 bm.fecha,
