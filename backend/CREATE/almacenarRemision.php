@@ -8,29 +8,40 @@
         $odpInfo = $datos['odpInfo']?? NULL;
         $observaciones = $datos['observaciones'] ?? NULL;
         $numeroRemision = $datos['remision'] ?? NULL;
+        $baja = $datos['baja']?? NULL;
         $fecha = date('Y-m-d');
-        // CALCULAR # DE REMISIÓN
+        // VERIFICAR SI NECESITA UN # Y CALCULAR # DE REMISIÓN
         if(empty($numeroRemision)){
-            $sql = "SELECT numeroDeRemision FROM bodega_remision ORDER BY rem_id DESC LIMIT 1";
+            $sql = "SELECT numeroDeRemision FROM bodega_remision";
+            $stmt = $mysqli->prepare($sql);
+            if($baja === 1) {
+                $bajas = 1;
+                $sql .= " WHERE bajas = 1";
+            } else {
+                $bajas = 0;
+                $sql .= " WHERE bajas = 0";
+            }
+            $sql .= " ORDER BY rem_id DESC LIMIT 1";
             $stmt = $mysqli->prepare($sql);
             if($stmt->execute()){
             $result = $stmt->get_result();
             $result = $result->fetch_all(MYSQLI_ASSOC);
             $numeroDeRemision = (int)$result[0]['numeroDeRemision'] + 1;
+            echo $bajas;
+
         }
         } else {
             $numeroDeRemision = $numeroRemision;
         }
-        
         // REGISTRAR TODAS LAS REMISIONES
         foreach($odpInfo as $odp){
             $odpID = (int)$odp['odp']?? NULL;
             $unidadesDespachadas = (int)$odp['unidades']?? NULL;
-            $segundas = (int)$odp['segundas']?? NULL;
+            $segundas = (int)$odp['segundas']?? 0;
             // ALMACENAR LA REMISION
-            $sql = "INSERT INTO bodega_remision (client_id, odp_id, unidadesDespachadas, segundasDespachadas, observaciones, numeroDeRemision) VALUES (?, ?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO bodega_remision (client_id, odp_id, unidadesDespachadas, segundasDespachadas, observaciones, numeroDeRemision, bajas) VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt = $mysqli->prepare($sql);
-            $stmt->bind_param("iiiisi", $clientID, $odpID, $unidadesDespachadas, $segundas, $observaciones, $numeroDeRemision);
+            $stmt->bind_param("iiiisii", $clientID, $odpID, $unidadesDespachadas, $segundas, $observaciones, $numeroDeRemision, $bajas);
             if($stmt->execute()){
                 // ACTUALIZAR EL ESTADO DE LA ORDEN DE PRODUCCION
                 $sql = "SELECT * FROM bodega WHERE odp_id = ?";

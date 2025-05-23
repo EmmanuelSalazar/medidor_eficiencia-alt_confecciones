@@ -1,13 +1,15 @@
 import { useRef, useContext } from 'react';
-import { Form, Button } from'react-bootstrap';
+import { Form, Button, Spinner } from'react-bootstrap';
 import { ListaContext } from '../../contexts/actualizarReferencias';
 import datos from '../../utils/json/menuModulos.json';
 import AlmacenarDatos from '../../services/api/create/almacenarProduccion';
 import useMostrarProduccion from '../../hooks/mostrarProduccion.hook';
+import useMostrarClientes from '../../hooks/mostrarClientes.hook';
 const RegistrarProduccion = () => {
     // CONTEXTOS
     const { listas, actualizarListas } = useContext(ListaContext);
     const { reload } = useMostrarProduccion();
+    const { data } = useMostrarClientes();
     // ALMACENAR FORMULARIO
     const formRef = useRef(null);
     const odpRef = useRef();
@@ -18,6 +20,10 @@ const RegistrarProduccion = () => {
     const moduloRef = useRef();
     const codBarrasRef = useRef();
     const detalleRef = useRef();
+    const clienteRef = useRef();
+    // ESPERAR A QUE CARGUEN LOS DATOS
+    if(!data) return (<Spinner animation="border" variant="primary" />);
+
     // CARGAR REFERENCIAS SEGÚN MODULO
     const cargarReferencias = async (e) => {
         const modulo = e.target.value;
@@ -34,7 +40,8 @@ const RegistrarProduccion = () => {
             detalle: detalleRef.current.value,
             cantidad: cantidadRef.current.value,
             referencia: referenciaRef.current.value,
-            codBarras: codBarrasRef.current.value
+            codBarras: codBarrasRef.current.value,
+            cliente: clienteRef.current.value
         };
         try {
             await AlmacenarDatos(values);
@@ -59,6 +66,17 @@ const RegistrarProduccion = () => {
                         Puedes usar el escaner para escanear el codigo de barras o ingresarlo manualmente
                         (Si utilizarás el escaner, selecciona el recuadro de arriba primero)
                     </Form.Text>
+                </Form.Group>
+                <Form.Group>
+                    <Form.Label>Cliente</Form.Label>
+                    <Form.Select className='selectCustom' required ref={clienteRef}>
+                        <option value="">Seleccione un cliente</option>
+                        {data.map((dato, index) => (
+                            <option key={index} value={dato.client_id}>
+                                {dato.nombre}
+                            </option>
+                        ))}
+                    </Form.Select>
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Modulo</Form.Label>

@@ -71,7 +71,7 @@ const TablaRegistros = () => {
         <>
         {mensajeDeError && <Alert variant="danger">{mensajeDeError}</Alert>}
         <div className=" tablaLimitadaAncho">
-            <Table rowSelection={rowSelection} dataSource={lista} columns={columns} pagination={false} rowKey="op_id" size="middle" scroll={{y: 55 * 5}}/>
+            <Table rowSelection={rowSelection} dataSource={lista} columns={columns} rowKey="op_id" size="middle" scroll={{y: 55 * 5}} pagination={false}/>
         </div>
         <Stack direction="horizontal" gap={2} className="my-2">
             <Button variant="primary" onClick={realizarBusqueda}>Graficar</Button>

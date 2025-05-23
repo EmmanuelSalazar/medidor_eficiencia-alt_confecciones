@@ -4,14 +4,17 @@ import Logo from '../assets/img/svg/logo.svg';
 import { PlantillaDespachoContext } from '../contexts/plantillaDespacho';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { useSearchParams } from 'react-router-dom';
 const InformeDespacho = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+    const plantilla = parseInt(searchParams.get('plantilla'));
     const [fecha, setFecha] = useState('');
     const ahora = new Date();
     useEffect(() => {
      // Configura el locale al montar el componente
     setFecha(format(ahora, 'PPPP', { locale: es }));
   }, []);
-    const { cliente, observaciones, despachos, fecha:fechaRegistro, sumatoriaUnidades } = useContext(PlantillaDespachoContext);
+    const { cliente, observaciones, despachos, fecha:fechaRegistro, sumatoriaUnidades, numeroRemision } = useContext(PlantillaDespachoContext);
     let fechaRegistroFormateada = format(fechaRegistro || ahora, 'PPPP', { locale: es })
     const informacionCliente = cliente || [{ nombre: 'Nombre', nit: 'NIT', direccion: 'Direccion', ciudad: 'Ciudad', telefono: 'Telefono'}];
     let totalPrimeras = despachos.reduce((acumulador, despacho) => {
@@ -36,6 +39,7 @@ const InformeDespacho = () => {
           } else {
             acumulador[codigoBarras] = {
               ...despacho,
+              segundas: despacho.bajas,
               unidadesDespachadas: despacho.unidadesDespachadas,
               informacionODP: [...(informacionODP || [])]
             };
@@ -53,10 +57,10 @@ const InformeDespacho = () => {
             <Row className='d-flex justify-content-between imprimir mb-2'>
                 <Col className='d-flex flex-column justify-content-center align-items-center'>
                 <Row>
-                  <h1 className='imprimir'>REMISIÓN</h1>
+                  <h1 className='imprimir'>{plantilla > 2 ? 'Bajas' : 'Remision'}</h1>
                 </Row>
                 <Row>
-                  <h5 className='imprimir'>N° 001</h5>
+                  <h5 className='imprimir'>N° {numeroRemision < 10 ? `00${numeroRemision}` : `0${numeroRemision}`}</h5>
                 </Row>
                 </Col>
                 <Col className='d-flex flex-column align-items-center'>
@@ -109,9 +113,12 @@ const InformeDespacho = () => {
                               <th colSpan="4">Detalles</th>
                               <th colSpan="1">Talla</th>
                               <th colSpan="4">Color</th>
-                              <th colSpan="4"><span style={{ textTransform: 'capitalize', display: 'block', fontSize: '0.6rem'}}>unidades</span>Primeras</th>
-                              <th colSpan="4"><span style={{ textTransform: 'capitalize', display: 'block', fontSize: '0.6rem'}}>unidades</span>Segundas</th>
-                              <th>Total</th>
+                              {plantilla <= 2 ? <>
+                                <th colSpan="4"><span style={{ textTransform: 'capitalize', display: 'block', fontSize: '0.6rem'}}>unidades</span>Primeras</th>
+                                <th colSpan="4"><span style={{ textTransform: 'capitalize', display: 'block', fontSize: '0.6rem'}}>unidades</span>Segundas</th>
+                                <th>Total</th>
+                              </> : <><th>Unidades</th></>}
+                              
                           </tr>
                           {despachos.map((despacho, index) => {
                               return (
@@ -122,18 +129,22 @@ const InformeDespacho = () => {
                                     <td colSpan="4">{despacho?.informacionODP?.[0]?.detalle || "N/A"}</td>
                                     <td colSpan="1">{despacho?.informacionODP?.[0]?.talla || "N/A"}</td>
                                     <td colSpan="4">{despacho?.informacionODP?.[0]?.color || "N/A"}</td>
-                                    <td colSpan="4">{despacho?.unidadesDespachadas || "0"}</td>
-                                    <td colSpan="4">{despacho?.bajas || 0}</td>
-                                    <td colSpan="6" className='bg bg-secondary bg-opacity-10'>{despacho?.sumatoria || '0'}</td>
+                                    {plantilla <= 2 ? <>
+                                      <td colSpan="4">{despacho?.unidadesDespachadas || "0"}</td>
+                                      <td colSpan="4">{despacho?.bajas || 0}</td>
+                                    </> : <></>}
+                                    <td colSpan="6" className='bg bg-secondary bg-opacity-10'>{despacho?.unidadesDespachadas || '0'}</td>
                                   </tr>
                               )
                           })}
                           <tr>
                               <th colSpan={13}></th>
                               <th colSpan={5}>TOTAL UNIDADES</th>
-                              <th colSpan={4} className='bg bg-secondary bg-opacity-10'>{totalPrimeras}</th>
-                              <th colSpan={4} className='bg bg-secondary bg-opacity-10'>{totalSegundas || 0}</th>
-                              <th colSpan={5} className='bg bg-secondary bg-opacity-50'>{sumatoriaUnidades || 0}</th>
+                              {plantilla <= 2 ? <>
+                                <th colSpan={4} className='bg bg-secondary bg-opacity-10'>{totalPrimeras}</th>
+                                <th colSpan={4} className='bg bg-secondary bg-opacity-10'>{totalSegundas || 0}</th>
+                              </> : <></>}
+                              <th colSpan={5} className='bg bg-secondary bg-opacity-50'>{totalPrimeras || 0}</th>
                           </tr>
                   </tbody>
               </table>
@@ -163,12 +174,12 @@ const InformeDespacho = () => {
                         </tr>
                         {Array.isArray(despachosConsolidados) && despachosConsolidados.length > 0 ? (
           despachosConsolidados.map((despacho, index) => {
-            const porDespachar = despacho?.informacionODP?.[0]?.cantidad_producida - despacho?.unidadesDespachadas;
+            const porDespachar = despacho?.informacionODP?.[0]?.cantidad_producida - (despacho?.unidadesDespachadas + despacho?.bajas);
             
             return (
               <tr key={`${despacho.id}-${index}`}> {/* Key único */}
                 <td className='bg bg-primary bg-opacity-10'>{despacho?.informacionODP?.[0]?.orden_produccion || 'N/A'}</td>
-                <td>{despacho?.unidadesDespachadas ?? 0}</td>
+                <td>{(despacho?.unidadesDespachadas + despacho?.bajas) || 0}</td>
                 <td>{porDespachar}</td>
               </tr>
             );

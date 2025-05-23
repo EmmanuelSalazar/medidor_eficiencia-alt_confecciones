@@ -9,7 +9,7 @@ import { throttle } from "lodash";
 
 const RegistrarOperaciones = () => {
     // CONTEXTOS
-    const { lista, actualizarLista } = React.useContext(ListaContext);
+    const { lista, setOperariosRetirados, operariosRetirados } = React.useContext(ListaContext);
     const { listas } = React.useContext(ContextoEnLista2);
     const { setListaRegistro, loading, error } = React.useContext(ContextoEnLista);
     // ACTIVAR/DESACTIVARR REGISTROS MULTIPLES/COMENTARIOS ADICIONALES
@@ -38,8 +38,8 @@ const RegistrarOperaciones = () => {
     // ACTIVAR/DESACTIVAR REGISTROS MULTIPLES
     useEffect(() => {
         try {
-            actualizarLista(window.moduloSeleccionado, registroMultiple);
-        } catch (error) {
+/*             setOperariosRetirados();
+ */        } catch (error) {
             setMensajeDeError("Ha ocurrido un error: ", error);
         }
     }, [registroMultiple]);
@@ -63,9 +63,10 @@ const RegistrarOperaciones = () => {
             return;
         }
         try {
+            setOperariosRetirados(prevOperarios => [...prevOperarios, parseInt(values.operario)]);
+
             await AlmacenarDatos(values);
             await setListaRegistro(window.moduloSeleccionado);
-            await actualizarLista(window.moduloSeleccionado, registroMultiple);
             setMensajeDeExito("El registro se ha guardado correctamente");
             formRef.current.reset();
         } catch (error) {

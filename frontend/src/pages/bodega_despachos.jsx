@@ -5,17 +5,20 @@ import InformeDespacho from '../components/informeDespacho';
 import { PlantillaDespachoProvider } from '../contexts/plantillaDespacho';
 import { ReloadOutlined } from '@ant-design/icons';
 import { Segmented } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import ListaRemision from '../components/listas/listaRemision';
 import ListaBajas from '../components/listas/listaBajas';
 import useMostrarRemision from '../hooks/mostrarRemisiones.hook';
 import RotulosDespacho from '../components/rotulosDespacho';
+import RegistrarBajas from '../components/formularios/registrarBajas';
 function BodegaDespachos() {
     const [seccion, setSeccion] = useState(1);
     const [apartado, setApartado] = useState(1);
     const { reload } = useMostrarRemision();
+    const navigate = useNavigate()
     const alCambio = (e) => {
         setSeccion(100);
-        console.log(apartado);
+        navigate('?plantilla=' + e)
         setTimeout(() => {
             setSeccion(e);
         }, 500)
@@ -37,6 +40,10 @@ function BodegaDespachos() {
         {
             value: 3,
             label: 'Lista de bajas'
+        },
+        {
+            value: 4,
+            label: 'Registrar bajas'
         }
     ];
     const apartados = [
@@ -47,7 +54,7 @@ function BodegaDespachos() {
         {
             value: 2,
             label: 'Rotulos',
-        },
+        }
     ]
   return (
         <PlantillaDespachoProvider>
@@ -61,8 +68,8 @@ function BodegaDespachos() {
                     </div>
                     </Col>
                     <Col className='noImprimir' lg={seccion === 1 || seccion === 3 ? 4 : 3}>
-                        <h1 className='noImprimir'>Remisión</h1>
-                       
+                        <h1 className='noImprimir'>{seccion <= 2 && 'Remision'}</h1>
+                        <h1 className='noImprimir'>{seccion > 2 && 'Bajas'}</h1>
                         <Collapse in={seccion === 1} dimension='width'>
                             <div id="collapseExample">
                                 <ListaRemision />
@@ -77,7 +84,12 @@ function BodegaDespachos() {
                             <div id="collapseExample">
                                 <ListaBajas />
                             </div>
-                        </Collapse>                
+                        </Collapse>
+                        <Collapse in={seccion === 4} dimension='width'>
+                            <div id="collapseExample">
+                                <RegistrarBajas/>
+                            </div>
+                        </Collapse>              
                     </Col>
                     <Col lg={1} className={`${seccion === 1 || seccion === 3 ? 'invisible' : ''}`}>
                     </Col>
@@ -88,7 +100,7 @@ function BodegaDespachos() {
                                     <h1 className='noImprimir text-muted'>Plantilla</h1>
                                 </Col>
                                 <Col lg={5}>
-                                <Segmented onChange={alCambioApartado} options={apartados}/>
+                                    <Segmented onChange={alCambioApartado} options={apartados}/>
                                 </Col>
                         </Row>
                     </div>

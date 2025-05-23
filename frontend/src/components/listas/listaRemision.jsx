@@ -7,9 +7,8 @@ import useMostrarClientes from '../../hooks/mostrarClientes.hook';
 import { PlantillaDespachoContext } from '../../contexts/plantillaDespacho';
 const ListaRemision = () => {
     const { data, status, error } = useMostrarRemisiones();
-    const { data:clientes } = useMostrarClientes();
     console.log(data);
-
+    const { data:clientes } = useMostrarClientes();
     const { setCliente, setObservaciones, setDespachos, setFecha, setNumeroRemision } = useContext(PlantillaDespachoContext);
      // MANEJO DE ALERTAS EXITO/ALERTA/ERROR
      const [mensajeDeExito, setMensajeDeExito] = useState("");
@@ -30,7 +29,8 @@ const ListaRemision = () => {
     }
     // REORGANIZAR Y AGRUPAR LOS DATOS
     function agruparArreglo(datos) {
-        const grupos = datos.reduce((a, b) => {
+        const datosFiltrados = datos.filter((item) => item.bajas === 0);
+        const grupos = datosFiltrados.reduce((a, b) => {
             const clave = b.numeroDeRemision;
             if (!a[clave]) {
                 a[clave] = [];
@@ -80,6 +80,7 @@ const ListaRemision = () => {
                 informacionODP: [{
                     orden_produccion: dato.orden_produccion,
                     referencia: dato.referencia,
+                    detalle: dato.detalle,
                     talla: dato.talla,
                     color: dato.color,
                 }],

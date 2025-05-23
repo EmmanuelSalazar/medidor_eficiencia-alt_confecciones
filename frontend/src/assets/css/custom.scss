@@ -11,7 +11,7 @@ $font-sizes: (
   &::placeholder {
       color: rgb(189, 153, 153)!important;
   }
-  &:hover {
+  &:hover, &:focus {
     background-color: rgba(183,95,95,1)!important;
     border-color: rgba(183,95,95,1)!important;
     &::placeholder {

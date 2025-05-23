@@ -7,7 +7,7 @@ import useMostrarProduccion from '../../hooks/mostrarProduccion.hook';
 import { PlantillaDespachoContext } from '../../contexts/plantillaDespacho';
 import AlmacenarDatos from '../../services/api/create/almacenarRemision';
 import useLeerCodigoBarras from '../../hooks/useLeerCodigoBarras.hook';
-const RegistrarDespacho = () => {
+const RegistrarBajas = () => {
     const {valor: codigoDeBarras, timestamp} = useLeerCodigoBarras({minLength: 6, delay: 100 });
     const [barcode, setBarcode] = useState('');
     const [escaneo, setEscaneo] = useState(false);
@@ -36,7 +36,7 @@ const RegistrarDespacho = () => {
     // CONTEXTOS
     const { data } = useMostrarClientes();
     const { data: produccion } = useMostrarProduccion();
-    const { setCliente, setObservaciones, despachos, setDespachos, setSumatoriaUnidades, numeroRemision, cliente } = useContext(PlantillaDespachoContext);
+    const { setCliente, setObservaciones, despachos, setDespachos, setSumatoriaUnidades, numeroRemision } = useContext(PlantillaDespachoContext);
     // ACTUALIZAR ESCANER
     // ACTUALIZAR UNIDADES POR EL CODIGO DE BARRAS
     const alEscanearCodigoBarras = (codigo) => {
@@ -196,12 +196,13 @@ const RegistrarDespacho = () => {
             clientID: clienteRef.current.value,
             odpInfo : odpInfo.filter((dato) => dato !== undefined),
             remision: numeroRemision,
+            baja: 1,
             observaciones: observaciones,
         }
         try {
             var respuesta = await AlmacenarDatos(values);
-                
-                setMensajeDeExito(respuesta || "El registro se ha almacenado exitosamente");
+
+                setMensajeDeExito("El registro se ha almacenado exitosamente");
                 formRef.current.reset();
                 setDespachos([]);
                 console.log(respuesta)
@@ -219,17 +220,14 @@ const RegistrarDespacho = () => {
             <Form.Group className='noImprimir'>
                 <Form.Label>Selecciona el cliente</Form.Label>
                 <Form.Select ref={clienteRef} onChange={cargarDatosCliente} required>
-                    {cliente ? <option value={cliente[0].client_id}>{cliente[0].nombre}</option> 
-                    : <option value={0} className='disabled'>Selecciona un cliente</option>}
+                    <option value={0} className='disabled'>Selecciona un cliente</option>
                 {clientes.map((cliente) => {
                     return (
                         <option value={cliente.client_id} key={cliente.client_id}>{cliente.nombre}</option>
                     )
                 })}
                 </Form.Select>
-                <Button className='mt-2' size='sm' variant="outline-danger" onClick={() => setDespachos([])}>
-                    Reiniciar formulario
-                </Button>
+                
             </Form.Group>
                 {despachos.map((despacho, index) => {
                     return (
@@ -243,11 +241,11 @@ const RegistrarDespacho = () => {
                                             <option value={orden.opd_id} key={orden.opd_id}>{orden.orden_produccion}</option>
                                         )
                                     })}
-                                    </Form.Select>
+                                </Form.Select>
                             </Form.Group>
                             <Form.Group className='noImprimir '>
                                 <Form.Label>Unidades a despachar</Form.Label>
-                                <Form.Control disabled  className={`bg ${despacho.estado === 1 ? '' : 'bg-primary bg-opacity-75 text-white'}`} value={despacho.unidadesDespachadas}  ref={unidadesRef} onChange={(e) => alCambiarUnidades(despacho.id, e.target.value, 1)} type="number"  placeholder="Ingresa las unidades a despachar" required />
+                                <Form.Control disabled={despacho.estado === 1 ? true : false} className={`bg ${despacho.estado === 1 ? '' : 'bg-primary bg-opacity-75 text-white'}`} value={despacho.unidadesDespachadas}  ref={unidadesRef} onChange={(e) => alCambiarUnidades(despacho.id, e.target.value, 1)} type="number"  placeholder="Ingresa las unidades a despachar" required />
                             </Form.Group>
                             <div className='noImprimir d-flex align-items-center mt-2 gap-3 justi'>
                                 <Form.Text>
@@ -266,6 +264,9 @@ const RegistrarDespacho = () => {
                 <Button variant="secondary" onClick={agregarDespacho}>
                 <PlusOutlined/> <span >Añadir orden</span>
                 </Button>
+                <Button variant="danger" onClick={() => setDespachos([])}>
+                    Reiniciar formulario
+                </Button>
             </Form.Group>
             <Form.Group className='noImprimir'>
                 <Form.Label>Observaciones</Form.Label>
@@ -279,4 +280,4 @@ const RegistrarDespacho = () => {
         </Form>
     )
 }
-export default RegistrarDespacho;
+export default RegistrarBajas;

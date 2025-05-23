@@ -89,6 +89,9 @@ const items = [
           },{
             label: <NavLink to="/bodega_clientes" className="noDecorativos">Clientes</NavLink>,
             key: 'clientes'
+          }, {
+            label: <NavLink to="/kardex" className="noDecorativos">Kardex</NavLink>,
+            key: 'kardex'
           }
         ]
       } : null, {

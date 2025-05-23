@@ -20,16 +20,16 @@ const RotulosDespacho = () => {
           <table key={index} className='table table-sm table-bordered'>
               <tbody className='plantilla'>
                 <tr>
-                  <th colSpan="1" rowSpan="2" ><div className='d-flex align-items-center' ><img style={{width: '30px', position: 'relative'}} className='me-2' src={Logo}/><h2>{index+1}/{despachos.length}</h2></div></th>
-                  <th colSpan="2">Envía: </th>
-                  <td colSpan="5"> Alt Confecciones</td>
+                  <th colSpan="4" rowSpan="2" ><div className='d-flex align-items-center' ><img style={{width: '30px', position: 'relative'}} className='me-2' src={Logo}/><h1>{index+1}/{despachos.length}</h1></div></th>
+                  <th colSpan="1">Envía: </th>
+                  <td colSpan="4"> Alt Confecciones</td>
                 </tr>
                 <tr>
-                  <th colSpan="2">Nit:</th>
-                  <td colSpan="3">901235934</td>
+                  <th colSpan="1">Nit:</th>
+                  <td colSpan="2">901235934</td>
                 </tr>
                 <tr>
-                  <th colSpan="3">Orden de produccion</th>
+                  <th colSpan="3">Orden</th>
                   <td colSpan="5">{despacho?.informacionODP?.[0]?.orden_produccion || "N/A"}</td>
                 </tr>
                 <tr>
@@ -54,7 +54,7 @@ const RotulosDespacho = () => {
                 </tr>
               </tbody>
           </table>
-          {verificarMultiplo(generado) && <><div className='imprimir' style={{height: '200px'}}></div><div className='imprimir' style={{height: '200px'}}></div></>}
+          {verificarMultiplo(generado) && <><div className='imprimir' style={{height: '150px'}}></div><div className='imprimir' style={{height: '150px'}}></div></>}
           </>
         )
       })}

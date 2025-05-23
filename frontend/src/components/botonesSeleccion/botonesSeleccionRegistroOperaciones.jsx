@@ -5,7 +5,7 @@ import { ListaContext as ContextoEnLista} from "../../contexts/actualizarRegistr
 import { ListaContext } from '../../contexts/actualizarOperarios';
 import { ListaContext as ContextoEnLista2} from "../../contexts/actualizarReferencias";
 const BotonesSelModRegOp = () => {
-        const { lista, actualizarLista } = React.useContext(ListaContext);
+        const { lista, reload, setModulo } = React.useContext(ListaContext);
         const { listas, actualizarListas } = React.useContext(ContextoEnLista2);
         const { setListaRegistro } = React.useContext(ContextoEnLista);
     const [botonSeleccionado, setBotonSeleccionado] = React.useState(null);
@@ -14,7 +14,7 @@ const BotonesSelModRegOp = () => {
         window.moduloSeleccionado = modulo;
         setBotonSeleccionado(index);
         try {
-            await actualizarLista(modulo, true);
+            setModulo(parseInt(modulo))
             await actualizarListas(modulo, true);
             await setListaRegistro(modulo)
         } catch (error) {

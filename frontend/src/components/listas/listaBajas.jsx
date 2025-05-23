@@ -28,7 +28,8 @@ const ListaBajas = () => {
     }
     // REORGANIZAR Y AGRUPAR LOS DATOS
     function agruparArreglo(datos) {
-        const grupos = datos.reduce((a, b) => {
+        const datosFiltrados = datos.filter((item) => item.bajas === 1);
+        const grupos = datosFiltrados.reduce((a, b) => {
             const clave = b.numeroDeRemision;
             if (!a[clave]) {
                 a[clave] = [];

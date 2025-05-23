@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useContext } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import { Button, Form, Alert, Col } from 'react-bootstrap'
 import AlmacenarOperario from '../../services/api/create/almacenarOperario'
 import { ListaContext } from "../../contexts/actualizarOperarios";

@@ -9,6 +9,7 @@
                 b.talla,
                 b.color,
                 b.odp_id,
+                COALESCE(b.detalle, 'N/A') AS detalle,
                 bc.nombre AS nombreCliente,
                 bm.unidadesDespachadas,
                 bm.segundasDespachadas,
@@ -16,7 +17,8 @@
                 COALESCE(bm.observaciones, 'N/A') AS observaciones,
                 bm.fecha,
                 r.referencia,
-                bm.numeroDeRemision
+                bm.numeroDeRemision,
+                COALESCE(bm.bajas, 0) AS bajas
             FROM
                 `bodega_remision` bm
             JOIN bodega_clientes bc ON

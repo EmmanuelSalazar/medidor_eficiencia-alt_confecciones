@@ -46,7 +46,6 @@ const FechaActual = () => {
                     let fechaFinal = `${anioActual}-${cortesSeparados[0].fechaFinal}`;
                     return {fechaInicio, fechaFinal}
                 }
-                
             }
             
     return {fechaFormateada, fechaActualDia, corteQuincena, tiempoUnix, corteQuincenaFormateado, anioActual, obtenerCortes}
