@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect, useRef } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
-import { Input, Spin } from 'antd';
-import { ConsoleSqlOutlined, PlusOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import useMostrarClientes from '../../hooks/mostrarClientes.hook';
 import useMostrarProduccion from '../../hooks/mostrarProduccion.hook';
 import { PlantillaDespachoContext } from '../../contexts/plantillaDespacho';
@@ -9,9 +9,6 @@ import AlmacenarDatos from '../../services/api/create/almacenarRemision';
 import useLeerCodigoBarras from '../../hooks/useLeerCodigoBarras.hook';
 const RegistrarDespacho = () => {
     const {valor: codigoDeBarras, timestamp} = useLeerCodigoBarras({minLength: 6, delay: 100 });
-    const [barcode, setBarcode] = useState('');
-    const [escaneo, setEscaneo] = useState(false);
-    const [mostrar, setMostrar] = useState(false);
     // REFERENCIAS FORMULARIO
     const clienteRef = useRef(null);
     const odpRef = useRef(null);
@@ -19,6 +16,7 @@ const RegistrarDespacho = () => {
     var observacionesRef = useRef(null);
     const formRef = useRef(null);
     const segundasRef = useRef(null);
+    const bajasRef = useRef(null);
     // MANEJO DE ALERTAS EXITO/ALERTA/ERROR
     const [mensajeDeExito, setMensajeDeExito] = useState("");
     const [mensajeDeAlerta, setMensajeDeAlerta] = useState("");
@@ -99,7 +97,8 @@ const RegistrarDespacho = () => {
             unidadesDespachadas: 0,
             observaciones: null,
             bajas: 0,
-            estado: 0
+            estado: 0,
+            unidadesBajas: 0
         }])
     }
     const alCambiarOdp = (despachoId, odpId) => {
@@ -135,7 +134,7 @@ const RegistrarDespacho = () => {
                     return despacho;
                 });
                 setDespachos(despachosActualizados);
-            }
+        }
     }  
     // ---------------------------------------------------- 
     const alCerrarCaja = (e, id) => {
@@ -158,8 +157,16 @@ const RegistrarDespacho = () => {
         })
         setDespachos(despachosActualizados);
     }
-    const alMarcarBajas = () => {
-        setMostrar(!mostrar)
+    const unidadesBajas = (id, e) => {
+        let unidades = e;
+        const despachosActualizados = despachos.map((despacho) => {
+            if (despacho.id === id && despacho.estado === 0) {
+                console.log(unidades)
+                return {...despacho, unidadesBajas: parseInt(unidades) }
+            }
+            return despacho;
+        });
+        setDespachos(despachosActualizados);
     }
     
     const cargarDatosCliente = (e) => {
@@ -187,9 +194,9 @@ const RegistrarDespacho = () => {
                     let odp = despacho.odp_id;
                     let unidades = despacho.unidadesDespachadas;
                     let segundas = despacho.bajas;
-                    return {odp, unidades, segundas}
+                    let bajas = despacho.unidadesBajas;
+                    return {odp, unidades, segundas, bajas}
                 } 
-            
         })
         let observaciones = observacionesRef.current.value === "" ? null : observacionesRef.current.value;
         const values = {
@@ -249,15 +256,19 @@ const RegistrarDespacho = () => {
                                 <Form.Label>Unidades a despachar</Form.Label>
                                 <Form.Control disabled  className={`bg ${despacho.estado === 1 ? '' : 'bg-primary bg-opacity-75 text-white'}`} value={despacho.unidadesDespachadas}  ref={unidadesRef} onChange={(e) => alCambiarUnidades(despacho.id, e.target.value, 1)} type="number"  placeholder="Ingresa las unidades a despachar" required />
                             </Form.Group>
+                            <Form.Group >
+                                <Form.Label>Segundas</Form.Label>
+                                <Form.Control disabled={despacho.estado === 1 ? true : false} ref={segundasRef} onChange={(e) => alCambiarUnidades(despacho.id, e.target.value, 2)} className={`mb-2 bg ${despacho.estado === 1 ? '' : 'bg-primary bg-opacity-75 text-white'}`}  type='number' placeholder='# de segundas' />
+                            </Form.Group>
+                            <Form.Group >
+                                <Form.Label>Bajas</Form.Label>
+                                <Form.Control disabled={despacho.estado === 1 ? true : false} ref={bajasRef} onChange={(e) => unidadesBajas(despacho.id, e.target.value)} className={`mb-2 bg ${despacho.estado === 1 ? '' : 'bg-primary bg-opacity-75 text-white'}`}  type='number' placeholder='# de bajas' />
+                            </Form.Group>
                             <div className='noImprimir d-flex align-items-center mt-2 gap-3 justi'>
                                 <Form.Text>
                                     #{index + 1}
                                 </Form.Text>
                                 <Form.Check disabled={despacho.modificable === 0 ? true : false} checked={despacho.estado === 1 ? true : false} onChange={(e) => {alCerrarCaja(e, despacho.id)}} className='mt-1' type="switch" label="Abrir/Cerrar caja"/>
-                                <Form.Check disabled={despacho.estado === 1 ? true : false} onChange={(e) => {alMarcarBajas(e)}} label="Añadir segundas" />
-                            </div>
-                            <div className={`${mostrar ? '' : 'imprimir'}`} >
-                                <Form.Control disabled={despacho.estado === 1 ? true : false} ref={segundasRef} onChange={(e) => alCambiarUnidades(despacho.id, e.target.value, 2)} className={`mt-2 bg ${despacho.estado === 1 ? '' : 'bg-primary bg-opacity-75 text-white'}`}  type='number' placeholder='# de segundas' />
                             </div>
                         </div>  
                      )

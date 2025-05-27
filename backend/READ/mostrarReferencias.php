@@ -4,8 +4,6 @@ require_once '../config/baseDeDatos.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     // Obtener el parámetro "modulo" del query string
-    $modulo = $_GET['modulo'] ?? null;
-    $todos = boolval($_GET['redux']);
     // Construir la consulta base
     $sql = "
         SELECT 
@@ -18,21 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 WHEN activo = 0 THEN 'Inactivo'
                 ELSE 'Desconocido' -- Manejar valores inesperados
             END AS estado
-        FROM referencias
+        FROM referencias ORDER BY ref_id DESC
     ";
-
-
-    // Agregar filtro por módulo si se proporciona
-    if ($modulo !== null && is_numeric($modulo)) {
-        $sql .= "WHERE modulo = ? ";
-    }
-
-    if ($todos) {
-        $sql .= "AND activo = 1";       
-    }
-
-    // Ordenar los resultados
-    $sql .= " ORDER BY ref_id DESC";
 
     // Preparar la consulta
     $stmt = $mysqli->prepare($sql);
@@ -43,11 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             'respuesta' => 'Error al preparar la consulta: ' . $mysqli->error
         ], JSON_PRETTY_PRINT);
         exit;
-    }
-
-    // Vincular parámetros si se proporciona un módulo
-    if ($modulo !== null && is_numeric($modulo)) {
-        $stmt->bind_param("i", $modulo);
     }
 
     // Ejecutar la consulta

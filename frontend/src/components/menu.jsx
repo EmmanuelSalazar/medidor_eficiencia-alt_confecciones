@@ -111,16 +111,14 @@ const MenuPrincipal = () => {
   const { reload } = useMostrarProduccion();
   const {fechaActualDia, corteQuincenaFormateado, anioActual} = FechaActual();
   let corteQuincena = `${anioActual}-${corteQuincenaFormateado[0].fechaInicial}`;
-  const { actualizarLista, actualizarListaRegistro } = React.useContext(ListaContext);
+  const { setModulo } = React.useContext(ListaContext);
   const [current, setCurrent] = useState('modulos');
   const onClick =  async (e) => {
     const { key } = e;
     let moduloSeleccionado = parseInt(key) ?? null;
     if (typeof moduloSeleccionado === 'number') {
       try  {
-        await actualizarListaRegistro(moduloSeleccionado, fechaActualDia, fechaActualDia, null, null, 1, 0);
-        await actualizarListaRegistro(moduloSeleccionado, corteQuincena, fechaActualDia, null, null, 1, 1);
-        await actualizarLista(null, moduloSeleccionado);
+        setModulo(moduloSeleccionado);
         await reload();
       } catch (error) {
         console.error("Ha ocurrido un error: ", error)

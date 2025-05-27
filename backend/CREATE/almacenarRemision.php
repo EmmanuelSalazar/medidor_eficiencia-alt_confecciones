@@ -38,6 +38,7 @@
             $odpID = (int)$odp['odp']?? NULL;
             $unidadesDespachadas = (int)$odp['unidades']?? NULL;
             $segundas = (int)$odp['segundas']?? 0;
+            $bajas = (int)$odp['bajas']?? 0;
             // ALMACENAR LA REMISION
             $sql = "INSERT INTO bodega_remision (client_id, odp_id, unidadesDespachadas, segundasDespachadas, observaciones, numeroDeRemision, bajas) VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt = $mysqli->prepare($sql);

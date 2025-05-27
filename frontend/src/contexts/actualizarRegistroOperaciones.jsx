@@ -1,30 +1,41 @@
 import { createContext, useState, useEffect } from 'react';
-import { useFetchData } from '../services/api/read/mostrarRegistroOperaciones';
+import useMostrarRegistroOperaciones from '../hooks/mostrarRegistroOperaciones.hook';
 export const ListaContext = createContext();
 
 export const ListaProvider = ({ children }) => {
-  // RECIBIR DATOS DE LA API  
-  const { data, loading, error, fetchData } = useFetchData();
-  //
-  const [listaRegistro, setLista] = useState([]);
+  const [modulo, setModulo] = useState(0);
+  const [lista, setLista] = useState([]);
 
-  // HOOK PARA REALIZAR Y ALMACENAR SOLICITUD
-  const setListaRegistro = async (modulo, fecha_inicio, fecha_final, hora_inicio, hora_fin, rol) => {
+  // RECIBIR DATOS DEL HOOK
+  const { data, status, error, reload } = useMostrarRegistroOperaciones();
+  // RECARGAR DATOS
+  const actualizarLista = async () => {
     try {
-      const nuevaLista = await fetchData(modulo, fecha_inicio, fecha_final, hora_inicio, hora_fin, rol);
-      setLista([...nuevaLista]);
+      await reload();
+      console.log('Datos actualizados');
     } catch (error) {
       console.error('Ha ocurrido un error al actualizar sus datos', error);
       throw error;
     }
   };
-
   useEffect(() => {
-    setListaRegistro();
-  }, [fetchData]);
+    if(data) {
+      if(data.length === 0) {
+        setLista([]);
+      } else {
+        if(modulo === 0) {
+          setLista(data.sort((a, b) => a.modulo - b.modulo))
+        } else {
+          setLista(data.filter((lista) => lista.modulo === modulo));
+        }
+      }
+    } else {
+        setLista([]);
+    }
+  },[modulo, data])
 
   return (
-    <ListaContext.Provider value={{ listaRegistro, loading, error, setListaRegistro }}>
+    <ListaContext.Provider value={{ status, error, actualizarLista, setModulo, lista }}>
       {children}
     </ListaContext.Provider>
   );

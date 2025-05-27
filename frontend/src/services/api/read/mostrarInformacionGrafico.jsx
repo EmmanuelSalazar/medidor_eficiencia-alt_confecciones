@@ -1,9 +1,8 @@
 import axios from 'axios';
-const fetchReferencias = async () => {
+const FetchInformacionGrafico = async () => {
     const apiURL = import.meta.env.VITE_API_URL;
-
     try {
-        const response = await axios.get(`${apiURL}/READ/mostrarReferencias.php`);
+        const response = await axios.get(`${apiURL}/READ/mostrarInformacionGrafico.php`);
         if (response.data.ok) {
             return response.data.respuesta
         } else {
@@ -14,4 +13,4 @@ const fetchReferencias = async () => {
         console.log(error);
     }
 }
-export default fetchReferencias;
+export default FetchInformacionGrafico;

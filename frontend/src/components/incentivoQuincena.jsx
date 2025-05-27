@@ -1,21 +1,15 @@
 import React from "react";
 import { ListaContext } from '../contexts/informacionGrafico';
-import { useSearchParams } from "react-router-dom";
 import { Stack } from 'react-bootstrap'
 const IncentivoQuincena = () => {
-    const { lista } = React.useContext(ListaContext);
+    const { eficiencia = [{}] } = React.useContext(ListaContext);
     const [beneficio, setBeneficio] = React.useState("--");
     const [porcentaje, setPorcentaje] = React.useState();
     const [porcentajeEstatico, setPorcentajeEstatico] = React.useState("--");
-    const { listaRegistroQuincenal } = React.useContext(ListaContext);  
-    //OBTENER MODULO
-    const [buscarParametro] = useSearchParams();
-    let moduloEnLaUrl = parseInt(buscarParametro.get('modulo'));
-    const modulo = moduloEnLaUrl || window.ModuloSeleccionado;
     // ACTUALIZAR COMPONENTES
-    React.useEffect( () => {
-        establecerEficiencia();
-    }, [lista]);
+        React.useEffect( () => {
+       setPorcentaje(parseFloat(eficiencia?.[0]?.eficienciaQuincenal));
+    }, [eficiencia]);
     React.useEffect(() => {
         establecerBeneficio();
     }, [porcentaje]);
@@ -47,7 +41,8 @@ const IncentivoQuincena = () => {
             setPorcentajeEstatico("--")
         }
     }
-    //OBTENER EFICIENCIA PARA ESTABLECER BENEFICIO
+    /* ESTA FUNCION ESTÁ EN DESUSO POR REFACTORIZACIÓN
+        //OBTENER EFICIENCIA PARA ESTABLECER BENEFICIO
     const establecerEficiencia = () => {
         // OBTENER REGISTRO CONTADOR
         const registroCalculador = listaRegistroQuincenal.filter((registro) => registro.modulo === modulo && registro.rol === 1)
@@ -61,7 +56,7 @@ const IncentivoQuincena = () => {
         const eficienciaCalculada = ((totalProducido / totalMeta) * 100).toFixed(1);
     // ESTABLECER EFICIENCIA
         setPorcentaje(parseFloat(eficienciaCalculada));
-    }
+    } */
     const PanelCompleto = () => {
         return (<Stack style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
                   <div className="p-2"><h4><strong>BENEFICIO</strong></h4></div>

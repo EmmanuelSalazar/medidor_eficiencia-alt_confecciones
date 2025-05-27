@@ -10,7 +10,6 @@ const ExportToExcel = ({ datos, texto, onClick }) => {
             setCargando(true);
             try {
                 await onClick();
-                await new Promise(resolve => setTimeout(resolve, 5000));
             } catch (error) {
                 console.error("Error al ejecutar la función onClick:", error);
             } finally {

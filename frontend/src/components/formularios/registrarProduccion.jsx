@@ -7,7 +7,7 @@ import useMostrarProduccion from '../../hooks/mostrarProduccion.hook';
 import useMostrarClientes from '../../hooks/mostrarClientes.hook';
 const RegistrarProduccion = () => {
     // CONTEXTOS
-    const { listas, actualizarListas } = useContext(ListaContext);
+    const { lista, setModulo } = useContext(ListaContext);
     const { reload } = useMostrarProduccion();
     const { data } = useMostrarClientes();
     // ALMACENAR FORMULARIO
@@ -22,12 +22,12 @@ const RegistrarProduccion = () => {
     const detalleRef = useRef();
     const clienteRef = useRef();
     // ESPERAR A QUE CARGUEN LOS DATOS
-    if(!data) return (<Spinner animation="border" variant="primary" />);
+    if(!data || !lista) return (<Spinner animation="border" variant="primary" />);
 
     // CARGAR REFERENCIAS SEGÚN MODULO
     const cargarReferencias = async (e) => {
         const modulo = e.target.value;
-        await actualizarListas(modulo);
+        setModulo(parseInt(modulo));
     }
     // PROCESAR FORMULARIO
     const alEnviar = async (e) => {
@@ -51,7 +51,6 @@ const RegistrarProduccion = () => {
             console.error('Ha ocurrido un error al registrar la produccion', error);
         }
     }
-
     return (
         <>
             <Form  style={{height: '80vh', overflow: 'auto'}} className='d-flex flex-column gap-2 bg bg-primary p-2 rounded text-light scrollBar'  ref={formRef} onSubmit={alEnviar}>
@@ -94,7 +93,7 @@ const RegistrarProduccion = () => {
                 <Form.Group>
                         <Form.Label>Seleccione la referencia</Form.Label>
                         <Form.Select className='selectCustom' required ref={referenciaRef}>
-                            {listas.map((dato, index) => (
+                            {lista.map((dato, index) => (
                                 <option key={index} value={dato.ref_id}>
                                     {dato.referencia}
                                 </option>
@@ -103,19 +102,19 @@ const RegistrarProduccion = () => {
                     </Form.Group>
                 <Form.Group>
                     <Form.Label>Detalles</Form.Label>
-                    <Form.Control className='selectCustom' placeholder='Top, Brasier...' type="text" ref={detalleRef} />
+                    <Form.Control required className='selectCustom' placeholder='Top, Brasier...' type="text" ref={detalleRef} />
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Talla</Form.Label>
-                    <Form.Control className='selectCustom' placeholder='34-36-38' type="text" ref={tallaRef} />
+                    <Form.Control required className='selectCustom' placeholder='34-36-38' type="text" ref={tallaRef} />
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Color</Form.Label>
-                    <Form.Control className='selectCustom' placeholder='Blanco' type="text" ref={colorRef} />
+                    <Form.Control required className='selectCustom' placeholder='Blanco' type="text" ref={colorRef} />
                 </Form.Group>
                 <Form.Group>
                     <Form.Label>Cantidad</Form.Label>
-                    <Form.Control className='selectCustom' placeholder='9999' type="number" ref={cantidadRef} />
+                    <Form.Control required className='selectCustom' placeholder='9999' type="number" ref={cantidadRef} />
                 </Form.Group>
                 <Form.Group className='my-4'>
                     <Button className='botonPersonalizado' type='submit'>Registrar</Button> 

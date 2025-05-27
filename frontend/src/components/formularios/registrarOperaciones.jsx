@@ -9,9 +9,9 @@ import { throttle } from "lodash";
 
 const RegistrarOperaciones = () => {
     // CONTEXTOS
-    const { lista, setOperariosRetirados, operariosRetirados } = React.useContext(ListaContext);
-    const { listas } = React.useContext(ContextoEnLista2);
-    const { setListaRegistro, loading, error } = React.useContext(ContextoEnLista);
+    const { lista, setOperariosRetirados } = React.useContext(ListaContext);
+    const { lista:listaReferencias } = React.useContext(ContextoEnLista2);
+    const { actualizarLista, status, error } = React.useContext(ContextoEnLista);
     // ACTIVAR/DESACTIVARR REGISTROS MULTIPLES/COMENTARIOS ADICIONALES
     const [registroMultiple, setRegistroMultiple] = useState(true);
     const [comentarios, setComentarios] = useState(false);
@@ -66,7 +66,7 @@ const RegistrarOperaciones = () => {
             setOperariosRetirados(prevOperarios => [...prevOperarios, parseInt(values.operario)]);
 
             await AlmacenarDatos(values);
-            await setListaRegistro(window.moduloSeleccionado);
+            await actualizarLista();
             setMensajeDeExito("El registro se ha guardado correctamente");
             formRef.current.reset();
         } catch (error) {
@@ -86,7 +86,7 @@ const RegistrarOperaciones = () => {
         throttlingFormulario()
     };
     
-     if (loading) return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
+     if (status === 'loading') return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
      if (error) return <Alert variant='danger'>Error: {error.message}</Alert>;
     return (
         <Col className="formularioConBotones">
@@ -108,7 +108,7 @@ const RegistrarOperaciones = () => {
                     <Form.Group className="m-5">
                         <Form.Label>Seleccione la referencia</Form.Label>
                         <Form.Select required ref={referenciaRef} size="lg">
-                            {listas.map((dato, index) => (
+                            {listaReferencias.map((dato, index) => (
                                 <option key={index} value={dato.ref_id}>
                                     {dato.referencia}
                                 </option>

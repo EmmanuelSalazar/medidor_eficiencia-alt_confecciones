@@ -11,7 +11,6 @@ const PanelInformacionProduccionGeneralizada = () => {
     }
     const infoProduccion =  () => {
         let informacionFiltrada = data.filter((datos) => datos.modulo === moduloEnLaUrl && datos.estado == 1 || datos.estado == 3)
-        console.log(informacionFiltrada)
         // TOTAL DE DÍAS DE TRABAJO DISPONIBLES
         let diasArray = informacionFiltrada.map((datos) => parseFloat(datos.DiasDeTrabajo));
         let diasTotales = diasArray.reduce((a,b) => a + b, 0);

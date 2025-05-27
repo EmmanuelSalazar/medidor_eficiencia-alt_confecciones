@@ -11,8 +11,8 @@ const ListaRegistroOperaciones = () => {
     // CONTEXTOS
     const { fetchData, data } = EliminarRegistroOperacion();
     const { actualizarRegistroOperacion } = ActualizarRegistroOperacion();
-    const { listas, actualizarListas } = React.useContext(ListaContexto);
-    const { listaRegistro, loading, error, setListaRegistro } = useContext(ListaContext);
+    const { lista, setModulo } = React.useContext(ListaContexto);
+    const { lista:listaRegistros, status, error, actualizarLista } = useContext(ListaContext);
     //
     const [visible, setVisible] = useState(false);
     const [registroSeleccionado, setRegistroSeleccionado] = useState("");
@@ -40,8 +40,8 @@ const ListaRegistroOperaciones = () => {
     }, [mensajeDeExito, mensajeDeAlerta, mensajeDeError]);
     // Función para mostrar el modal
     const showModal = (registro) => {
-        actualizarListas(registro.modulo, true)
         setRegistroSeleccionado(registro)
+        setModulo(registro.modulo)
         setVisible(true)
     }
     // Función para cerrar el modal
@@ -52,7 +52,7 @@ const ListaRegistroOperaciones = () => {
     const handleDelete = async (id) => {
         try {
             await fetchData(id);
-            await setListaRegistro(window.moduloSeleccionado);
+            await actualizarLista();
             setMensajeDeAlerta(data || "El registro se la eliminado con exito");
         } catch (error) {
             console.log("Ha ocurrido un error: ", error)
@@ -73,7 +73,7 @@ const ListaRegistroOperaciones = () => {
         }
         try {
             await actualizarRegistroOperacion(values);
-            await setListaRegistro(window.moduloSeleccionado,null,null,null,null,0);
+            await actualizarLista();
             setVisible(false)
             setMensajeDeExito("El registro ha sido modificado con exito");
         } catch (error) {
@@ -138,7 +138,7 @@ const ListaRegistroOperaciones = () => {
         { title: 'Acciones', key: 'acciones', fixed: 'right',
             render: (text, record) => (
                 <span>
-                    <ButtonBS variant="warning" className="mb-1" onClick={() => showModal(record)}>
+                    <ButtonBS variant="warning" className="mb-1" onClick={() => {showModal(record)}}>
                         Editar
                     </ButtonBS>
                     <Popconfirm title="Eliminar registro" description="¿Estás seguro de eliminar este registro?" onConfirm={() => handleDelete(record.regProd_id)} okText="Sí" cancelText="No" >
@@ -150,7 +150,7 @@ const ListaRegistroOperaciones = () => {
          }
     ];
     const horariosJson = horarios;
-    if (loading) return (
+    if (status === 'loading') return (
         <Spin tip="Cargando..."><div></div></Spin>
     );
     if (error) return <Alert variant="danger">Ha ocurrido un error</Alert>
@@ -159,7 +159,7 @@ const ListaRegistroOperaciones = () => {
             {mensajeDeExito && <Alert variant="success">{mensajeDeExito}</Alert>}
             {mensajeDeAlerta && <Alert variant="warning">{mensajeDeAlerta}</Alert>}
             {mensajeDeError && <Alert variant="danger">{mensajeDeError}</Alert>}
-            <Table dataSource={listaRegistro} columns={columns} rowKey="reg_id" scroll={{y: 520}} pagination={false}/>
+            <Table dataSource={listaRegistros} columns={columns} rowKey="reg_id" scroll={{y: 520}} pagination={false}/>
             <Pagination onChange={paginacion} />
             <Modal show={visible} onHide={handleCancel}>
                 <Modal.Header closeButton>
@@ -178,7 +178,7 @@ const ListaRegistroOperaciones = () => {
                         <Form.Group>
                             <Form.Label>Referencia</Form.Label>
                             <Form.Select required ref={referenciaRef}>
-                                {listas.map((dato, index) => (
+                                {lista.map((dato, index) => (
                                     dato.ref_id === registroSeleccionado.ref_id ? (
                                         <option key={index} value={dato.ref_id} selected>{dato.referencia}</option>
                                     ) : (

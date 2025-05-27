@@ -6,10 +6,10 @@ import { ListaContext } from '../../contexts/informacionGrafico';
 import { Alert, Spinner } from 'react-bootstrap';
 
 const HorizontalBarChart = () => {
-    const { lista, loading, error } = useContext(ListaContext);
-    const nombre_operario = lista.map(persona => `${persona.nombre_operario}  (${persona.eficiencia})`);
-    const totalUnidadesProducidas = lista.map(persona => persona.total_unidades_producidas);
-    const totalMetaEficiencia = lista.map(persona => persona.total_meta_eficiencia);
+    const { listaOperarios, status, error } = useContext(ListaContext);
+    const nombre_operario = listaOperarios.map(persona => `${persona.operario}  (${persona.EficienciaDelDia}%)`);
+    const totalUnidadesProducidas = listaOperarios.map(persona => persona.TotalProducido);
+    const totalMetaEficiencia = listaOperarios.map(persona => persona.TotalMeta);
     const calcularValorMaximo = Math.max(
       ...totalUnidadesProducidas,
       ...totalMetaEficiencia
@@ -92,7 +92,7 @@ const HorizontalBarChart = () => {
     justifyContent: 'center',
   };
 
-  if (loading) {
+  if (status === 'loading') {
     return (
       <div style={styles}>
         <div className="text-center">

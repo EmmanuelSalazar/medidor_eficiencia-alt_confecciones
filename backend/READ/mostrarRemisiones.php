@@ -18,7 +18,7 @@
                 bm.fecha,
                 r.referencia,
                 bm.numeroDeRemision,
-                COALESCE(bm.bajas, 0) AS bajas
+                bm.bajas
             FROM
                 `bodega_remision` bm
             JOIN bodega_clientes bc ON

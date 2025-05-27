@@ -1,11 +1,11 @@
-import { useContext, useState, useEffect, useRef, use } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
 import { ListaContext } from '../../contexts/actualizarOperarios';
 import EliminarOperario from '../../services/api/delete/eliminarOperario';
 import ActualizarOperario from '../../services/api/update/actualizarOperario';
 import { Table, Spin, Popconfirm } from 'antd';
 import { Alert, Button, Modal, Form } from 'react-bootstrap';
 const ListaOperarios = () => {
-    const { lista, status, error } = useContext(ListaContext);
+    const { lista, status, error, actualizarLista } = useContext(ListaContext);
     const [mostrar, setMostrar] = useState(false);
     const [operarioSeleccionado, setOperarioSeleccionado] = useState(null);
     const { fetchData } = EliminarOperario();
@@ -33,8 +33,8 @@ const ListaOperarios = () => {
     const handleDelete = async (id) => {
         try {
             await fetchData(id);
-/*             await actualizarLista(modulo);
- */            setMensajeDeAlerta("El operario ha sido eliminado");
+            await actualizarLista();
+            setMensajeDeAlerta("El operario ha sido eliminado");
         } catch (error) {
             console.error("Ha ocurrido un error: ", error);
         }
@@ -60,8 +60,8 @@ const ListaOperarios = () => {
         };
         try {
             await actualizarOperario(operarioSeleccionado.op_id, false, values);
-/*             await actualizarLista(modulo);
- */            setMensajeDeExito("El operario ha sido actualizado con exito");
+            await actualizarLista();
+            setMensajeDeExito("El operario ha sido actualizado con exito");
             setMostrar(null)
         } catch (error) {
             setMensajeDeError("Ha ocurrido un error: ", error);

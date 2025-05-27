@@ -21,7 +21,7 @@ export const ListaProvider = ({ children }) => {
   useEffect(() => {
     const intervalo = setInterval(() => {
       setOperariosRetirados([]);
-    }, 120000)
+    }, 600000)
     return () => clearInterval(intervalo);
   })
   // MOSTRAR OPERARIOS SEGÚN EL MODULO
@@ -40,14 +40,22 @@ export const ListaProvider = ({ children }) => {
   useEffect(() => {
     if (data) {
       setLista(data.filter((lista) =>  !operariosRetirados.includes(lista.op_id) && lista.modulo === modulo));
-      console.log(operariosRetirados);
+      console.log('DATOS ACTUALIZADOS')
     } else {
       setLista([]);
     }
-  }, [operariosRetirados]);
-  
+  }, [operariosRetirados, data]);
+  // ACTUALIZAR LISTA DE OPERARIOS
+  const actualizarLista = async () => {
+    try {
+      await reload();
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
   return (
-    <ListaContext.Provider value={{ setModulo, lista, status, error, setRedux, reload, operariosRetirados, setOperariosRetirados }}>
+    <ListaContext.Provider value={{ setModulo, lista, status, error, setRedux, actualizarLista, operariosRetirados, setOperariosRetirados }}>
       {children}
     </ListaContext.Provider>
   );

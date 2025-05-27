@@ -57,7 +57,8 @@ const ListaBajas = () => {
     arregloArreglado.sort((a,b) => b.numeroDeRemision - a.numeroDeRemision)
     // CARGAR DATOS AL CONTEXTO
     const cargarDatos = (arreglo) => {
-        const datosFiltrados = data.filter((item) => item.numeroDeRemision === arreglo.numeroDeRemision);
+        const datosFiltrados = data.filter((item) => item.numeroDeRemision === arreglo.numeroDeRemision && item.bajas === 1);
+        console.log(datosFiltrados);
         // DATOS DEL CLIENTE
         const datosCliente = clientes.filter((cliente) => cliente.client_id === datosFiltrados[0].client_id)
         setCliente(datosCliente)

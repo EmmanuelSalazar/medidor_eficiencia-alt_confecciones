@@ -109,7 +109,10 @@ const FechasDuales = () => {
             console.error("Ha ocurrido un error: ",error)
         }  
     }
-    
+/*     let uno = 1
+    if (uno === 1 ) return (
+        <Alert variant="warning">Esta funcion se encuentra en mantenimiento, por lo que podrás notar algunos errores y/o fallos en la información visible</Alert>
+    ) */
     return (
         <>
             <Button type="primary" onClick={showModal}>Seleccionar rango de fechas</Button>

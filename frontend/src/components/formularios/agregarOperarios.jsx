@@ -33,8 +33,7 @@ const AgregarOperarios = () => {
                 };
                 try {
                     await AlmacenarOperario(values)
-                    const modulo = window.ModuloSeleccionado;
-                    await actualizarLista(modulo);
+                    await actualizarLista();
                     setMensajeDeExito("El operario se ha guardado correctamente");
                     formRef.current.reset();
                 } catch (error) {

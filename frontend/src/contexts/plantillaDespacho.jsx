@@ -17,7 +17,8 @@ export const PlantillaDespachoProvider = ({ children }) => {
         informacionODP: null,
         bajas: 0,
         sumatoria: 0,
-        estado: 0
+        estado: 0,
+        unidadesBajas: 0
     }])
     return (
         <PlantillaDespachoContext.Provider value={{ cliente, setCliente, odp, setOdp, unidades, setUnidades, observaciones, setObservaciones, despachos, setDespachos, fecha, setFecha, sumatoriaUnidades, setSumatoriaUnidades, primerasConSegundas, setPrimerasConSegundas, numeroRemision, setNumeroRemision }}>

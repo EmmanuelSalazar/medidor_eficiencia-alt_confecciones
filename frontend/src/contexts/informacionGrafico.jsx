@@ -1,12 +1,33 @@
 import { createContext, useState, useEffect } from 'react';
-import useFetchData from '../services/api/read/registro_produccion';
-import { useFetchData as RegistroOperaciones } from '../services/api/read/mostrarRegistroOperaciones';
-import { useSearchParams } from "react-router-dom";
+import useMostrarInformacionGrafico from '../hooks/mostrarInformacionGrafico.'; 
 export const ListaContext = createContext();
 import FechaActual from '../components/fechaActual';
 
 export const ListaProvider = ({ children }) => {
-  // COMPONENTE DE FECHA
+  const { data, status, error, reload } = useMostrarInformacionGrafico();
+  const [modulo, setModulo] = useState(0);
+  const [eficiencia, setEficiencia] = useState([]);
+  const [listaOperarios, setListaOperarios] = useState([]);
+  useEffect(() => {
+    if(data) {
+      if(modulo === 0) {
+        setEficiencia([]);
+        setListaOperarios([]);
+      } else {
+        setEficiencia(data[1].filter(item => item.modulo === modulo));
+        setListaOperarios(data[0].filter(item => item.modulo === modulo));
+      }
+    }
+  }, [data, modulo]);
+
+  return (
+    <ListaContext.Provider value={{ setModulo, eficiencia, listaOperarios, status, error }}>
+      {children}
+    </ListaContext.Provider>
+  );
+};
+
+/*   // COMPONENTE DE FECHA
   const { fechaActualDia, corteQuincena, obtenerCortes } = FechaActual();
   const [buscarParametro] = useSearchParams();
   let moduloEnLaUrl = parseInt(buscarParametro.get('modulo'));
@@ -16,7 +37,7 @@ export const ListaProvider = ({ children }) => {
    // GRAFICA
   const { data, loading, error, fetchData } = useFetchData();
   // REGISTRO DE OPERACIONES
-  const { fetchData: fetchDataRegistro } = RegistroOperaciones();
+  const fetchDataRegistro = FetchRegistrosOperaciones();
   // ALMACENAR LOS DATOS DE LAS API
   const [lista, setLista] = useState([]);
   const [listaRegistro, setListaRegistro] = useState([]);
@@ -42,7 +63,7 @@ export const ListaProvider = ({ children }) => {
   const actualizarListaRegistro = async (modulo, fecha_inicio, fecha_final, hora_inicio, hora_fin, rol, tipo) => {
     modulo = modulo ?? moduloEnLaUrl;
     try {
-      const nuevaLista = await fetchDataRegistro(modulo, fecha_inicio, fecha_final, hora_inicio, hora_fin, rol);
+      const nuevaLista = await FetchRegistrosOperaciones(modulo, fecha_inicio, fecha_final, hora_inicio, hora_fin, rol);
       if(tipo === 1) {
         setListaRegistroQuincenal([...nuevaLista]);
       } else {
@@ -67,11 +88,4 @@ export const ListaProvider = ({ children }) => {
     actualizarListaRegistro(moduloEnLaUrl|| window.moduloConsultado, fechaEnLaUrl || fechaActualDia, null, null, null, 1, 0);
     // EFICIENCIA DE QUINCENA
     actualizarListaRegistro(moduloEnLaUrl|| window.moduloConsultado, cortes.fechaInicio, cortes.fechaFinal, null, null, 1, 1);
-  }, [fetchData]);
-  
-  return (
-    <ListaContext.Provider value={{ lista, loading, error, actualizarLista, actualizarListaRegistro, listaRegistro, listaRegistroQuincenal }}>
-      {children}
-    </ListaContext.Provider>
-  );
-};
+  }, [fetchData]); */
