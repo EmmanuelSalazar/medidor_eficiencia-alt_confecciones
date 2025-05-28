@@ -80,6 +80,7 @@ const RegistrarProduccion = () => {
                 <Form.Group>
                     <Form.Label>Modulo</Form.Label>
                     <Form.Select className='selectCustom' ref={moduloRef} required onChange={cargarReferencias}>
+                        <option>Seleccione un modulo</option>
                         {datos.map((dato, index) => (
                             <option key={index} value={dato.value}>
                                 {dato.label}

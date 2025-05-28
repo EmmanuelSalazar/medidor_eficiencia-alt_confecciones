@@ -10,7 +10,8 @@
         $talla = $datos['talla'] ?? NULL;
         $color = $datos['color'] ?? NULL;
         $estado = (int)$datos['estado']?? NULL;
-        if (empty($odp) || empty($talla) || empty($color)) {
+        $detalle = $datos['detalle']?? NULL;
+        if (empty($odp) || empty($talla) || empty($color) || empty($detalle)) {
             $response =[
                 'ok' => 'false',
                 'respuesta' => 'Datos incompletos'
@@ -18,10 +19,9 @@
             echo json_encode($response);
             exit();
         }
-        
-        $sql = "UPDATE bodega SET orden_produccion = ?, talla = ?, color = ?, estado = ? WHERE odp_id = ?";
+        $sql = "UPDATE bodega SET orden_produccion = ?, detalle = ?, talla = ?, color = ?, estado = ? WHERE odp_id = ?";
         $stmt = $mysqli->prepare($sql);
-        $stmt->bind_param("ssssi", $odp, $talla, $color, $estado, $odpID);
+        $stmt->bind_param("sssssi", $odp, $detalle, $talla, $color, $estado, $odpID);
         if($stmt->execute()){
             // Actualizar el estado de las otras ordenes de produccion del mismo modulo
             if($estado === 1) {

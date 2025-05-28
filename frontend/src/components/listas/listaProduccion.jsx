@@ -13,6 +13,7 @@ const ListaProduccion = () => {
     const [color, setColor] = useState();
     const [estado, setEstado] = useState();
     const [odpID, setOdpID] = useState();
+    const [detalle, setDetalle] = useState();
     const [referencia, setReferencia] = useState();
     const { actualizarProduccion } = ActualizarProduccion();
     const [informacionModal, setInformacionModal] = useState();
@@ -52,7 +53,8 @@ const ListaProduccion = () => {
             talla: talla,
             referencia: referencia,
             color: color,
-            estado: estado
+            estado: estado,
+            detalle: detalle
         }
         try {
             await actualizarProduccion(values)
@@ -65,6 +67,7 @@ const ListaProduccion = () => {
             setEstado("");
             setOdpID("");
             setReferencia("");
+            setDetalle("");
 
         } catch (error) {
             setMensajeDeError("Ha ocurrido un error al actualizar el registro, si el error persiste, contacta al administrativo");
@@ -133,6 +136,10 @@ const ListaProduccion = () => {
                     <Form.Group>
                         <Form.Label>Referencia</Form.Label>
                         <Form.Control  type="text" defaultValue={informacionModal?.referencia} disabled/>
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label>Detalle</Form.Label>
+                        <Form.Control onChange={(e) => setDetalle(e.target.value)} type="text" defaultValue={informacionModal?.detalle} />
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Talla</Form.Label>

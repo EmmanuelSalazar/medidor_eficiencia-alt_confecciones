@@ -7,6 +7,8 @@ import useMostrarClientes from '../../hooks/mostrarClientes.hook';
 import { PlantillaDespachoContext } from '../../contexts/plantillaDespacho';
 const ListaRemision = () => {
     const { data, status, error } = useMostrarRemisiones();
+    console.log(data)
+
     const { data:clientes } = useMostrarClientes();
     const { setCliente, setObservaciones, setDespachos, setFecha, setNumeroRemision } = useContext(PlantillaDespachoContext);
      // MANEJO DE ALERTAS EXITO/ALERTA/ERROR
@@ -28,8 +30,7 @@ const ListaRemision = () => {
     }
     // REORGANIZAR Y AGRUPAR LOS DATOS
     function agruparArreglo(datos) {
-        const datosFiltrados = datos.filter((item) => item.bajas === 0);
-        const grupos = datosFiltrados.reduce((a, b) => {
+        const grupos = datos.reduce((a, b) => {
             const clave = b.numeroDeRemision;
             if (!a[clave]) {
                 a[clave] = [];
@@ -39,13 +40,17 @@ const ListaRemision = () => {
         }, {});
         const arregloAgrupado = Object.keys(grupos).map(clave => {
             const primerElemento = grupos[clave][0];
+            let unidadesPrimeras = grupos[clave].reduce((a, b) => a + b.unidadesDespachadas, 0);
+            let unidadesSegundas = grupos[clave].reduce((a, b) => a + b.segundasDespachadas, 0);
+            let unidadesBajas = grupos[clave].reduce((a, b) => a + b.bajas, 0);
+            let unidadesTotales = unidadesPrimeras + unidadesSegundas + unidadesBajas;
             return {
                 numeroDeRemision: Number(clave),
                 orden_produccion: primerElemento.orden_produccion,
                 nombreCliente: primerElemento.nombreCliente,
                 referencia: primerElemento.referencia,
                 ordenesDespachadas: grupos[clave].length, // Obtener la longitud del grupo para obtener el número de ordenes de despachadas
-                unidadesDespachadas: grupos[clave].reduce((a, b) => a + b.unidadesDespachadas, 0),
+                unidadesDespachadas: unidadesTotales,
                 bajas: grupos[clave].reduce((a, b) => a + b.segundasDespachadas, 0),
                 observaciones: primerElemento.observaciones,
                 fecha: primerElemento.fecha,
@@ -59,6 +64,7 @@ const ListaRemision = () => {
     // CARGAR DATOS AL CONTEXTO
     const cargarDatos = (arreglo) => {
         const datosFiltrados = data.filter((item) => item.numeroDeRemision === arreglo.numeroDeRemision);
+        console.log(datosFiltrados)
         // DATOS DEL CLIENTE
         const datosCliente = clientes.filter((cliente) => cliente.client_id === datosFiltrados[0].client_id)
         setCliente(datosCliente)
@@ -73,6 +79,7 @@ const ListaRemision = () => {
                 odp_id: dato.odp_id,
                 unidadesDespachadas: dato.unidadesDespachadas,
                 bajas: dato.segundasDespachadas,
+                unidadesBajas: dato.bajas, // OBTENER LAS UNIDADES DE BAJ
                 sumatoria: dato.unidadesDespachadas + dato.segundasDespachadas,
                 estado: 1,
                 modificable: 0,

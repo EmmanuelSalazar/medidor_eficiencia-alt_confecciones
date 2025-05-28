@@ -50,8 +50,8 @@
                 'ok' => false,
                'respuesta' => 'Error al obtener datos'
             ];
-            http_response_code(500);
-            echo json_encode($respuesta, true);
+/*             http_response_code(500);
+ */            echo json_encode($respuesta, true);
         }
         
     } else {

@@ -1,32 +1,22 @@
 import { useContext, useState, useEffect } from "react";
 import { ListaContext } from "../../contexts/actualizarRegistroOperaciones";
 const IncentivoQuincena = ({ modulo, fechaInicio, fechaFinal }) => {
-    const { listaRegistro, setListaRegistro } = useContext(ListaContext);
+    const { eficiencia } = useContext(ListaContext);
+    console.log(eficiencia);
     const [beneficio, setBeneficio] = useState("--");
     const [porcentaje, setPorcentaje] = useState();
     const [porcentajeEstatico, setPorcentajeEstatico] = useState("--");
     // ACTUALIZAR COMPONENTES
     useEffect( () => {
-        establecerEficiencia();
-    }, [listaRegistro]);
-
-    useEffect(() => {
-        actualizarLista(modulo, fechaInicio, fechaFinal);
-    }, [modulo, fechaInicio, fechaFinal]);
-
+        setPorcentaje(parseFloat(eficiencia?.[0]?.eficienciaQuincenal));
+/*         console.log(eficiencia);
+ */    }, [eficiencia]);
     
     useEffect(() => {
         establecerBeneficio();
-    }, [porcentaje]);
+/*         console.log(porcentaje);
+ */    }, [porcentaje]);
 
-    // ACTUALIZAR LISTA
-    const actualizarLista = async (modulo, fechaInicio, fechaFinal) => {
-        try {
-            await setListaRegistro(modulo, fechaInicio, fechaFinal, null, null, 1, 1);
-        } catch (error) {
-            console.log(error);
-        }
-    }
     // ESTABLECER BENEFICIO GENERAL
     const establecerBeneficio = () => {
         if (porcentaje <= 69.9) {
@@ -53,9 +43,10 @@ const IncentivoQuincena = ({ modulo, fechaInicio, fechaFinal }) => {
         } else {
             setPorcentajeEstatico("--")
         }
+        console.log(porcentaje);
     }
 
-    //OBTENER EFICIENCIA PARA ESTABLECER BENEFICIO
+    /* //OBTENER EFICIENCIA PARA ESTABLECER BENEFICIO // ESTA FUNCION ESTÁ EN DESUSO POR REFACTORIZACIÓN
     const establecerEficiencia = () => {
         // OBTENER REGISTRO CONTADOR
         const registroCalculador = listaRegistro.filter((registro) => registro.modulo === modulo && registro.rol === 1)
@@ -69,7 +60,7 @@ const IncentivoQuincena = ({ modulo, fechaInicio, fechaFinal }) => {
         const eficienciaCalculada = ((totalProducido / totalMeta) * 100).toFixed(1);
     // ESTABLECER EFICIENCIA
         setPorcentaje(parseFloat(eficienciaCalculada));
-    }
+    } */
 
    return (
     <span>{beneficio} / {porcentajeEstatico}</span>

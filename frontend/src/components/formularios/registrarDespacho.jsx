@@ -1,7 +1,7 @@
 import { useContext, useState, useEffect, useRef } from 'react';
 import { Form, Button, Alert } from 'react-bootstrap';
-import { Spin } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { Spin, Tooltip } from 'antd';
+import { PlusOutlined, DeleteOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import useMostrarClientes from '../../hooks/mostrarClientes.hook';
 import useMostrarProduccion from '../../hooks/mostrarProduccion.hook';
 import { PlantillaDespachoContext } from '../../contexts/plantillaDespacho';
@@ -35,7 +35,7 @@ const RegistrarDespacho = () => {
     const { data } = useMostrarClientes();
     const { data: produccion } = useMostrarProduccion();
     const { setCliente, setObservaciones, despachos, setDespachos, setSumatoriaUnidades, numeroRemision, cliente } = useContext(PlantillaDespachoContext);
-    // ACTUALIZAR ESCANER
+
     // ACTUALIZAR UNIDADES POR EL CODIGO DE BARRAS
     const alEscanearCodigoBarras = (codigo) => {
         if (!codigo) return;
@@ -68,10 +68,6 @@ const RegistrarDespacho = () => {
             const sumatoriaSegundas = unidadesCompletasArray.reduce((a,b) => a + b.bajas, 0)
             const primerasConSegundas = sumatoriaPrimeras + sumatoriaSegundas;
             setSumatoriaUnidades(primerasConSegundas)
-            // TOTAL POR ODP
-            /* const unidadesCompletasPorODP = despachos.map((despacho) => {
-                if
-            }) */
     }, [despachos])
     // ESPERAR A QUE LOS DATOS ESTEN CARGADOS
     if (!data || !produccion) return <Spin className='mt-5' tip="Cargando..."><div></div></Spin> 
@@ -185,7 +181,20 @@ const RegistrarDespacho = () => {
         let seleccionado = e.target.value;
         setObservaciones(seleccionado)
     }
-    
+    const eliminarDespacho = (id) => {
+        const despachosActualizados = despachos.filter((despacho) => despacho.id !== id);
+        setDespachos(despachosActualizados);
+    }
+    const reducirUnidades = (id, tipo) => {
+        const despachosActualizados = despachos.map((despacho) => {
+            if (despacho.id === id && despacho.estado === 0) {
+                let unidades = despacho.unidadesDespachadas - 1;
+                return {...despacho, unidadesDespachadas: unidades }
+            }
+            return despacho;
+        })
+        setDespachos(despachosActualizados);
+    }
     // ENVIAR DATOS AL BACKEND
     const enviarDatos = async (e) => {
         e.preventDefault();
@@ -265,10 +274,24 @@ const RegistrarDespacho = () => {
                                 <Form.Control disabled={despacho.estado === 1 ? true : false} ref={bajasRef} onChange={(e) => unidadesBajas(despacho.id, e.target.value)} className={`mb-2 bg ${despacho.estado === 1 ? '' : 'bg-primary bg-opacity-75 text-white'}`}  type='number' placeholder='# de bajas' />
                             </Form.Group>
                             <div className='noImprimir d-flex align-items-center mt-2 gap-3 justi'>
-                                <Form.Text>
-                                    #{index + 1}
-                                </Form.Text>
-                                <Form.Check disabled={despacho.modificable === 0 ? true : false} checked={despacho.estado === 1 ? true : false} onChange={(e) => {alCerrarCaja(e, despacho.id)}} className='mt-1' type="switch" label="Abrir/Cerrar caja"/>
+                                <Tooltip title="Este número representa la posicion de la caja en la remisión">
+                                    <Form.Text className='bg bg-warning text-dark rounded py-1 px-2'>
+                                        #{index + 1}
+                                    </Form.Text>
+                                </Tooltip>
+                                <Tooltip title="Abrir/Cerrar caja">
+                                    <Form.Check disabled={despacho.modificable === 0 ? true : false} checked={despacho.estado === 1 ? true : false} onChange={(e) => {alCerrarCaja(e, despacho.id)}} className='mt-1' type="switch"/>
+                                </Tooltip>
+                                <Tooltip title="Eliminar despacho">
+                                    <Button variant="danger" disabled={despacho.modificable === 0? true : false} onClick={() => eliminarDespacho(despacho.id)}>
+                                        <DeleteOutlined />
+                                    </Button>
+                                </Tooltip>
+                                <Tooltip title="Reducir unidades (1)">
+                                    <Button variant="secondary" disabled={despacho.modificable === 0? true : false} onClick={() => reducirUnidades(despacho.id)}>
+                                    <MinusCircleOutlined />
+                                    </Button>
+                                </Tooltip>
                             </div>
                         </div>  
                      )

@@ -7,13 +7,13 @@ const IncentivoQuincena = () => {
     const [porcentaje, setPorcentaje] = React.useState();
     const [porcentajeEstatico, setPorcentajeEstatico] = React.useState("--");
     // ACTUALIZAR COMPONENTES
-        React.useEffect( () => {
+    React.useEffect( () => {
        setPorcentaje(parseFloat(eficiencia?.[0]?.eficienciaQuincenal));
     }, [eficiencia]);
     React.useEffect(() => {
         establecerBeneficio();
     }, [porcentaje]);
-
+    
     // ESTABLECER BENEFICIO GENERAL
     const establecerBeneficio = () => {
         if (porcentaje <= 69.9) {

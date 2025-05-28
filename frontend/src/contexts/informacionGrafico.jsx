@@ -1,13 +1,22 @@
 import { createContext, useState, useEffect } from 'react';
 import useMostrarInformacionGrafico from '../hooks/mostrarInformacionGrafico.'; 
+import { useSearchParams } from 'react-router-dom';
 export const ListaContext = createContext();
 import FechaActual from '../components/fechaActual';
 
 export const ListaProvider = ({ children }) => {
   const { data, status, error, reload } = useMostrarInformacionGrafico();
+  const [searchParams] = useSearchParams();
+  const moduloEnLaUrl = parseInt(searchParams.get('modulo'));
   const [modulo, setModulo] = useState(0);
   const [eficiencia, setEficiencia] = useState([]);
   const [listaOperarios, setListaOperarios] = useState([]);
+  useEffect(() => {
+    if(moduloEnLaUrl) {
+      setModulo(moduloEnLaUrl);
+    }
+  }, [moduloEnLaUrl]);
+
   useEffect(() => {
     if(data) {
       if(modulo === 0) {
@@ -27,7 +36,7 @@ export const ListaProvider = ({ children }) => {
   );
 };
 
-/*   // COMPONENTE DE FECHA
+/*   // COMPONENTE DE FECHA // ESTA FUNCION SE MANTIENE COMO REFERENCIA PRE-REFACTORIZADO
   const { fechaActualDia, corteQuincena, obtenerCortes } = FechaActual();
   const [buscarParametro] = useSearchParams();
   let moduloEnLaUrl = parseInt(buscarParametro.get('modulo'));

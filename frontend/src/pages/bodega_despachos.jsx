@@ -36,14 +36,6 @@ function BodegaDespachos() {
         {
             value: 2,
             label: 'Registrar remisiones',
-        },
-        {
-            value: 3,
-            label: 'Lista de bajas'
-        },
-        {
-            value: 4,
-            label: 'Registrar bajas'
         }
     ];
     const apartados = [

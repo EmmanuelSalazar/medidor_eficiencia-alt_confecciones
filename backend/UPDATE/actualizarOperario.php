@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     $modulo = $datos['modulo'] ?? NULL;
     $actividad = $datos['actividad'] ?? NULL;
     $revisor = $datos['revisor'] ?? NULL;
- echo $revisor;
+    $posicion = (int)$datos['posicion']?? NULL;
     // Debugging: Imprimir los datos recibidos
     error_log("Datos recibidos: " . print_r($datos, true));
 
@@ -98,14 +98,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
             $modulo_anterior = $operario['modulo'];
 
             // Actualizar los datos generales del operario
-            $sql = "UPDATE operarios SET nombre = ?, modulo = ?, activo = ?, revisador = ? WHERE op_id = ?";
+            $sql = "UPDATE operarios SET nombre = ?, modulo = ?, activo = ?, revisador = ?, posicion = ? WHERE op_id = ?";
             $stmt = $mysqli->prepare($sql);
 
             if (!$stmt) {
                 throw new Exception("Error al preparar la consulta: " . $mysqli->error);
             }
 
-            $stmt->bind_param("siiii", $nombre, $modulo, $actividad, $revisor, $id);
+            $stmt->bind_param("siiiii", $nombre, $modulo, $actividad, $revisor, $posicion, $id);
             $stmt->execute();
 
             if ($stmt->affected_rows > 0) {
