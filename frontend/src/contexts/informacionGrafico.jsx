@@ -5,18 +5,24 @@ export const ListaContext = createContext();
 import FechaActual from '../components/fechaActual';
 
 export const ListaProvider = ({ children }) => {
-  const { data, status, error, reload } = useMostrarInformacionGrafico();
   const [searchParams] = useSearchParams();
   const moduloEnLaUrl = parseInt(searchParams.get('modulo'));
   const [modulo, setModulo] = useState(0);
   const [eficiencia, setEficiencia] = useState([]);
   const [listaOperarios, setListaOperarios] = useState([]);
+  const [fecha, setFecha] = useState();
+  const { data, status, error, reload } = useMostrarInformacionGrafico(fecha);
+
   useEffect(() => {
     if(moduloEnLaUrl) {
       setModulo(moduloEnLaUrl);
     }
   }, [moduloEnLaUrl]);
-
+  useEffect(() => {
+    reload();
+    console.log('datos actualizados');
+    console.log(data);
+  }, [fecha])
   useEffect(() => {
     if(data) {
       if(modulo === 0) {
@@ -30,7 +36,7 @@ export const ListaProvider = ({ children }) => {
   }, [data, modulo]);
 
   return (
-    <ListaContext.Provider value={{ setModulo, eficiencia, listaOperarios, status, error }}>
+    <ListaContext.Provider value={{ setModulo, eficiencia, listaOperarios, status, error, setFecha }}>
       {children}
     </ListaContext.Provider>
   );

@@ -10,17 +10,15 @@ dayjs.locale('es');
 const CalendarioSeleccion = () => {
     const navigate = useNavigate();
     const { listaActualizada } = React.useContext(ListaContext);
-    const { actualizarLista } = React.useContext(ContextoLista);
+    const { setFecha } = React.useContext(ContextoLista);
     
     const onPanelChange = async (value) => {
         const fecha = value.format('YYYY-MM-DD');
         const modulo = window.ModuloSeleccionado
-        window.fechaSeleccionada = value.format('YYYY-MM-DD');
         navigate(`?fecha=${fecha}`)
         try {
             await listaActualizada(fecha, modulo)
-            await actualizarLista(fecha, modulo);
-
+            setFecha(fecha);
         } catch (error) {
             console.log("Ha ocurrido un error:", error);
         }

@@ -9,7 +9,6 @@ const BotonesSelModAdminRegOp = () => {
     const [botonSeleccionado, setBotonSeleccionado] = React.useState(null);
     const botones = datos;
     const handleButtonClick = async (modulo, index) => {
-        window.moduloSeleccionado = modulo;
         setBotonSeleccionado(index);
         setModuloSeleccionado(modulo);
         

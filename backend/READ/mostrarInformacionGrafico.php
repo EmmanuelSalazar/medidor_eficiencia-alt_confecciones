@@ -3,7 +3,8 @@
 require_once '../config/cors.php';
 require_once '../config/baseDeDatos.php';
 
- if ($_SERVER['REQUEST_METHOD'] === 'GET') { 
+ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $fecha = $_GET['fecha'] ?? null;
     $query = "SELECT
             o.nombre AS operario,
             ROUND(
@@ -22,8 +23,15 @@ require_once '../config/baseDeDatos.php';
         JOIN operarios o ON
             o.op_id = rp.op_id
         WHERE
-            DATE(fecha) = CURDATE()
-        GROUP BY
+            DATE(fecha) = ";
+    
+    if ($fecha) {
+        $query.= "'$fecha'";
+    } else {
+        $query.= "CURDATE()";
+    }
+
+    $query .= "GROUP BY
             rp.op_id
         ORDER BY
             o.posicion ASC

@@ -1,8 +1,10 @@
 import axios from 'axios';
-const FetchInformacionGrafico = async () => {
+import FechaActual from '../../../components/fechaActual';
+const { fechaActualDia } = FechaActual();
+const FetchInformacionGrafico = async (fecha = fechaActualDia) => {
     const apiURL = import.meta.env.VITE_API_URL;
     try {
-        const response = await axios.get(`${apiURL}/READ/mostrarInformacionGrafico.php`);
+        const response = await axios.get(`${apiURL}/READ/mostrarInformacionGrafico.php?fecha=${fecha}`);
         if (response.data.ok) {
             return response.data.respuesta
         } else {
