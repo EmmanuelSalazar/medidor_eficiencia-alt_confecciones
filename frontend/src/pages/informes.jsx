@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ListaRegistroOperacionesResumido from "../components/listas/listaRegistroOperacionesResumido";
 import { Container, Row, Col, Button, Alert } from "react-bootstrap";
 import { Segmented, Calendar } from "antd";
@@ -9,7 +9,6 @@ import IncentivoQuincena from "../components/incentivoQuincena";
 import FechaActual from "../components/fechaActual";
 import logo from '../assets/img/logo.png'
 import { useNavigate } from "react-router-dom";
-import { ListaProvider } from "../contexts/actualizarRegistroOperaciones";
 function Informes() {
     const { obtenerCortes } = FechaActual();
     const { beneficio, porcentajeEstatico } = IncentivoQuincena();
@@ -19,10 +18,7 @@ function Informes() {
     const [fechaInicio, setFechaInicio] = useState(cortes.fechaInicio);
     const [fechaFin, setFechaFin] = useState(cortes.fechaFinal);
     const { reload, data, status } = useRegistroOperacionesResumido(seccion,fechaInicio, fechaFin);
-    /* useEffect(() => {
-        recargarDatos(seccion, fechaInicio, fechaFin);
 
-    }, [seccion, fechaInicio, fechaFin]); */
     const alCambio = (e) => {
         setSeccion(parseInt(e));
         navigate('?modulo=' + e);

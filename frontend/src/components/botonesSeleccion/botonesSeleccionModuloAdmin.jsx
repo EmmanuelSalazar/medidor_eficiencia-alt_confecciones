@@ -4,15 +4,15 @@ import { ListaContext } from '../../contexts/actualizarRegistros'
 import { ListaContext as ContextoLista } from '../../contexts/informacionGrafico'
 import datos from '../../utils/json/menuModulos.json'
 const BotonesSeleccionModulos = () => {
-    const { listaActualizada } = React.useContext(ListaContext);
+    const { listaActualizada, setModulo:setModuloRegistros } = React.useContext(ListaContext);
     const { setModulo } = React.useContext(ContextoLista);
     const handleButtonClick = async (modulo, index) => {
-      window.ModuloSeleccionado = modulo;
       const fechaSeleccionada = window.fechaSeleccionada;
         try {
             setModulo(parseInt(modulo));
-            await listaActualizada(fechaSeleccionada, modulo);
-          } catch (error) {
+            setModuloRegistros(parseInt(modulo));
+/*             await listaActualizada(fechaSeleccionada, modulo);
+ */          } catch (error) {
             console.error("Ha ocurrido un error: ", error)
           }
         setBotonSeleccionado(index)

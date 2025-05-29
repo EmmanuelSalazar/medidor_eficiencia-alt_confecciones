@@ -66,10 +66,14 @@ require_once '../config/cortes.php';
         $stmt = $mysqli->prepare($query);
         $stmt->bind_param("ssss", $fecha, $fecha, $cortes[0], $cortes[1]);
         $stmt->execute();
-        $resultado = $stmt->get_result();
-        $eficienciaQuincenal = $resultado->fetch_all(MYSQLI_ASSOC);
-        $respuesta['respuesta'][1] = $eficienciaQuincenal;
-        echo json_encode($respuesta, true);
+        if($resultado = $stmt->get_result()) {
+            $eficienciaQuincenal = $resultado->fetch_all(MYSQLI_ASSOC);
+            $respuesta['respuesta'][1] = $eficienciaQuincenal;
+            echo json_encode($respuesta, true);
+        } else {
+            echo json_encode(['ok' => false, 'respuesta' => 'Ha ocurrido un error en el servidor, por favor intente mas tarde', 'error' => $mysqli->error, 'query' => $query, 'fecha' => $fecha, 'cortes' => $cortes, 'dp' => $dp]);
+        }
+        
     }
 
     

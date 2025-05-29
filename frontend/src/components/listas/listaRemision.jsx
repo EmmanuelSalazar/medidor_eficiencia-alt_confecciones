@@ -7,8 +7,6 @@ import useMostrarClientes from '../../hooks/mostrarClientes.hook';
 import { PlantillaDespachoContext } from '../../contexts/plantillaDespacho';
 const ListaRemision = () => {
     const { data, status, error } = useMostrarRemisiones();
-    console.log(data)
-
     const { data:clientes } = useMostrarClientes();
     const { setCliente, setObservaciones, setDespachos, setFecha, setNumeroRemision } = useContext(PlantillaDespachoContext);
      // MANEJO DE ALERTAS EXITO/ALERTA/ERROR
@@ -64,7 +62,6 @@ const ListaRemision = () => {
     // CARGAR DATOS AL CONTEXTO
     const cargarDatos = (arreglo) => {
         const datosFiltrados = data.filter((item) => item.numeroDeRemision === arreglo.numeroDeRemision);
-        console.log(datosFiltrados)
         // DATOS DEL CLIENTE
         const datosCliente = clientes.filter((cliente) => cliente.client_id === datosFiltrados[0].client_id)
         setCliente(datosCliente)

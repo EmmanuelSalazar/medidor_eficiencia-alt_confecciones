@@ -6,7 +6,6 @@ import { ListaContext } from '../../contexts/informacionGrafico';
 
 const GraficaAdministrativa = () => {
     const { listaOperarios } = useContext(ListaContext);
-    console.log(listaOperarios);
     const nombre_operario = listaOperarios.map(persona => `${persona.operario}  (${persona.EficienciaDelDia}%)`);
     const totalUnidadesProducidas = listaOperarios.map(persona => persona.TotalProducido);
     const totalMetaEficiencia = listaOperarios.map(persona => persona.TotalMeta);

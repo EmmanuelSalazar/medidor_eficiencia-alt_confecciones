@@ -3,7 +3,7 @@ import useMostrarProduccion from "../hooks/mostrarProduccion.hook";
 import useMostrarClientes from "../hooks/mostrarClientes.hook";
 import ListaKardex from "./listas/listaKardex";
 import { differenceInDays } from "date-fns";
-import { Row, Col, Spinner } from 'react-bootstrap';
+import { Row, Col, Spinner, Button } from 'react-bootstrap';
 const KardexDespacho = () => {
     const { data:clientes } = useMostrarClientes();
     const { data:produccion } = useMostrarProduccion();
@@ -34,13 +34,10 @@ const KardexDespacho = () => {
     const clienteSeleccionado = (cliente) => {
         setCliente(parseInt(cliente.target.value));
     }
-    
-    console.log(produccion.filter((prod) => prod.client_id === cliente))
-
     return (
         <>
-            <Row>
-                <Col lg={3}>
+            <Row className="d-flex gap-5">
+                <Col lg={3} className="noImprimir">
                     <select onChange={clienteSeleccionado} className="form-select">
                         <option value="0">Seleccione un cliente</option>
                         {clientes?.map((cliente, index) => {
@@ -50,8 +47,11 @@ const KardexDespacho = () => {
                         })}
                     </select>
                 </Col>
-                <Col>
+                <Col lg={12} sm={12} xl={12}>
                     <ListaKardex datos={infoProduccion}/>
+                </Col>
+                <Col className="noImprimir">
+                    <Button variant="primary" className="noImprimir mt-5" onClick={() => window.print()}>Imprimir</Button>
                 </Col>
             </Row>
         </>

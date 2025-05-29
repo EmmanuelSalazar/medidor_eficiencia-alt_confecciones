@@ -3,6 +3,7 @@ import { Table, Spin } from 'antd'
 import { Button, Stack, Alert } from'react-bootstrap';
 
 const ListaKardex = ({ datos = [{}] }) => {
+    datos = datos.filter((item) => item.cantidad_restante > 0);
     const columns = [
         { title: 'Orden', dataIndex: 'orden', key: 'orden', width: 100},
         { title: 'Referencia', dataIndex: 'referencia', key: 'referencia', width: 100},
@@ -17,8 +18,8 @@ const ListaKardex = ({ datos = [{}] }) => {
     ]
 
     return (
-        <div>
-            <Table columns={columns} dataSource={datos} scroll={{y: 500}}  />
+        <div className="limitToPrint">
+            <Table size="small" columns={columns} dataSource={datos} pagination={false} />
         </div>
     )
 }

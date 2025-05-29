@@ -1,34 +1,41 @@
 import { createContext, useState, useEffect } from 'react';
-import useFetchData from '../services/api/read/mostrarIngresosPorHoras';
+import useMostrarHorarios from '../hooks/mostrarHorarios.hook';
 import FechaActual from '../components/fechaActual';
 export const ListaContext = createContext();
 
 export const ListaProvider = ({ children }) => {
   // COMPONENTE DE FECHA
   const { fechaActualDia } = FechaActual();
-  // RECIBIR DATOS DE LA API
-  const { data, loading, error, fetchData } = useFetchData();
   //
   const [lista, setLista] = useState([]);
-  // HOOK PARA REALIZAR Y ALMACENAR IFORMACION
-  const listaActualizada = async (fecha, modulo) => {
-    window.moduloConsultado = modulo;
-    const fechaConsultada = fecha ?? fechaActualDia;
-    try {
-      const nuevaLista = await fetchData(fechaConsultada, modulo);
-      setLista([...nuevaLista]);
-    } catch (error) {
-      console.error('Ha ocurrido un error al actualizar sus datos', error);
-      throw error;
-    }
-  };
-
+  const [modulo, setModulo] = useState(0);
+  const [fecha, setFecha] = useState(fechaActualDia);
+    // ESTE ES EL  HOOK QUE TRAE LOS DATOS DE LA API
+  const { data, status, error, reload } = useMostrarHorarios(fecha);
+  // ACTUALIZAR DATOS CON LA FECHA
   useEffect(() => {
-    listaActualizada();
-  }, [fetchData]);
+   actualizarRegistros();
+  }, [fecha]);
+  // DISTRIBUIR LOS DATOS POR MODULOS O TODOS LOS MODULOS EN CASO DE QUE SEA 0 EN EL MODULO
+  useEffect(() => {
+    if (data) {
+      if (modulo === 0) {
+        setLista(data.sort((a, b) => a.posicion - b.posicion));
+      } else {
+        setLista(data.filter((item) => item.modulo === modulo).sort((a, b) => a.posicion - b.posicion));
+         }
+    }
+  }, [data, modulo]);
 
+  const actualizarRegistros = async () => {
+    try {
+      await reload();
+    } catch (error) {
+      console.log(error);
+    }
+  } 
   return (
-    <ListaContext.Provider value={{ lista, loading, error, listaActualizada }}>
+    <ListaContext.Provider value={{ lista, error , setModulo, setFecha }}>
       {children}
     </ListaContext.Provider>
   );

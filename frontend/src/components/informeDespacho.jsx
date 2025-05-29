@@ -6,15 +6,15 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useSearchParams } from 'react-router-dom';
 const InformeDespacho = () => {
+  const apiURL = import.meta.env.VITE_API_URL;
   const [searchParams, setSearchParams] = useSearchParams();
-    const plantilla = parseInt(searchParams.get('plantilla'));
     const [fecha, setFecha] = useState('');
     const ahora = new Date();
     useEffect(() => {
      // Configura el locale al montar el componente
     setFecha(format(ahora, 'PPPP', { locale: es }));
   }, []);
-    const { cliente, observaciones, despachos, fecha:fechaRegistro, sumatoriaUnidades, numeroRemision } = useContext(PlantillaDespachoContext);
+    const { cliente, observaciones, despachos, fecha:fechaRegistro, numeroRemision } = useContext(PlantillaDespachoContext);
     let fechaRegistroFormateada = format(fechaRegistro || ahora, 'PPPP', { locale: es })
     const informacionCliente = cliente || [{ nombre: 'Nombre', nit: 'NIT', direccion: 'Direccion', ciudad: 'Ciudad', telefono: 'Telefono'}];
     let totalPrimeras = despachos.reduce((acumulador, despacho) => {
@@ -54,14 +54,19 @@ const InformeDespacho = () => {
       
         return Object.values(agrupados);
       };
+      let despachosConsolidados = consolidarDespachos(despachos);
+      useEffect(() => {
+        // Actualizar el estado de los despachos consolidados
+        despachosConsolidados = consolidarDespachos(despachos);
+      }, [despachos]);
       // Uso:
-      const despachosConsolidados = consolidarDespachos(despachos);
+
     return (
         <>  
             <Row className='d-flex justify-content-between imprimir mb-2'>
                 <Col className='d-flex flex-column justify-content-center align-items-center'>
                 <Row>
-                  <h1 className='imprimir'>{plantilla > 2 ? 'Bajas' : 'Remision'}</h1>
+                  <h1 className='imprimir'>Remisión</h1>
                 </Row>
                 <Row>
                   <h5 className='imprimir'>N° {numeroRemision < 10 ? `00${numeroRemision}` : `0${numeroRemision}`}</h5>
@@ -173,7 +178,7 @@ const InformeDespacho = () => {
                             </th>
                         </tr>
                         {Array.isArray(despachosConsolidados) && despachosConsolidados.length > 0 ? (
-          despachosConsolidados.map((despacho, index) => {
+          consolidarDespachos(despachos).map((despacho, index) => {
             const porDespachar = despacho?.informacionODP?.[0]?.cantidad_producida - (despacho?.unidadesDespachadas + despacho?.bajas);
             
             return (
@@ -191,7 +196,10 @@ const InformeDespacho = () => {
         )}
                  </tbody>
                  </table>
-                <Button variant='primary' onClick={() => window.print()}>Imprimir</Button>
+                 <div className='d-flex gap-2'>
+                    <Button className={!numeroRemision && `invisible`} variant='primary' onClick={() => window.print()}>Imprimir</Button>
+                    <Button className={!numeroRemision && `invisible`} onClick={() => window.open(`${apiURL}/READ/mostrarResumenRemision.php?remision=${numeroRemision}`, "Resumen")}>Generar resumen</Button>
+                 </div>
             </div>
         </>
     )

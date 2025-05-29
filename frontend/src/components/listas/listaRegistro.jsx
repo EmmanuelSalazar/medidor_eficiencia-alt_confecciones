@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Table, Spin } from 'antd'
 import { Button, Stack, Alert } from 'react-bootstrap';
 import { ListaContext } from "../../contexts/actualizarRegistros";

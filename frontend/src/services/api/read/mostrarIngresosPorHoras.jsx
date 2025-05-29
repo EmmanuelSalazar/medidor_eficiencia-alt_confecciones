@@ -1,4 +1,23 @@
-import {useState, useEffect, useCallback} from "react";
+import axios from 'axios';
+import FechaActual from "../../../components/fechaActual";
+const { fechaActualDia } = FechaActual();
+const FetchHorarios = async (fecha = fechaActualDia) => {
+    const apiURL = import.meta.env.VITE_API_URL;
+    try {
+        const response = await axios.get(`${apiURL}/READ/mostrarIngresosPorHoras.php?fecha=${fecha}`);
+        if (response.data.ok) {
+            return response.data.respuesta
+        } else {
+            console.error(response.data.respuesta || 'Ha ocurrido un error, reinicie, si este persiste, contacte al administrador')
+            throw new Error(response.data.respuesta || 'Ha ocurrido un error, reinicie, si este persiste, contacte al administrador')
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+export default FetchHorarios;
+
+/* import {useState, useEffect, useCallback} from "react";
 import axios from 'axios';
 import FechaActual from "../../../components/fechaActual";
 const useFetchData = () => {
@@ -33,4 +52,4 @@ const useFetchData = () => {
         }, [fetchData]);
         return {data, error, fetchData}
 }
-export default useFetchData;
+export default useFetchData; */
