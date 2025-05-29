@@ -2,9 +2,15 @@
 
 require_once '../config/cors.php';
 require_once '../config/baseDeDatos.php';
-
+require_once '../config/cortes.php';
  if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $fecha = $_GET['fecha'] ?? null;
+    if($fecha) {
+        $cortes = obtenerCorte($fecha);
+    } else {
+        $fecha = date('Y-m-d');
+        $cortes = obtenerCorte($fecha);
+    }
     $query = "SELECT
             o.nombre AS operario,
             ROUND(
@@ -44,8 +50,8 @@ require_once '../config/baseDeDatos.php';
         $respuesta['respuesta'][0] = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
         $query = "SELECT
                     COALESCE(ROUND(
-                        SUM(CASE WHEN DATE(fecha) = CURDATE() THEN unidadesProducidas ELSE 0 END) / 
-                        SUM(CASE WHEN DATE(fecha) = CURDATE() THEN MetaPorEficiencia ELSE 0 END) * 100,1), 0)
+                        SUM(CASE WHEN DATE(fecha) = ? THEN unidadesProducidas ELSE 0 END) / 
+                        SUM(CASE WHEN DATE(fecha) = ? THEN MetaPorEficiencia ELSE 0 END) * 100,1), 0)
                     AS eficienciaDiaria,
                     COALESCE(ROUND(
                         SUM(unidadesProducidas) / SUM(MetaPorEficiencia) * 100, 1), 0)
@@ -54,11 +60,11 @@ require_once '../config/baseDeDatos.php';
                 FROM
                     registro_produccion
                 WHERE
-                    rol = 1 AND DATE(fecha) BETWEEN '2025-05-16' AND '2025-05-31'
+                    rol = 1 AND DATE(fecha) BETWEEN ? AND ?
                 GROUP BY
                     modulo;";
-
         $stmt = $mysqli->prepare($query);
+        $stmt->bind_param("ssss", $fecha, $fecha, $cortes[0], $cortes[1]);
         $stmt->execute();
         $resultado = $stmt->get_result();
         $eficienciaQuincenal = $resultado->fetch_all(MYSQLI_ASSOC);
