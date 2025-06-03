@@ -8,7 +8,7 @@ import { Alert, Button, Form, Modal } from 'react-bootstrap'
 const ListaReferencias = () => {
     // CONTEXTOS
     const { actualizarReferencia } = ActualizarReferencia();
-    const { listas, loading, error, actualizarListas } = useContext(ListaContext);
+    const { lista, status, error, actualizarLista } = useContext(ListaContext);
     const { fetchData } = EliminarReferencia();
     //
     const [referenciaSeleccionada, setReferenciaSeleccionada] = useState(null);
@@ -48,7 +48,7 @@ const ListaReferencias = () => {
             }
             try {
                 await actualizarReferencia(values);
-                await actualizarListas(window.ModuloSeleccionado, 0);
+                await actualizarLista();
                 setMensajeDeExito("La referencia ha sido actualizada con éxito");
             } catch (error) {
                 setMensajeDeError("Ha ocurrido un error, si este persiste, contacte al administrador: ", error);
@@ -66,7 +66,6 @@ const ListaReferencias = () => {
         const handleDelete = async (id) => {
         try {
             await fetchData(id);
-            await actualizarListas(window.ModuloSeleccionado);
             setMensajeDeAlerta("La referencia ha sido eliminada con éxito");
         } catch (error) {
             setMensajeDeError("Ha ocurrido un error: ", error);
@@ -92,7 +91,7 @@ const ListaReferencias = () => {
         },
 
     ];
-    if (loading) return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
+    if (status === 'loading') return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
     if (error) return <Alert variant='danger'>Error: {error.message}</Alert>;
 
     return (
@@ -101,7 +100,7 @@ const ListaReferencias = () => {
             {mensajeDeAlerta && <Alert variant="warning">{mensajeDeAlerta}</Alert>}
             {mensajeDeError && <Alert variant="danger">{mensajeDeError}</Alert>}
 
-            <Table dataSource={listas} columns={columns} rowKey="ref_id" scroll={{y: 500}} pagination={false} />
+            <Table dataSource={lista} columns={columns} rowKey="ref_id" scroll={{y: 500}} pagination={false} />
             <Modal show={visible} onHide={handleCancel}>
                 <Modal.Header closeButton>
                     <Modal.Title>Editar referencia</Modal.Title>

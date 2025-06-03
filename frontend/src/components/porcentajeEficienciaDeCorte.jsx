@@ -4,24 +4,20 @@ import { useSearchParams } from "react-router-dom";
 import FechaActual from "./fechaActual";
 import { Spin } from 'antd';
 const PorcentajeDeEficienciaPorCorte = () => {
-    const {corteQuincenaFormateado, anioActual, obtenerCortes, fechaActualDia} = FechaActual();
-    let corteQuincena = `${anioActual}-${corteQuincenaFormateado[0].fechaInicial}`;
-    const [buscarParametro] = useSearchParams();
-    let fechaEnLaUrl = buscarParametro.get('fecha');
-    let moduloEnLaUrl = parseInt(buscarParametro.get('modulo'));
-
     // CONTEXTOS
-    const { lista, listaRegistroQuincenal, actualizarListaRegistro } = React.useContext(ListaContext);    //OBTENER MODULO
+    const { eficiencia } = React.useContext(ListaContext);
     const [porcentaje, setPorcentaje] = useState("--");
     const [cargando, setCargando] = useState(false);
-    const modulo = moduloEnLaUrl || window.ModuloSeleccionado;
-
     // ACTUALIZAR AL RECIBIR NUEVOS DATOS
     useEffect(() => {
-        actualizarRegistros();
-    }, [lista]); 
+        if (eficiencia[0]) {
+            setCargando(true)
+            setPorcentaje(parseFloat(eficiencia[0].eficienciaQuincenal))
+            setCargando(false)   
+        }
+    }, [eficiencia])
         
-        // ESTA FUNCIÓN ESTÁ BAJO REVISIÓN POR FUTURA OBSOLECENCIA
+        /* // ESTA FUNCIÓN ESTÁ BAJO REVISIÓN POR FUTURA OBSOLECENCIA
          const actualizarRegistros = async () => {
             const fechasDeCortes = obtenerCortes(fechaEnLaUrl || fechaActualDia);
             let fechaInicio = fechasDeCortes.fechaInicio;
@@ -49,7 +45,7 @@ const PorcentajeDeEficienciaPorCorte = () => {
                 const eficienciaCalculada = ((totalProducido / totalMeta) * 100).toFixed(1);
             // ESTABLECER EFICIENCIA
                 setPorcentaje(parseFloat(eficienciaCalculada));
-            }
+            } */
     //DAR COLOR AL RECUADRO SEGUN EFICIENCIA
     const obtenerColorEficiencia = () => {
         if (porcentaje > 69.9) {

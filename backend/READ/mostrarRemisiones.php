@@ -9,13 +9,16 @@
                 b.talla,
                 b.color,
                 b.odp_id,
+                COALESCE(b.detalle, 'N/A') AS detalle,
                 bc.nombre AS nombreCliente,
                 bm.unidadesDespachadas,
+                bm.segundasDespachadas,
                 bm.client_id,
                 COALESCE(bm.observaciones, 'N/A') AS observaciones,
                 bm.fecha,
                 r.referencia,
-                bm.numeroDeRemision
+                bm.numeroDeRemision,
+                bm.bajas
             FROM
                 `bodega_remision` bm
             JOIN bodega_clientes bc ON
@@ -26,7 +29,7 @@
                 b.ref_id = r.ref_id
             ORDER BY
                 bm.numeroDeRemision
-            ASC LIMIT 100
+            ASC LIMIT 1000
                 ";
         $stmt = $mysqli->prepare($sql);
         if ($stmt->execute()) {

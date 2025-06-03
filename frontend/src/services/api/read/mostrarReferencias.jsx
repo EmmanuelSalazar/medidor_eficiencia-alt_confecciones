@@ -1,34 +1,17 @@
-import {useState, useEffect, useCallback} from "react";
 import axios from 'axios';
-const useFetchData = () => {
+const fetchReferencias = async () => {
     const apiURL = import.meta.env.VITE_API_URL;
-    const [data, setData] = useState([]);
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState(null);
-    const fetchData = useCallback(async (modulo, redux) => {
-        let moduloConsultado = modulo ?? null;
-        let reduxConsultado = redux ?? 0;
-        setLoading(true)
-            try {
-                const response = await axios.get(`${apiURL}/READ/mostrarReferencias.php?modulo=${moduloConsultado}&redux=${reduxConsultado}`);
-                if (response.data.ok) {
-                    setData(response.data.respuesta)
-                    return response.data.respuesta
-                } else {
-                    setError(response.data.respuesta)
-                    return []
-                }    
-            }  catch (error) {
-                setError(error instanceof Error ? error : new Error("Ha ocurrido un error desconocido"))
-                console.error("Error al obtener datos:", error)
-                throw error;
-            } finally {
-                setLoading(false)
-            }
-        },[]);
-        useEffect(() => {
-            fetchData();
-        }, [fetchData]);
-        return {data, error, fetchData, loading}
+
+    try {
+        const response = await axios.get(`${apiURL}/READ/mostrarReferencias.php`);
+        if (response.data.ok) {
+            return response.data.respuesta
+        } else {
+            console.error(response.data.respuesta || 'Ha ocurrido un error, reinicie, si este persiste, contacte al administrador')
+            throw new Error(response.data.respuesta || 'Ha ocurrido un error, reinicie, si este persiste, contacte al administrador')
+        }
+    } catch (error) {
+        console.log(error);
+    }
 }
-export default useFetchData;
+export default fetchReferencias;

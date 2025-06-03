@@ -1,30 +1,58 @@
 import { createContext, useState, useEffect } from 'react';
-import { useFetchData } from '../services/api/read/mostrarRegistroOperaciones';
+import useMostrarRegistroOperaciones from '../hooks/mostrarRegistroOperaciones.hook';
+import FechaActual from '../components/fechaActual';
+import { useLocation } from 'react-router-dom';
 export const ListaContext = createContext();
 
 export const ListaProvider = ({ children }) => {
-  // RECIBIR DATOS DE LA API  
-  const { data, loading, error, fetchData } = useFetchData();
-  //
-  const [listaRegistro, setLista] = useState([]);
-
-  // HOOK PARA REALIZAR Y ALMACENAR SOLICITUD
-  const setListaRegistro = async (modulo, fecha_inicio, fecha_final, hora_inicio, hora_fin, rol) => {
+  const location = useLocation();
+  const { fechaActualDia } = FechaActual();
+  const [modulo, setModulo] = useState(0);
+  const [lista, setLista] = useState([]);
+  const [fechaInicio, setFechaInicio] = useState(fechaActualDia);
+  const [fechaFin, setFechaFin] = useState(fechaActualDia);
+  // RECIBIR DATOS DEL HOOK
+  const { data, status, error, reload } = useMostrarRegistroOperaciones(modulo, fechaInicio, fechaFin);
+  // RECARGAR DATOS
+  const actualizarLista = async () => {
     try {
-      const nuevaLista = await fetchData(modulo, fecha_inicio, fecha_final, hora_inicio, hora_fin, rol);
-      setLista([...nuevaLista]);
+      await reload();
+      console.log('Datos actualizados');
     } catch (error) {
       console.error('Ha ocurrido un error al actualizar sus datos', error);
       throw error;
     }
   };
-
+  // RESETEAR FILTROS AL ENTRAR EN "REGISTRAR OPERACIONES"
   useEffect(() => {
-    setListaRegistro();
-  }, [fetchData]);
+    if(location.pathname === '/registro_operaciones') {
+      setModulo(0);
+      setFechaInicio(fechaActualDia);
+      setFechaFin(fechaActualDia);
+    }
+  }, [location]);
+  // ACTUALIZAR DATOS AL ESTABLECER LAS FECHAS
+  useEffect(() => {
+      actualizarLista();
+  }, [fechaInicio, fechaFin]);
+  useEffect(() => {
+    if(data) {
+      if(data.length === 0) {
+        setLista([]);
+      } else {
+        if(modulo === 0) {
+          setLista(data.sort((a, b) => a.modulo - b.modulo))
+        } else {
+          setLista(data.filter((lista) => lista.modulo === modulo));
+        }
+      }
+    } else {
+        setLista([]);
+    }
+  },[modulo, data])
 
   return (
-    <ListaContext.Provider value={{ listaRegistro, loading, error, setListaRegistro }}>
+    <ListaContext.Provider value={{ status, error, actualizarLista, setModulo, lista, setFechaInicio, setFechaFin }}>
       {children}
     </ListaContext.Provider>
   );

@@ -5,12 +5,13 @@ import AlmacenarDatos from "../../services/api/create/almacenarRegistroOperacion
 import { ListaContext as ContextoEnLista } from "../../contexts/actualizarRegistroOperaciones";
 import { ListaContext, ListaProvider } from "../../contexts/actualizarOperarios";
 import { ListaContext as ContextoEnLista2 } from "../../contexts/actualizarReferencias";
+import { throttle } from "lodash";
 
 const RegistrarOperaciones = () => {
     // CONTEXTOS
-    const { lista, actualizarLista } = React.useContext(ListaContext);
-    const { listas } = React.useContext(ContextoEnLista2);
-    const { setListaRegistro, loading, error } = React.useContext(ContextoEnLista);
+    const { lista, setOperariosRetirados } = React.useContext(ListaContext);
+    const { lista:listaReferencias } = React.useContext(ContextoEnLista2);
+    const { actualizarLista, status, error } = React.useContext(ContextoEnLista);
     // ACTIVAR/DESACTIVARR REGISTROS MULTIPLES/COMENTARIOS ADICIONALES
     const [registroMultiple, setRegistroMultiple] = useState(true);
     const [comentarios, setComentarios] = useState(false);
@@ -37,8 +38,8 @@ const RegistrarOperaciones = () => {
     // ACTIVAR/DESACTIVAR REGISTROS MULTIPLES
     useEffect(() => {
         try {
-            actualizarLista(window.moduloSeleccionado, registroMultiple);
-        } catch (error) {
+/*             setOperariosRetirados();
+ */        } catch (error) {
             setMensajeDeError("Ha ocurrido un error: ", error);
         }
     }, [registroMultiple]);
@@ -46,14 +47,11 @@ const RegistrarOperaciones = () => {
     const activarRegistroMultiple = (valor) => {
         setRegistroMultiple(valor);
     };
-
+    
     const activarComentarios = (checked) => {
         setComentarios(checked); // Actualiza el estado basado en el valor del checkbox
     };
-
-    // ALMACENAR, ENVIAR Y ACTUALIZAR INFORMACIÓN
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const enviarDatos = async () => {
         const values = {
             operario: operarioRef.current.value,
             unidadesProducidas: unidadesProducidasRef.current.value,
@@ -65,17 +63,30 @@ const RegistrarOperaciones = () => {
             return;
         }
         try {
+            setOperariosRetirados(prevOperarios => [...prevOperarios, parseInt(values.operario)]);
+
             await AlmacenarDatos(values);
-            await setListaRegistro(window.moduloSeleccionado);
-            await actualizarLista(window.moduloSeleccionado, registroMultiple);
+            await actualizarLista();
             setMensajeDeExito("El registro se ha guardado correctamente");
             formRef.current.reset();
         } catch (error) {
             setMensajeDeError("Ha ocurrido un error, por favor intente de nuevo más tarde: ", error);
             console.error("Ha ocurrido un error: ", error);
         }
+    }
+    // THROTTLING PARA LIMITAR LA CANTIDAD DE LLAMADAS A LA API
+    const throttlingFormulario = useRef(
+        throttle(async () => {
+            await enviarDatos();
+        }, 1000, { leading: true, trailing: false  })
+    ).current;
+    // ALMACENAR, ENVIAR Y ACTUALIZAR INFORMACIÓN
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        throttlingFormulario()
     };
-     if (loading) return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
+    
+     if (status === 'loading') return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
      if (error) return <Alert variant='danger'>Error: {error.message}</Alert>;
     return (
         <Col className="formularioConBotones">
@@ -97,7 +108,7 @@ const RegistrarOperaciones = () => {
                     <Form.Group className="m-5">
                         <Form.Label>Seleccione la referencia</Form.Label>
                         <Form.Select required ref={referenciaRef} size="lg">
-                            {listas.map((dato, index) => (
+                            {listaReferencias.map((dato, index) => (
                                 <option key={index} value={dato.ref_id}>
                                     {dato.referencia}
                                 </option>

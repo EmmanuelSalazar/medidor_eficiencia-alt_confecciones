@@ -8,7 +8,7 @@ import { PlantillaDespachoContext } from '../../contexts/plantillaDespacho';
 const ListaRemision = () => {
     const { data, status, error } = useMostrarRemisiones();
     const { data:clientes } = useMostrarClientes();
-    const { setCliente, setObservaciones, setDespachos, setFecha } = useContext(PlantillaDespachoContext);
+    const { setCliente, setObservaciones, setDespachos, setFecha, setNumeroRemision } = useContext(PlantillaDespachoContext);
      // MANEJO DE ALERTAS EXITO/ALERTA/ERROR
      const [mensajeDeExito, setMensajeDeExito] = useState("");
      const [mensajeDeAlerta, setMensajeDeAlerta] = useState("");
@@ -26,7 +26,6 @@ const ListaRemision = () => {
     if (data === undefined) {
         return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>
     }
-    
     // REORGANIZAR Y AGRUPAR LOS DATOS
     function agruparArreglo(datos) {
         const grupos = datos.reduce((a, b) => {
@@ -39,13 +38,18 @@ const ListaRemision = () => {
         }, {});
         const arregloAgrupado = Object.keys(grupos).map(clave => {
             const primerElemento = grupos[clave][0];
+            let unidadesPrimeras = grupos[clave].reduce((a, b) => a + b.unidadesDespachadas, 0);
+            let unidadesSegundas = grupos[clave].reduce((a, b) => a + b.segundasDespachadas, 0);
+            let unidadesBajas = grupos[clave].reduce((a, b) => a + b.bajas, 0);
+            let unidadesTotales = unidadesPrimeras + unidadesSegundas + unidadesBajas;
             return {
                 numeroDeRemision: Number(clave),
                 orden_produccion: primerElemento.orden_produccion,
                 nombreCliente: primerElemento.nombreCliente,
                 referencia: primerElemento.referencia,
                 ordenesDespachadas: grupos[clave].length, // Obtener la longitud del grupo para obtener el número de ordenes de despachadas
-                unidadesDespachadas: grupos[clave].reduce((a, b) => a + b.unidadesDespachadas, 0),
+                unidadesDespachadas: unidadesTotales,
+                bajas: grupos[clave].reduce((a, b) => a + b.segundasDespachadas, 0),
                 observaciones: primerElemento.observaciones,
                 fecha: primerElemento.fecha,
             }
@@ -61,6 +65,8 @@ const ListaRemision = () => {
         // DATOS DEL CLIENTE
         const datosCliente = clientes.filter((cliente) => cliente.client_id === datosFiltrados[0].client_id)
         setCliente(datosCliente)
+        // CARGAR NUMERO DE REMISION
+        setNumeroRemision(arreglo.numeroDeRemision);
         // OBSERVACIONES
         setObservaciones(datosFiltrados[0].observaciones);
         // DATOS DE LAS ODP
@@ -69,9 +75,15 @@ const ListaRemision = () => {
                 id: Date.now(),
                 odp_id: dato.odp_id,
                 unidadesDespachadas: dato.unidadesDespachadas,
+                bajas: dato.segundasDespachadas,
+                unidadesBajas: dato.bajas, // OBTENER LAS UNIDADES DE BAJ
+                sumatoria: dato.unidadesDespachadas + dato.segundasDespachadas,
+                estado: 1,
+                modificable: 0,
                 informacionODP: [{
                     orden_produccion: dato.orden_produccion,
                     referencia: dato.referencia,
+                    detalle: dato.detalle,
                     talla: dato.talla,
                     color: dato.color,
                 }],

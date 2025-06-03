@@ -18,6 +18,7 @@ import NotFoundPage from './pages/404';
 import Bodega from './pages/bodega';
 import BodegaClientes from './pages/bodega_clientes';
 import BodegaDespachos from './pages/bodega_despachos';
+import Kardex from './pages/kardex';
 function App() {
   const token = localStorage.getItem('token') || null;
   // Verificar que tenga un token almacenado
@@ -57,6 +58,7 @@ function App() {
             <Route path='/bodega_clientes' element={<BodegaClientes />}/>
             <Route path='/bodega' element={<Bodega />}/>
             <Route path='/bodega_despacho' element={<BodegaDespachos />}/>
+            <Route path='/kardex' element={<Kardex />}/>
             <Route path='*' element={<NotFoundPage />}/>
           </Routes>
         </ListaProvider>

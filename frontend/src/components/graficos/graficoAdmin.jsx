@@ -1,16 +1,14 @@
-import React, { useContext } from "react";
-import { Spin } from 'antd'
-import { Alert } from 'react-bootstrap'
+import { useContext } from "react";
+
 import { Bar } from "react-chartjs-2";
 import 'chart.js/auto';
 import { ListaContext } from '../../contexts/informacionGrafico';
 
 const GraficaAdministrativa = () => {
-    const { lista, loading, error } = useContext(ListaContext);
-    const nombre_operario = lista.map(persona => `${persona.nombre_operario}  (${persona.eficiencia})`);
-    const totalUnidadesProducidas = lista.map(persona => persona.total_unidades_producidas);
-    const totalMetaEficiencia = lista.map(persona => persona.total_meta_eficiencia);
-
+    const { listaOperarios } = useContext(ListaContext);
+    const nombre_operario = listaOperarios.map(persona => `${persona.operario}  (${persona.EficienciaDelDia}%)`);
+    const totalUnidadesProducidas = listaOperarios.map(persona => persona.TotalProducido);
+    const totalMetaEficiencia = listaOperarios.map(persona => persona.TotalMeta);
     const data = {
         labels: nombre_operario,
         datasets: [
@@ -73,10 +71,6 @@ const GraficaAdministrativa = () => {
         display: 'flex',
         justifyContent: 'center',
       };
-    
-    if (loading) return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
-    if (error) return <Alert variant='danger'>Error: {error.message}</Alert>;
-    
       return (
         <div style={styles}>
           <Bar data={data} options={options}/>

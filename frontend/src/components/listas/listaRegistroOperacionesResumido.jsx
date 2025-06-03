@@ -6,10 +6,6 @@ import FechaActual from "../fechaActual";
 const ListaRegistroOperacionesResumido = ({ modulo, fechaInicio, fechaFin }) => {
     const { obtenerCortes } = FechaActual();
     const cortes = obtenerCortes();
-    React.useEffect(() => {
-        console.log(fechaInicio);
-
-    }, [fechaInicio, fechaFin])
     const fechaInicioSeleccionada = fechaInicio || cortes.fechaInicio;
     const fechaFinSeleccionada = fechaFin || cortes.fechaFinal;
 

@@ -4,37 +4,20 @@ import { ListaContext } from "../contexts/informacionGrafico";
 import { useSearchParams } from "react-router-dom";
 import FechaActual from "./fechaActual";
 const PorcentajeDeEficienciaDiaria = () => {
-    const { fechaActualDia } = FechaActual();
     // CONTEXTOS
-    const { lista, listaRegistro, actualizarListaRegistro } = React.useContext(ListaContext);
-    // OBTENER MODULO CON URL
-        const [buscarParametro] = useSearchParams();
-        let moduloEnLaUrl = parseInt(buscarParametro.get('modulo'));
-    // OBTENER FECHA CON URL
-        let fechaEnLaUrl = buscarParametro.get('fecha');  
-    const modulo = moduloEnLaUrl || window.ModuloSeleccionado;
+    const { eficiencia } = React.useContext(ListaContext);
     const [porcentaje, setPorcentaje] = useState("--");
     const [cargando, setCargando] = useState(false);
     // ACTUALIZAR AL RECIBIR NUEVOS DATOS
     useEffect(() => {
-        actualizarRegistros();
-    }, [lista]);
-
-    // Esta función está bajo revisión por futura obsolecencia
-        const actualizarRegistros = async () => {
-            setCargando(true);
-            let fechaSeleccionada = fechaEnLaUrl || fechaActualDia;
-            try {
-                await actualizarListaRegistro(modulo, fechaSeleccionada, fechaSeleccionada, null, null, 1, false);
-            } catch (error) {
-                console.log('Error: ', error)
-            } finally {
-                establecerEficiencia();
-                setCargando(false);
-            }
+        if (eficiencia[0]) {
+            setCargando(true)
+            setPorcentaje(parseFloat(eficiencia[0].eficienciaDiaria))
+            setCargando(false)   
         }
+    }, [eficiencia])
 
-        const establecerEficiencia = () => {
+        /* const establecerEficiencia = () => { ESTA FUNCION ESTÁ MARCADA EN DESUSO POR REFACTORIZACION
             // OBTENER REGISTRO CONTADOR
             const registroCalculador = listaRegistro.filter((registro) => registro.modulo === modulo && registro.rol === 1)
             // CALCULAR EL TOTAL PRODUCIDO
@@ -48,7 +31,7 @@ const PorcentajeDeEficienciaDiaria = () => {
             const eficienciaCalculada = ((totalProducido / totalMeta) * 100).toFixed(1);
         // ESTABLECER EFICIENCIA
             setPorcentaje(parseFloat(eficienciaCalculada));
-        }
+        } */
     // DAR COLOR AL RECUADRO SEGUN EFICIENCIA
     const obtenerColorEficiencia = () => {
         if (porcentaje > 69.9) {

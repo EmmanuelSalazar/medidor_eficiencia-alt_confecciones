@@ -4,19 +4,18 @@ import EliminarOperario from '../../services/api/delete/eliminarOperario';
 import ActualizarOperario from '../../services/api/update/actualizarOperario';
 import { Table, Spin, Popconfirm } from 'antd';
 import { Alert, Button, Modal, Form } from 'react-bootstrap';
-
 const ListaOperarios = () => {
-    const { lista, loading, error, actualizarLista } = useContext(ListaContext);
+    const { lista, status, error, actualizarLista } = useContext(ListaContext);
     const [mostrar, setMostrar] = useState(false);
     const [operarioSeleccionado, setOperarioSeleccionado] = useState(null);
     const { fetchData } = EliminarOperario();
     const { actualizarOperario } = ActualizarOperario();
-    const modulo = window.ModuloSeleccionado;
     // ALMACENAR DATOS DE FORMULARIO
     const nombreOperarioRef = useRef();
     const moduloRef = useRef();
     const actividadRef = useRef();
     const revisorRef = useRef();
+    const posicionRef = useRef();
     // MANEJO DE ALERTAS EXITO/ALERTA/ERROR
     const [mensajeDeExito, setMensajeDeExito] = useState("");
     const [mensajeDeAlerta, setMensajeDeAlerta] = useState("");
@@ -35,7 +34,7 @@ const ListaOperarios = () => {
     const handleDelete = async (id) => {
         try {
             await fetchData(id);
-            await actualizarLista(modulo);
+            await actualizarLista();
             setMensajeDeAlerta("El operario ha sido eliminado");
         } catch (error) {
             console.error("Ha ocurrido un error: ", error);
@@ -58,11 +57,12 @@ const ListaOperarios = () => {
             "nombreOperario": nombreOperarioRef.current.value,
             "modulo": moduloRef.current.value,
             "actividad": actividadRef.current.value,
-            "revisor" : revisorRef.current.value
+            "revisor" : revisorRef.current.value,
+            "posicion": posicionRef.current.value
         };
         try {
             await actualizarOperario(operarioSeleccionado.op_id, false, values);
-            await actualizarLista(modulo);
+            await actualizarLista();
             setMensajeDeExito("El operario ha sido actualizado con exito");
             setMostrar(null)
         } catch (error) {
@@ -99,14 +99,18 @@ const ListaOperarios = () => {
         },
     ];
 
-    if (loading) return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
+    if (status === 'loading') return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
     if (error) return <Alert variant='danger'>Error: {error.message}</Alert>;
     return (
         <div>
             {mensajeDeExito && <Alert variant="success">{mensajeDeExito}</Alert>}
             {mensajeDeAlerta && <Alert variant="warning">{mensajeDeAlerta}</Alert>}
             {mensajeDeError && <Alert variant="danger">{mensajeDeError}</Alert>}
+            <div className='bg bg-primary bg-opacity-25 p-2 rounded my-1'>
+                <span>En este modulo hay <strong>{lista.length}</strong> operarios/as</span>
+            </div>
             <Table dataSource={lista} columns={columns} rowKey="op_id" scroll={{y: 500}} pagination={false} />
+
             <Modal show={mostrar} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Editar Operario</Modal.Title>
@@ -146,6 +150,21 @@ const ListaOperarios = () => {
                                     )
                                     }
                                 </Form.Select>
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                    <Form.Label>Posicion del operario</Form.Label>
+                                    <Form.Select ref={posicionRef}>
+                                        <option>Seleccionar posición</option>    
+                                        {lista.map((item, index) => {
+                                            return (
+                                                <option key={item.op_id} value={index+1}>{index+1}</option>
+                                            )
+                                        })
+                                        }
+                                    </Form.Select>
+                                    <Form.Text>
+                                        La posicion actual es: <strong>{operarioSeleccionado.posicion}</strong>
+                                    </Form.Text>
                             </Form.Group>
                         </Form>
                     )}

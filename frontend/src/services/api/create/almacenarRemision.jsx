@@ -3,7 +3,9 @@ import axios from "axios"
 const AlmacenarDatos = async (values) => {
   const apiURL = import.meta.env.VITE_API_URL;
   try {
+    console.log(values)
     const response = await axios.post(`${apiURL}/CREATE/almacenarRemision.php`, values)
+    
     if (response.data.ok) {
       console.log(response.data.respuesta)
       return response.data.respuesta

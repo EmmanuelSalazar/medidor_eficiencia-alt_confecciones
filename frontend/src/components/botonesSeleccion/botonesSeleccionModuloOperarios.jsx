@@ -1,14 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Button, ButtonGroup } from 'react-bootstrap';
 import { ListaContext } from '../../contexts/actualizarOperarios';
 import datos from '../../utils/json/menuModulos.json'
 const BotonesSeleccionModulos = () => {
-  
-    const { actualizarLista } = React.useContext(ListaContext);
+    const { setModulo } = useContext(ListaContext);
     const handleButtonClick = async (modulo, index) => {
-      window.ModuloSeleccionado = modulo;
         try {
-            await actualizarLista(modulo, false);
+            setModulo(parseInt(modulo));
           } catch (error) {
             console.error("Ha ocurrido un error: ", error)
           }

@@ -4,7 +4,7 @@ import AlmacenarDatos from '../../services/api/create/almacenarReferencia'
 import { ListaContext } from '../../contexts/actualizarReferencias';
 const AgregarReferencia = () => {
     // CONTEXTOS
-    const { actualizarListas } = React.useContext(ListaContext);
+    const { actualizarLista } = React.useContext(ListaContext);
     // MANEJO DE ALERTAS EXITO/ALERTA/ERROR
     const [mensajeDeExito, setMensajeDeExito] = useState("");
     const [mensajeDeAlerta, setMensajeDeAlerta] = useState("");
@@ -34,7 +34,7 @@ const AgregarReferencia = () => {
         }
         try {
             await AlmacenarDatos(values)
-            await actualizarListas(window.ModuloSeleccionado, 0);
+            await actualizarLista()
             setMensajeDeExito("La Referencia se ha almacenado correctamente");
             formRef.current.reset();
         } catch (error){

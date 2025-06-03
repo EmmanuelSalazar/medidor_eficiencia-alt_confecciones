@@ -5,16 +5,15 @@ import { ListaContext as ContextoEnLista} from "../../contexts/actualizarRegistr
 import { ContextoModulo } from "../../contexts/botonesSeleccionModuloAdmin";
 const BotonesSelModAdminRegOp = () => {
     const {setModuloSeleccionado } = React.useContext(ContextoModulo);
-    const { setListaRegistro } = React.useContext(ContextoEnLista);
+    const { setModulo } = React.useContext(ContextoEnLista);
     const [botonSeleccionado, setBotonSeleccionado] = React.useState(null);
     const botones = datos;
     const handleButtonClick = async (modulo, index) => {
-        window.moduloSeleccionado = modulo;
         setBotonSeleccionado(index);
         setModuloSeleccionado(modulo);
         
         try {
-            await setListaRegistro(modulo,window.fechaInicio,window.fechaFin,window.horaInicio,window.horaFin)
+            setModulo(parseInt(modulo))
         } catch (error) {
             console.error("Ha ocurrido un error: ", error)
             throw error;

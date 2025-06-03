@@ -1,4 +1,28 @@
-import {useState, useEffect, useCallback} from "react";
+import axios from 'axios';
+import FechaActual from "../../../components/fechaActual";
+const FetchRegistrosOperaciones = async (modulo, fecha_inicio, fecha_final) => {
+    const apiURL = import.meta.env.VITE_API_URL;
+    const { fechaActualDia } = FechaActual();
+    let moduloSeleccionado = modulo?? null
+    let fechaInicioSeleccionada = fecha_inicio?? fechaActualDia
+    let fechaFinSeleccionada = fecha_final?? fechaActualDia
+
+    try {
+        const response = await axios.get(`${apiURL}/READ/mostrarRegistroOperaciones.php?fecha_inicio=${fechaInicioSeleccionada}&fecha_fin=${fechaFinSeleccionada}&modulo=${moduloSeleccionado}`)
+        if (response.data.ok) {
+            return response.data.respuesta
+        } else {
+            console.error(response.data.respuesta || 'Ha ocurrido un error, reinicie, si este persiste, contacte al administrador')
+            throw new Error(response.data.respuesta || 'Ha ocurrido un error, reinicie, si este persiste, contacte al administrador')
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+export default FetchRegistrosOperaciones;
+
+
+/* import {useState, useEffect, useCallback} from "react";
 import axios from 'axios';
 import FechaActual from "../../../components/fechaActual";
 export const useFetchData = () => {
@@ -35,4 +59,4 @@ export const useFetchData = () => {
             fetchData();
         }, [fetchData]);
         return {data, error, fetchData, loading}
-}
+} */

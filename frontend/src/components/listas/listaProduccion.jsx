@@ -13,6 +13,7 @@ const ListaProduccion = () => {
     const [color, setColor] = useState();
     const [estado, setEstado] = useState();
     const [odpID, setOdpID] = useState();
+    const [detalle, setDetalle] = useState();
     const [referencia, setReferencia] = useState();
     const { actualizarProduccion } = ActualizarProduccion();
     const [informacionModal, setInformacionModal] = useState();
@@ -52,7 +53,8 @@ const ListaProduccion = () => {
             talla: talla,
             referencia: referencia,
             color: color,
-            estado: estado
+            estado: estado,
+            detalle: detalle
         }
         try {
             await actualizarProduccion(values)
@@ -65,6 +67,7 @@ const ListaProduccion = () => {
             setEstado("");
             setOdpID("");
             setReferencia("");
+            setDetalle("");
 
         } catch (error) {
             setMensajeDeError("Ha ocurrido un error al actualizar el registro, si el error persiste, contacta al administrativo");
@@ -91,6 +94,7 @@ const ListaProduccion = () => {
     const columns = [
         { title: 'Orden de produccion', dataIndex: 'orden_produccion', key: 'orden_produccion', width: 150 },
         { title: 'Referencia', dataIndex: 'referencia', key: 'referencia', width: 100 },
+        { title: 'Detalles', dataIndex:'detalle', key:'detalles', width: 100},
         { title: 'Talla', dataIndex:'talla', key:'talla', width: 65 },
         { title: 'Color', dataIndex:'color', key:'color', width: 70 },
         { title: 'Cantidad', dataIndex:'cantidad', key:'cantidad', width: 90 },
@@ -118,7 +122,7 @@ const ListaProduccion = () => {
         {mensajeDeExito && <Alert variant="success">{mensajeDeExito}</Alert>}
         {mensajeDeAlerta && <Alert variant="warning">{mensajeDeAlerta}</Alert>}
         {mensajeDeError && <Alert variant="danger">{mensajeDeError}</Alert>}
-        <Table rowKey='odp_id' columns={columns} dataSource={data}  scroll={{y: 600}}/>
+        <Table rowKey='odp_id' columns={columns} dataSource={data}  scroll={{y: 600}} pagination={false}/>
         <Modal show={mostrarModal} onHide={cerrarModal}>
             <Modal.Header closeButton>
                 <Modal.Title>Editar registro</Modal.Title>
@@ -132,6 +136,10 @@ const ListaProduccion = () => {
                     <Form.Group>
                         <Form.Label>Referencia</Form.Label>
                         <Form.Control  type="text" defaultValue={informacionModal?.referencia} disabled/>
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label>Detalle</Form.Label>
+                        <Form.Control onChange={(e) => setDetalle(e.target.value)} type="text" defaultValue={informacionModal?.detalle} />
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Talla</Form.Label>

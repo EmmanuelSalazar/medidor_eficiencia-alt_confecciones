@@ -1,31 +1,61 @@
 import { createContext, useState, useEffect } from 'react';
-import useFetchData from '../services/api/read/mostrarOperarios';
+import useMostrarOperarios from '../hooks/mostrarOperarios.hook';
+import { useLocation } from 'react-router-dom';
 export const ListaContext = createContext();
 
 export const ListaProvider = ({ children }) => {
-  // RECIBIR INFORMACIÓN DE LA API
-  const { data, loading, error, fetchData } = useFetchData();
-  //
+  const [redux, setRedux] = useState(false);
+  const [modulo, setModulo] = useState(0);
   const [lista, setLista] = useState([]);
-  // HOOK PARA REALIZAR Y ALMACENAR SOLICITUD
-  const actualizarLista = async (modulo, redux) => {
-    let moduloConsultado = modulo ?? null;
-    let reduxConsultado = redux ?? false;
+  const [operariosRetirados, setOperariosRetirados] = useState([]);
+  // RECIBIR INFORMACIÓN DE LA API
+  const { data, status, error, reload } = useMostrarOperarios(redux);
+  const location = useLocation();
+  // VACIAR LISTA DE OPERARIOS RETIRADOS AL ENTRAR EN LA PAGINA DE OPERARIOS
+  useEffect(() => {
+    if (location.pathname === '/operarios') {
+      setOperariosRetirados([]);
+    }
+  }, [location]);
+  // VOLVER A CARGAR TODOS LOS OPERARIOS
+  useEffect(() => {
+    const intervalo = setInterval(() => {
+      setOperariosRetirados([]);
+    }, 600000)
+    return () => clearInterval(intervalo);
+  })
+  // MOSTRAR OPERARIOS SEGÚN EL MODULO
+  useEffect(() => {
+    if (data) {
+      if(modulo === 0) {
+        setLista(data.sort((a, b) => a.modulo - b.modulo));
+      } else {
+        setLista(data.filter((lista) =>  !operariosRetirados.includes(lista.op_id) && lista.modulo === modulo))
+      }
+    } else {
+      setLista([]);
+    }
+  }, [modulo]);
+  // MOSTRAR OPERARIOS SEGÚN EL MODULO Y ELIMINAR OPERARIOS RETIRADOS
+  useEffect(() => {
+    if (data) {
+      setLista(data.filter((lista) =>  !operariosRetirados.includes(lista.op_id) && lista.modulo === modulo));
+      console.log('DATOS ACTUALIZADOS')
+    } else {
+      setLista([]);
+    }
+  }, [operariosRetirados, data]);
+  // ACTUALIZAR LISTA DE OPERARIOS
+  const actualizarLista = async () => {
     try {
-      const nuevaLista = await fetchData(moduloConsultado, reduxConsultado);
-      setLista([...nuevaLista]);
-      //console.log('Nueva lista obtenida:', nuevaLista);
+      await reload();
     } catch (error) {
-      console.error('Ha ocurrido un error al actualizar sus datos', error);
+      console.log(error);
+      throw error;
     }
   };
-
-  useEffect(() => {
-    actualizarLista();
-  }, [fetchData]);
-
   return (
-    <ListaContext.Provider value={{ lista, loading, error, actualizarLista }}>
+    <ListaContext.Provider value={{ setModulo, lista, status, error, setRedux, actualizarLista, operariosRetirados, setOperariosRetirados }}>
       {children}
     </ListaContext.Provider>
   );

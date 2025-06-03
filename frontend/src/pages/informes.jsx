@@ -1,27 +1,24 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ListaRegistroOperacionesResumido from "../components/listas/listaRegistroOperacionesResumido";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col, Button, Alert } from "react-bootstrap";
 import { Segmented, Calendar } from "antd";
 import { InfoCircleFilled, PrinterOutlined, ReloadOutlined } from '@ant-design/icons';
 import useRegistroOperacionesResumido from "../hooks/mostrarRegistroOperacionesResumido.hook";
-import IncentivoQuincena from "../components/utils/incentivoQuincena";
+/* import IncentivoQuincena from "../components/utils/incentivoQuincena"; */
+import IncentivoQuincena from "../components/incentivoQuincena";
 import FechaActual from "../components/fechaActual";
-import EstadisticaInforme from "../components/graficos/estadisticaInformes";
 import logo from '../assets/img/logo.png'
 import { useNavigate } from "react-router-dom";
-import { ListaProvider } from "../contexts/actualizarRegistroOperaciones";
 function Informes() {
     const { obtenerCortes } = FechaActual();
+    const { beneficio, porcentajeEstatico } = IncentivoQuincena();
     const navigate = useNavigate();
     const cortes = obtenerCortes();
     const [seccion, setSeccion] = useState(1);
     const [fechaInicio, setFechaInicio] = useState(cortes.fechaInicio);
     const [fechaFin, setFechaFin] = useState(cortes.fechaFinal);
     const { reload, data, status } = useRegistroOperacionesResumido(seccion,fechaInicio, fechaFin);
-    /* useEffect(() => {
-        recargarDatos(seccion, fechaInicio, fechaFin);
 
-    }, [seccion, fechaInicio, fechaFin]); */
     const alCambio = (e) => {
         setSeccion(parseInt(e));
         navigate('?modulo=' + e);
@@ -54,6 +51,7 @@ function Informes() {
 
     return (
         <Container>
+            <Alert className="noImprimir" variant="warning">Esta funcion se encuentra en mantenimiento, por lo que puedes encontrar algunos errores y/o fallas</Alert>
             <Row className="my-3">
                 <Col className="noImprimir" lg={4}>
                     <Row className="mb-5">
@@ -86,10 +84,7 @@ function Informes() {
                         </Col>
                         <Col className="text-end">
                             <h5>Beneficio: </h5>
-                            <ListaProvider>
-                                <IncentivoQuincena modulo={seccion} fechaInicio={fechaInicio} fechaFinal={fechaFin}/>
-                            </ListaProvider>
-                            
+                            {beneficio} / {porcentajeEstatico}
                         </Col>
                     </Row>
                     <Row>

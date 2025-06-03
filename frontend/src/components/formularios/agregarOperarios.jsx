@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useContext } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import { Button, Form, Alert, Col } from 'react-bootstrap'
 import AlmacenarOperario from '../../services/api/create/almacenarOperario'
 import { ListaContext } from "../../contexts/actualizarOperarios";
@@ -33,8 +33,7 @@ const AgregarOperarios = () => {
                 };
                 try {
                     await AlmacenarOperario(values)
-                    const modulo = window.ModuloSeleccionado;
-                    await actualizarLista(modulo);
+                    await actualizarLista();
                     setMensajeDeExito("El operario se ha guardado correctamente");
                     formRef.current.reset();
                 } catch (error) {

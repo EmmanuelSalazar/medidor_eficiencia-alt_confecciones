@@ -2,7 +2,7 @@ import React from "react";
 import { Modal, Button, DatePicker, Spin} from 'antd'
 import { Row, Col , Button as ButtonBS, Alert} from 'react-bootstrap'
 import ListaRegistroOperaciones from "../listas/listaRegistroOperaciones";
-import {ListaContext } from "../../contexts/actualizarRegistroOperaciones";
+import { ListaContext } from "../../contexts/actualizarRegistroOperaciones";
 import ExportToExcel from "../exportarExcel";
 import { ContextoModulo } from "../../contexts/botonesSeleccionModuloAdmin";
 import BotonesSelModAdminRegOp from '../botonesSeleccion/botonesSeleccionModuloAdminModal'
@@ -26,7 +26,7 @@ const FechasDuales = () => {
             modulo: moduloSeleccionado,
         })
     }, [moduloSeleccionado]);
-    const { listaRegistro, setListaRegistro } = React.useContext(ListaContext)
+    const { setFechaInicio, setFechaFin } = React.useContext(ListaContext)
     const [visible, setVisible] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     // MANEJO DE ALERTAS EXITO/ALERTA/ERROR
@@ -82,10 +82,11 @@ const FechasDuales = () => {
     }
     // FUNCION DE SELECCION DE HORAS
     const onChangeHours = async (time, timeStrings) => {
-        window.horaInicio = `${timeStrings[0]}:00`;
-        window.horaFin = `${timeStrings[1]}:59`;
+        const horaInicio = `${timeStrings[0]}:00`;
+        const horaFin = `${timeStrings[1]}:59`;
         try {
-            await setListaRegistro(window.moduloSeleccionado, window.fechaInicio, window.fechaFin, window.horaInicio, window.horaFin);
+/*             await setListaRegistro(window.moduloSeleccionado, window.fechaInicio, window.fechaFin, window.horaInicio, window.horaFin);
+ */
         } catch (error) {
             setMensajeDeError("Ha ocurrido un error: ", error);
             console.log("Ha ocurrido un error: ", error)
@@ -93,8 +94,8 @@ const FechasDuales = () => {
     }
     // FUNCION DE SELECCION DE FECHAS
     const onPanelChange = async (dates, dateStrings) => {
-        window.fechaInicio = dateStrings[0];
-        window.fechaFin = dateStrings[1];
+        const fechaInicio = dateStrings[0];
+        const fechaFin = dateStrings[1];
         setParams({
             ...params,
             modulo: moduloSeleccionado,
@@ -102,14 +103,19 @@ const FechasDuales = () => {
             fechaFin: dateStrings[1],
         });
         try {
-            await setListaRegistro(window.moduloSeleccionado, dateStrings[0], dateStrings[1], window.horaInicio, window.horaFin)
-            await reload(); // Actualizar la lista con los datos de la api
+                setFechaInicio(fechaInicio);
+                setFechaFin(fechaFin);
+/*             await setListaRegistro(window.moduloSeleccionado, dateStrings[0], dateStrings[1], window.horaInicio, window.horaFin)
+ */            await reload(); // Actualizar la lista con los datos de la api
         } catch (error) {
             setMensajeDeError("Ha ocurrido un error: ", error);
             console.error("Ha ocurrido un error: ",error)
         }  
     }
-    
+/*     let uno = 1
+    if (uno === 1 ) return (
+        <Alert variant="warning">Esta funcion se encuentra en mantenimiento, por lo que podrás notar algunos errores y/o fallos en la información visible</Alert>
+    ) */
     return (
         <>
             <Button type="primary" onClick={showModal}>Seleccionar rango de fechas</Button>
@@ -129,8 +135,8 @@ const FechasDuales = () => {
                             <RangePicker onChange={onChangeHours} picker="time" format="HH" disabledTime={disabledTime}/>
                         </Col>
                         <Col lg={2} md={12} sm={12}>
-                            <ExportToExcel datos={listaRegistro}/> 
-                        </Col>
+{/*                             <ExportToExcel datos={listaRegistro}/> 
+ */}                        </Col>
                     </Row>
                     <Row className="my-2">
                         <BotonesSelModAdminRegOp />

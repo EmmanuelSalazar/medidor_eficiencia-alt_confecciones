@@ -157,8 +157,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $respuesta["respuesta"] = $datosCompuestos;
         
     } else {
-        $respuesta["ok"] = false;
-        $respuesta["respuesta"] = "No se encontraron resultados.";
+        $respuesta["ok"] = true;
+        $respuesta["respuesta"] = ["No se encontraron resultados."];
     }
 
     // Devolver la respuesta como JSON
@@ -170,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 } else {
     http_response_code(405); 
     $respuesta["ok"] = false;
-    $respuesta["respuesta"] = "Método no permitido.";
+    $respuesta["respuesta"] = ["Método no permitido."];
     echo json_encode($respuesta, JSON_PRETTY_PRINT);
 }
 ?>
