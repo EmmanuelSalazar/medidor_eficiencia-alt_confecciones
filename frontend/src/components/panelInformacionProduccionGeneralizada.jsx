@@ -21,13 +21,14 @@ const PanelInformacionProduccionGeneralizada = () => {
                 estado: datos.estado
             }
         });
+        referencias = referencias.sort((a,b) => a.estado - b.estado);
         // UNIDADES POR REFERENCIA
         let unidadesPorReferencia = informacionFiltrada.map((datos) => parseInt(datos.cantidad_producida))
         // TOTAL UNIDADES POR REFERENCIA
         let totalUnidadesPorReferencia = unidadesPorReferencia.reduce((a,b) => a + b, 0);
         return {diasTotales, referencias, unidadesPorReferencia, totalUnidadesPorReferencia};
     }
-    return (
+    return (    
         <Row className="p-1 d-flex ms-2">
             <Row className="text-center">
                 <Col>
@@ -47,15 +48,13 @@ const PanelInformacionProduccionGeneralizada = () => {
                 </Row>
                  </Col>
             </Row>
-            <Row className="text-center">
-                
-            </Row>
-            <Row>
+
+            <Row style={{maxHeight: '190px', overflowY: 'hidden'}}>
                 <Col>
                     {infoProduccion().referencias.map((referencia, index) => {
                         return (
                         <table key={index}>
-                            <tbody >
+                            <tbody>
                             {referencia.estado === 1 ?
                                 <tr>
                                     <td width={50}><div style={{width: '10px', height: '10px', borderRadius: '50%', backgroundColor: 'BLUE'}}></div></td>

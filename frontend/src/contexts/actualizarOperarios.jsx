@@ -40,7 +40,6 @@ export const ListaProvider = ({ children }) => {
   useEffect(() => {
     if (data) {
       setLista(data.filter((lista) =>  !operariosRetirados.includes(lista.op_id) && lista.modulo === modulo));
-      console.log('DATOS ACTUALIZADOS')
     } else {
       setLista([]);
     }

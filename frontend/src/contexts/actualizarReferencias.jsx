@@ -9,7 +9,7 @@ export const ListaProvider = ({ children }) => {
  
   // VOLVER A CARGAR TODOS LOS OPERARIOS
   const [lista, setLista] = useState([]);
-  const [modulo, setModulo] = useState(5);
+  const [modulo, setModulo] = useState(9999);
   const [estado, setEstado] = useState(1);
    // MOSTRAR TODAS LAS REFERENCIAS AL ENTRAR EN LA PESTAÑA DE REFERENCIAS
    useEffect(() => {
@@ -19,6 +19,15 @@ export const ListaProvider = ({ children }) => {
           }
       }
   }, [location]);
+  
+  useEffect(() => {
+    if(location.pathname === '/bodega') {
+      alCargarBodega();
+    }
+  }, []);
+    const alCargarBodega = () => {
+      return setEstado(0);
+    }
   // FILTRAR LAS REFERENCIAS
   useEffect(() => {
     if(data) {

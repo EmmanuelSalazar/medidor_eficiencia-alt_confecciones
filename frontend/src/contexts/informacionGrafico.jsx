@@ -20,8 +20,6 @@ export const ListaProvider = ({ children }) => {
   }, [moduloEnLaUrl]);
   useEffect(() => {
     reload();
-    console.log('datos actualizados');
-    console.log(data);
   }, [fecha])
   useEffect(() => {
     if(data) {

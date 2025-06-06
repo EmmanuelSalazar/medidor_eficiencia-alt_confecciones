@@ -17,7 +17,6 @@ export const ListaProvider = ({ children }) => {
   const actualizarLista = async () => {
     try {
       await reload();
-      console.log('Datos actualizados');
     } catch (error) {
       console.error('Ha ocurrido un error al actualizar sus datos', error);
       throw error;
