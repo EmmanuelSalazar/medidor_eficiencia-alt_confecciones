@@ -101,13 +101,14 @@ const ListaOperarios = () => {
 
     if (status === 'loading') return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
     if (error) return <Alert variant='danger'>Error: {error.message}</Alert>;
+    console.log(lista)
     return (
         <div>
             {mensajeDeExito && <Alert variant="success">{mensajeDeExito}</Alert>}
             {mensajeDeAlerta && <Alert variant="warning">{mensajeDeAlerta}</Alert>}
             {mensajeDeError && <Alert variant="danger">{mensajeDeError}</Alert>}
             <div className='bg bg-primary bg-opacity-25 p-2 rounded my-1'>
-                <span>En este modulo hay <strong>{lista.length}</strong> operarios/as</span>
+                <span>En este modulo hay <strong>{lista.filter((item) => item.activo === 1).length}</strong> operarios/as</span>
             </div>
             <Table dataSource={lista} columns={columns} rowKey="op_id" scroll={{y: 500}} pagination={false} />
 
