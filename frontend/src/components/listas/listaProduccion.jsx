@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
-import { Table, Tag, Spin } from 'antd'
+import { Table, Tag, Spin, Popconfirm } from 'antd'
 import { Alert, Button, Modal, Form } from 'react-bootstrap'
 import useMostrarProduccion from '../../hooks/mostrarProduccion.hook';
-import { EditOutlined } from '@ant-design/icons';
+import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import ActualizarProduccion from '../../services/api/update/actualizarProduccion';
+import EliminarOrdenProduccion from '../../services/api/delete/eliminarOrdenProduccion';
 const ListaProduccion = () => {
     const { data, status, error, reload } = useMostrarProduccion();
+    const { fetchData } = EliminarOrdenProduccion();
     const [mostrarModal, setMostrarModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [odp, setOdp] = useState();
@@ -90,7 +92,16 @@ const ListaProduccion = () => {
                 return <Tag color='black'>Desconocido</Tag>
         }
     }
-
+    const alBorrar = async (id) => {
+        try {
+            await fetchData(id);
+            setMensajeDeExito("El registro se ha eliminado exitosamente");
+            await reload();
+        } catch (error) {
+            console.log(error);
+/*             setMensajeDeError(error || "Ha ocurrido un error al eliminar el registro, si el error persiste, contacta al administrativo");
+ */        }
+    }
     const columns = [
         { title: 'Orden de produccion', dataIndex: 'orden_produccion', key: 'orden_produccion', width: 150 },
         { title: 'Referencia', dataIndex: 'referencia', key: 'referencia', width: 100 },
@@ -103,7 +114,14 @@ const ListaProduccion = () => {
         { title: 'Días de trabajo', dataIndex:'DiasDeTrabajo', key:'cantidad_producida', width: 90 },
         { title: 'Fecha de inicio', dataIndex:'fecha_inicio', key:'fecha', width: 110 },
         { title: 'Fecha de actualización', dataIndex:'fecha_final', key:'fecha', width: 116 },
-        { title: 'Acciones', dataIndex:'acciones', key:'acciones', render:(text, record) => ( <Button variant='primary' onClick={() => abrirModal(record)}><EditOutlined /></Button>), width: 89, fixed: 'right' },
+        { title: 'Acciones', dataIndex:'acciones', key:'acciones', render:(text, record) => (
+            <div className='d-flex gap-1'>
+             <Button variant='primary' onClick={() => abrirModal(record)}><EditOutlined /></Button>
+             <Popconfirm title="Eliminar Registro" description="¿Estás seguro de eliminar el registro?" onConfirm={() => alBorrar(record.odp_id)}>
+                <Button variant='danger'><DeleteOutlined /></Button>
+             </Popconfirm>
+            </div>
+        ), width: 89, fixed: 'right' },
     ]
     // MANEJO DEL ESTADO DE LA SOLICITUD
     if (status === 'pending') {

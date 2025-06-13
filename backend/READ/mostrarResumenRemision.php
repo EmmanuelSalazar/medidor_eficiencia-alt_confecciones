@@ -56,7 +56,7 @@ require_once '../config/baseDeDatos.php';
                         <td><?=$registro['SUM(unidadesDespachadas)']?></td>
                     </tr>
                 <?php
-            }   
+            }
         ?>
     </table>
     <?php
