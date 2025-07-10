@@ -30,7 +30,7 @@ const TableroMensajes = () => {
               <p className="fs-3">-{mensaje.autor || "Desconocido"}</p>
             </div>
           </Col> */}
-          <img src="/img/mensajeFelicitaciones.png" />
+          <img src="/img/vacio.jpeg" />
         </Row>
       </>
     )

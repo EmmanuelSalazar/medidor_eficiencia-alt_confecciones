@@ -2,11 +2,34 @@ import { useState, useEffect } from 'react';
 import { Table, Tag, Spin, Popconfirm } from 'antd'
 import { Alert, Button, Modal, Form } from 'react-bootstrap'
 import useMostrarProduccion from '../../hooks/mostrarProduccion.hook';
+import ActualizarMarcasDeProcesos from '../../services/api/update/actualizarMarcasProcesos';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import ActualizarProduccion from '../../services/api/update/actualizarProduccion';
 import EliminarOrdenProduccion from '../../services/api/delete/eliminarOrdenProduccion';
+import { colorPorReferencia, colorPorRestante } from './../utils/colorCeldas.lista';
+import { coloresUnicos } from '../utils/coloresUnicos';
+import moment from 'moment';
 const ListaProduccion = () => {
     const { data, status, error, reload } = useMostrarProduccion();
+    const { actualizarRegistroOperacion } = ActualizarMarcasDeProcesos();
+    if(data) {
+        var listaColores = data.map((item) => {
+            return item.color;
+        });
+        var listaColoresUnicos = coloresUnicos(listaColores);
+        var listaTallas = data.map((item) => {
+            return item.talla;
+        })
+        var listaTallaUnicas = coloresUnicos(listaTallas);
+        var listaReferencias = data.map((item) => {
+            return item.referencia;
+        })
+        var listaReferenciaUnicas = coloresUnicos(listaReferencias);
+        var listaClientes = data.map((item) => {
+            return item.cliente;
+        })
+        var listaClienteUnicas = coloresUnicos(listaClientes);
+    }
     const { fetchData } = EliminarOrdenProduccion();
     const [mostrarModal, setMostrarModal] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -17,6 +40,7 @@ const ListaProduccion = () => {
     const [odpID, setOdpID] = useState();
     const [detalle, setDetalle] = useState();
     const [referencia, setReferencia] = useState();
+    const [comentario, setComentario] = useState();
     const { actualizarProduccion } = ActualizarProduccion();
     const [informacionModal, setInformacionModal] = useState();
     // MANEJO DE ALERTAS EXITO/ALERTA/ERROR
@@ -41,6 +65,8 @@ const ListaProduccion = () => {
         setColor(record.color);
         setEstado(record.estado);
         setReferencia(record.referencia);
+        setDetalle(record.detalle)
+        setComentario(record.comentario)
         setOdpID(record.odp_id);
     }
     const cerrarModal = () => {
@@ -56,7 +82,8 @@ const ListaProduccion = () => {
             referencia: referencia,
             color: color,
             estado: estado,
-            detalle: detalle
+            detalle: detalle,
+            comentario: comentario,
         }
         try {
             await actualizarProduccion(values)
@@ -102,18 +129,72 @@ const ListaProduccion = () => {
 /*             setMensajeDeError(error || "Ha ocurrido un error al eliminar el registro, si el error persiste, contacta al administrativo");
  */        }
     }
+    // MANEJO DEL ESTADO DE LA SOLICITUD
+    if (status === 'pending') {
+        return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>
+      }
+    if (status === 'error') {
+        return <Alert variant='danger'>Error: {error.message}</Alert>;
+    }
+    if (loading) return (
+        <Spin tip="Cargando..."><div></div></Spin>
+    );
+    if (error) return <Alert variant="danger">Ha ocurrido un error</Alert>
+    // COLUMNAS PARA LA LISTA
     const columns = [
+        { title: 'Cliente', dataIndex: 'cliente', key: 'cliente', width: 150, filters: [
+            ...listaClienteUnicas.map((cliente) => ({
+                text: cliente,
+                value: cliente,
+            })),
+        ], onFilter: (value, record) => {
+            return String(record.cliente).toUpperCase() === String(value).toUpperCase();
+        } },
         { title: 'Orden de produccion', dataIndex: 'orden_produccion', key: 'orden_produccion', width: 150 },
-        { title: 'Referencia', dataIndex: 'referencia', key: 'referencia', width: 100 },
+        { title: 'Referencia', dataIndex: 'referencia', key: 'referencia', width: 120, onCell: (record) => {
+            return colorPorReferencia(record?.referencia);
+        }, filters: [
+            ...listaReferenciaUnicas.map((referencia) => ({
+                text: referencia,
+                value: referencia,
+            })),
+        ], onFilter: (value, record) => {
+            return String(record.referencia).toUpperCase() === String(value).toUpperCase();
+        } },
         { title: 'Detalles', dataIndex:'detalle', key:'detalles', width: 100},
-        { title: 'Talla', dataIndex:'talla', key:'talla', width: 65 },
-        { title: 'Color', dataIndex:'color', key:'color', width: 70 },
-        { title: 'Cantidad', dataIndex:'cantidad', key:'cantidad', width: 90 },
-        { title: 'Restante', dataIndex:'cantidad_producida', key:'cantidad_producida', width: 90 },
-        { title: 'Estado', dataIndex:'estado', key:'estado', render: (estado) => establecerEstados(estado), width: 100  },
+        { title: 'Talla', dataIndex:'talla', key:'talla', width: 80, filters: [
+            ...listaTallaUnicas.map((talla) => ({
+                text: talla,
+                value: talla,
+            })),
+        ], onFilter: (value, record) => {
+            return String(record.talla).toUpperCase() === String(value).toUpperCase();
+        } },
+        { title: 'Color', dataIndex:'color', key:'color', width: 135, filters: [
+            ...listaColoresUnicos.map((color) => ({
+                text: color,
+                value: color,
+            })),
+        ], onFilter: (value, record) => {
+            return String(record.color).toUpperCase() === String(value).toUpperCase();
+        } },
+        { title: 'Cantidad', dataIndex:'cantidad', key:'cantidad', width: 90, onCell: () => {
+            return { style: { background: '#5fbf4f'} }
+        } },
+        { title: 'Restante', dataIndex:'cantidad_producida', key:'cantidad_producida', width: 90, onCell: (record) => {
+            return colorPorRestante(record?.cantidad, record?.cantidad_producida);
+        } },
+        { title: 'Estado', dataIndex:'estado', key:'estado', render: (estado) => establecerEstados(estado), width: 100 },
+        { title: 'Comentarios', dataIndex:'comentarios', key:'comentarios', width: 300},
         { title: 'Días de trabajo', dataIndex:'DiasDeTrabajo', key:'cantidad_producida', width: 90 },
-        { title: 'Fecha de inicio', dataIndex:'fecha_inicio', key:'fecha', width: 110 },
-        { title: 'Fecha de actualización', dataIndex:'fecha_final', key:'fecha', width: 116 },
+        { title: 'Fecha de entrada', dataIndex:'fecha_inicio', key:'fecha', width: 110, sorter: (a, b) => {
+            const fechaA = moment(a.fecha_inicio, 'YYYY-MM-DD');
+            const fechaB = moment(b.fecha_inicio, 'YYYY-MM-DD');
+            return fechaA.diff(fechaB);
+        }, defaultSortOrder: 'descend' },
+        { title: 'Fecha de entrada a planta', dataIndex:'fecha_ingresoPlanta', key:'fecha', width: 110},
+        { title: 'Fecha de salida a planta', dataIndex:'fecha_salidaPlanta', key:'fecha', width: 110},
+        { title: 'Fecha de despacho', dataIndex:'fecha_final', key:'fecha', width: 116},
         { title: 'Acciones', dataIndex:'acciones', key:'acciones', render:(text, record) => (
             <div className='d-flex gap-1'>
              <Button variant='primary' onClick={() => abrirModal(record)}><EditOutlined /></Button>
@@ -123,18 +204,6 @@ const ListaProduccion = () => {
             </div>
         ), width: 89, fixed: 'right' },
     ]
-    // MANEJO DEL ESTADO DE LA SOLICITUD
-    if (status === 'pending') {
-        return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>
-      }
-    
-    if (status === 'error') {
-        return <Alert variant='danger'>Error: {error.message}</Alert>;
-    }
-    if (loading) return (
-        <Spin tip="Cargando..."><div></div></Spin>
-    );
-    if (error) return <Alert variant="danger">Ha ocurrido un error</Alert>
     return (
         <>
         {mensajeDeExito && <Alert variant="success">{mensajeDeExito}</Alert>}
@@ -168,6 +237,10 @@ const ListaProduccion = () => {
                         <Form.Control onChange={(e) => setColor(e.target.value)} type="text" defaultValue={informacionModal?.color} />
                     </Form.Group>
                     <Form.Group>
+                        <Form.Label>Comentarios</Form.Label>
+                        <Form.Control onChange={(e) => setComentario(e.target.value)} as='textarea' rows={3} placeholder="Ingrese comentarios" defaultValue={informacionModal?.comentarios} />
+                    </Form.Group>
+                    <Form.Group>
                         <Form.Label>Actualizar estado <Form.Text>(Actual: {establecerEstados(informacionModal?.estado)})</Form.Text></Form.Label>
                         <Form.Select onChange={(e) => setEstado(e.target.value)} disabled={informacionModal?.estado === 2  ? true : false}>
                             <option>Seleccionar</option>
@@ -182,6 +255,9 @@ const ListaProduccion = () => {
                     </Form.Group>
                 </Modal.Body>
                 <Modal.Footer>
+                    <div>
+                        <Button variant='warning' onClick={() => actualizarRegistroOperacion({id: informacionModal?.odp_id, tipo: 1})}>Marcar en planta</Button>
+                    </div>
                     <Button variant='secondary' onClick={cerrarModal}>Cerrar</Button>
                     <Button variant='primary' type='submit'>Actualizar</Button>
                 </Modal.Footer>

@@ -80,9 +80,10 @@ const RegistrarDespacho = () => {
         }
     })
     const ordenesDeProduccion = produccion.filter((dato) => dato.estado === 1 || dato.estado === 3).map((datos) => {
+        console.log();
         return {
             opd_id: datos.odp_id,
-            orden_produccion: datos.orden_produccion,
+            orden_produccion: `${datos.orden_produccion}-T${datos.talla}-${datos.color}`,
         }
     })
    // ENVIAR DATOS AL CONTEXTO
@@ -247,7 +248,7 @@ const RegistrarDespacho = () => {
                     Reiniciar formulario
                 </Button>
             </Form.Group>
-                {despachos.map((despacho, index) => {
+                {despachos.map((despacho, index) => { 
                     return (
                         <div key={index} className={`noImprimir border ${despacho.estado === 1 ? 'bg-success border-secondary' : 'bg bg-primary bg-opacity-50 border-primary' } p-2 rounded border-2`}>
                             <Form.Group className={`noImprimir `}>
@@ -259,7 +260,7 @@ const RegistrarDespacho = () => {
                                             <option value={orden.opd_id} key={orden.opd_id}>{orden.orden_produccion}</option>
                                         )
                                     })}
-                                    </Form.Select>
+                                </Form.Select>
                             </Form.Group>
                             <Form.Group className='noImprimir '>
                                 <Form.Label>Unidades a despachar</Form.Label>

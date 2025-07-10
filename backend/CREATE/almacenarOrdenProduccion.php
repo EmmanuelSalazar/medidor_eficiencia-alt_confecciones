@@ -14,8 +14,7 @@
         $referencia = mysqli_real_escape_string($mysqli, $datos['referencia'])?? null;
         $codBarras = (int)mysqli_real_escape_string($mysqli, $datos['codBarras'])?? null;
         $clientID = (int)mysqli_real_escape_string($mysqli, $datos['cliente'])?? null;
-
-        $odp .= "-T".$talla."-".$color;
+        $comentario = (string)mysqli_real_escape_string($mysqli, string: $datos['comentario'])?? null;
         if (empty ($odp) || empty($talla) || empty($color) || empty($cantidad) || empty($referencia) || empty($codBarras) || empty($clientID)) {
             $respuesta = [
                 'ok' => false,
@@ -25,9 +24,9 @@
             echo json_encode($respuesta);
             exit();
         }
-        $sql = "INSERT INTO bodega (orden_produccion, ref_id, client_id, codigoBarras, detalle, talla, color, cantidad, cantidad_producida, modulo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO bodega (orden_produccion, ref_id, client_id, codigoBarras, detalle, talla, color, cantidad, cantidad_producida, modulo, comentarios) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $mysqli->prepare($sql);
-        $stmt->bind_param('ssiisssiii', $odp, $referencia, $clientID, $codBarras, $detalle, $talla, $color, $cantidad, $cantidad, $modulo);
+        $stmt->bind_param('siiisssiiis', $odp, $referencia, $clientID, $codBarras, $detalle, $talla, $color, $cantidad, $cantidad, $modulo, $comentario);
         if($stmt->execute()) {
             $respuesta = [
                 'ok' => true,

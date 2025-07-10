@@ -3,7 +3,7 @@
     include_once '../config/baseDeDatos.php';
     include_once '../config/cors.php';
 
-    if($_SERVER['REQUEST_METHOD'] == 'PUT'){
+    if($_SERVER['REQUEST_METHOD'] === 'PUT'){
         $datos = json_decode(file_get_contents('php://input'), true);
         $odpID = (int)$datos['odpID']?? NULL;
         $odp = $datos['odp']?? NULL;
@@ -11,6 +11,7 @@
         $color = $datos['color'] ?? NULL;
         $estado = (int)$datos['estado']?? NULL;
         $detalle = $datos['detalle']?? NULL;
+        $comentario = $datos['comentario']?? NULL;
         if (empty($odp) || empty($talla) || empty($color) || empty($detalle)) {
             $response =[
                 'ok' => 'false',
@@ -19,9 +20,9 @@
             echo json_encode($response);
             exit();
         }
-        $sql = "UPDATE bodega SET orden_produccion = ?, detalle = ?, talla = ?, color = ?, estado = ? WHERE odp_id = ?";
+        $sql = "UPDATE bodega SET orden_produccion = ?, detalle = ?, talla = ?, color = ?, estado = ?, comentarios = ? WHERE odp_id = ?";
         $stmt = $mysqli->prepare($sql);
-        $stmt->bind_param("sssssi", $odp, $detalle, $talla, $color, $estado, $odpID);
+        $stmt->bind_param("ssssssi", $odp, $detalle, $talla, $color, $estado, $comentario, $odpID);
         if($stmt->execute()){
             // Actualizar el estado de las otras ordenes de produccion del mismo modulo
             if($estado === 1) {

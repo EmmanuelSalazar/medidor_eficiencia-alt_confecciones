@@ -8,6 +8,7 @@
                 b.orden_produccion,
                 b.client_id,
                 bc.nombre AS cliente,
+                b.ref_id,
                 b.talla,
                 COALESCE(b.detalle, "N/A") AS detalle,
                 b.codigoBarras,
@@ -17,6 +18,10 @@
                 b.fecha_inicio,
                 b.fecha_final,
                 b.cantidad_producida,
+                COALESCE(b.comentarios, "N/A") AS comentarios,
+
+                b.fecha_ingresoPlanta,
+                b.fecha_salidaPlanta,
                 r.referencia,
                 r.modulo,
                 ROUND(

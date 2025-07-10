@@ -72,7 +72,7 @@
     $sql .= "GROUP BY
             O.op_id, O.nombre -- Agrupa por nombre para evitar ambigüedades
         ORDER BY
-            O.op_id DESC; ";
+            O.posicion ASC; ";
 
             $stmt = $mysqli->prepare($sql);
         try {
