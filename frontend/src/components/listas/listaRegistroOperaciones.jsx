@@ -12,12 +12,12 @@ const ListaRegistroOperaciones = () => {
     const { fetchData, data } = EliminarRegistroOperacion();
     const { actualizarRegistroOperacion } = ActualizarRegistroOperacion();
     const { lista, setModulo } = React.useContext(ListaContexto);
-    const { lista:listaRegistros, status, error, actualizarLista } = useContext(ListaContext);
+    const { lista:listaRegistros, status, error, actualizarLista, total, setPagina, pagina } = useContext(ListaContext);
     //
     const [visible, setVisible] = useState(false);
     const [registroSeleccionado, setRegistroSeleccionado] = useState("");
-    const [pagina, setPagina] = useState(1);
-    // Almacenar Formulario
+/*     const [pagina, setPagina] = useState(1);
+ */    // Almacenar Formulario
     const referenciaRef = useRef();
     const unidadesProducidasRef = useRef();
     const horarioRef = useRef();
@@ -142,7 +142,7 @@ const ListaRegistroOperaciones = () => {
                         Editar
                     </ButtonBS>
                     <Popconfirm title="Eliminar registro" description="¿Estás seguro de eliminar este registro?" onConfirm={() => handleDelete(record.regProd_id)} okText="Sí" cancelText="No" >
-                    <ButtonBS variant="danger">Eliminar</ButtonBS>
+                        <ButtonBS variant="danger">Eliminar</ButtonBS>
                     </Popconfirm>
                 </span>
             ),
@@ -150,7 +150,7 @@ const ListaRegistroOperaciones = () => {
          }
     ];
     const horariosJson = horarios;
-    if (status === 'loading') return (
+    if (status === 'pending') return (
         <Spin tip="Cargando..."><div></div></Spin>
     );
     if (error) return <Alert variant="danger">Ha ocurrido un error</Alert>
@@ -160,7 +160,7 @@ const ListaRegistroOperaciones = () => {
             {mensajeDeAlerta && <Alert variant="warning">{mensajeDeAlerta}</Alert>}
             {mensajeDeError && <Alert variant="danger">{mensajeDeError}</Alert>}
             <Table dataSource={listaRegistros} columns={columns} rowKey="reg_id" scroll={{y: 520}} pagination={false}/>
-            <Pagination onChange={paginacion} />
+            <Pagination total={total} pageSize={50} showSizeChanger={false} current={pagina} onChange={(page) => setPagina(page)} />
             <Modal show={visible} onHide={handleCancel}>
                 <Modal.Header closeButton>
                     <Modal.Title>Editar Registro</Modal.Title>

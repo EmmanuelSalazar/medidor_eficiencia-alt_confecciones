@@ -20,7 +20,6 @@
             echo json_encode($respuesta, JSON_PRETTY_PRINT);
             exit();
         }
-
         $sql = "SELECT
     O.nombre AS NombreOperario,
     COALESCE(SUM(RP.unidadesProducidas), 0) AS TotalUnidadesProducidas,
@@ -72,7 +71,7 @@
     $sql .= "GROUP BY
             O.op_id, O.nombre -- Agrupa por nombre para evitar ambigüedades
         ORDER BY
-            O.op_id DESC; ";
+            O.posicion ASC; ";
 
             $stmt = $mysqli->prepare($sql);
         try {

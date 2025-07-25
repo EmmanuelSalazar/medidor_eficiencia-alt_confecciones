@@ -11,8 +11,10 @@ export const ListaProvider = ({ children }) => {
   const [lista, setLista] = useState([]);
   const [fechaInicio, setFechaInicio] = useState(fechaActualDia);
   const [fechaFin, setFechaFin] = useState(fechaActualDia);
+  const [total, setTotal] = useState();
+  const [pagina, setPagina] = useState(1);
   // RECIBIR DATOS DEL HOOK
-  const { data, status, error, reload } = useMostrarRegistroOperaciones(modulo, fechaInicio, fechaFin);
+  const { data, status, error, reload } = useMostrarRegistroOperaciones(modulo, fechaInicio, fechaFin, pagina);
   // RECARGAR DATOS
   const actualizarLista = async () => {
     try {
@@ -35,23 +37,30 @@ export const ListaProvider = ({ children }) => {
       actualizarLista();
   }, [fechaInicio, fechaFin]);
   useEffect(() => {
+    actualizarLista();
+  },[pagina])
+
+  useEffect(() => {
     if(data) {
+      let totalModulo = data?.totalModulos.filter((item) => item.modulo === modulo);
+      setTotal(totalModulo[0]?.total);
       if(data.length === 0) {
         setLista([]);
       } else {
         if(modulo === 0) {
-          setLista(data.sort((a, b) => a.modulo - b.modulo))
+          setLista(data?.datos.sort((a, b) => a.modulo - b.modulo))
         } else {
-          setLista(data.filter((lista) => lista.modulo === modulo));
+          setLista(data?.datos.filter((lista) => lista.modulo === modulo));
         }
       }
     } else {
         setLista([]);
+        setTotal(0);
     }
   },[modulo, data])
 
   return (
-    <ListaContext.Provider value={{ status, error, actualizarLista, setModulo, lista, setFechaInicio, setFechaFin }}>
+    <ListaContext.Provider value={{ status, error, actualizarLista, setModulo, lista, setFechaInicio, setFechaFin, total, pagina, setPagina }}>
       {children}
     </ListaContext.Provider>
   );

@@ -23,12 +23,18 @@ require_once '../config/baseDeDatos.php';
     $remisionFormateada = str_pad($numeroRemision, 3, '0', STR_PAD_LEFT);
     $query = "SELECT
         b.orden_produccion,
-        SUM(unidadesDespachadas),
+        r.referencia,
+        b.detalle,
+        b.color,
+        b.talla,
+        SUM(unidadesDespachadas + segundasDespachadas) as total_unidades,
         br.numeroDeRemision
     FROM
         `bodega_remision` br
     JOIN bodega b ON
         b.odp_id = br.odp_id
+    JOIN referencias r ON
+		r.ref_id = b.ref_id
     WHERE
         br.numeroDeRemision = ?
     GROUP BY
@@ -45,6 +51,10 @@ require_once '../config/baseDeDatos.php';
         <thead>
             <tr>
                 <th>Orden de produccion</th>
+                <th>Referencia</th>
+                <th>Detalle</th>
+                <th>Color</th>
+                <th>Talla</th>
                 <th>Unidades despachadas</th>
             </tr>
         </thead>
@@ -53,10 +63,14 @@ require_once '../config/baseDeDatos.php';
                 ?>
                     <tr>
                         <td><?=$registro['orden_produccion']?></td>
-                        <td><?=$registro['SUM(unidadesDespachadas)']?></td>
+                        <td><?=$registro['referencia']?></td>
+                        <td><?=$registro['detalle']?></td>
+                        <td><?=$registro['color']?></td>
+                        <td><?=$registro['talla']?></td>
+                        <td><?=$registro['total_unidades']?></td>
                     </tr>
                 <?php
-            }   
+            }
         ?>
     </table>
     <?php

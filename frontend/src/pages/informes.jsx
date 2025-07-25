@@ -47,6 +47,7 @@ function Informes() {
         { label: 'Modulo 1', value: '1', icon: <InfoCircleFilled /> },
         { label: 'Modulo 2', value: '2', icon: <InfoCircleFilled />},
         { label: 'Modulo 3', value: '3', icon: <InfoCircleFilled /> },
+        { label: 'Otros', value: '4', icon: <InfoCircleFilled /> },
     ]
 
     return (
@@ -90,6 +91,16 @@ function Informes() {
                     <Row>
                         <ListaRegistroOperacionesResumido modulo={seccion} fechaInicio={fechaInicio} fechaFin={fechaFin} />
                     </Row>
+
+                    {seccion === 4 &&
+                        <Row className="mt-5">
+                            <h4>Auditoría</h4>
+                            <ListaRegistroOperacionesResumido modulo={5} fechaInicio={fechaInicio} fechaFin={fechaFin} />
+                            <span className="text-muted">La meta de auditoría se mide de esta forma: <strong>134</strong> (Unidades por hora) <strong>* 9.1</strong> (tiempo de trabajo) * <strong>(Dias trabajados en la quincena)</strong></span>
+                            <span className="text-muted">Las unidades producidas resultan de la suma de ambas auditorías</span>
+
+                        </Row>
+                    }
                     {/* <Row className="justify-content-center">
                         <EstadisticaInforme modulo={seccion} fechaFin={fechaFin} fechaInicio={fechaInicio} />
                     </Row> */}

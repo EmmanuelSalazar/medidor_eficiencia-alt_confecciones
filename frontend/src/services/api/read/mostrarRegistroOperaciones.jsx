@@ -1,14 +1,15 @@
 import axios from 'axios';
 import FechaActual from "../../../components/fechaActual";
-const FetchRegistrosOperaciones = async (modulo, fecha_inicio, fecha_final) => {
+const FetchRegistrosOperaciones = async (modulo, fecha_inicio, fecha_final, pagina) => {
     const apiURL = import.meta.env.VITE_API_URL;
     const { fechaActualDia } = FechaActual();
     let moduloSeleccionado = modulo?? null
     let fechaInicioSeleccionada = fecha_inicio?? fechaActualDia
     let fechaFinSeleccionada = fecha_final?? fechaActualDia
-
+    let paginaSeleccionada = pagina?? 1;
     try {
-        const response = await axios.get(`${apiURL}/READ/mostrarRegistroOperaciones.php?fecha_inicio=${fechaInicioSeleccionada}&fecha_fin=${fechaFinSeleccionada}&modulo=${moduloSeleccionado}`)
+        const response = await axios.get(`${apiURL}/READ/mostrarRegistroOperaciones.php?fecha_inicio=${fechaInicioSeleccionada}&fecha_fin=${fechaFinSeleccionada}&modulo=${moduloSeleccionado}&page=${paginaSeleccionada}`)
+        console.log(response);
         if (response.data.ok) {
             return response.data.respuesta
         } else {

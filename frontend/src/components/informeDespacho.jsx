@@ -60,7 +60,6 @@ const InformeDespacho = () => {
         despachosConsolidados = consolidarDespachos(despachos);
       }, [despachos]);
       // Uso:
-
     return (
         <>  
             <Row className='d-flex justify-content-between imprimir mb-2'>

@@ -6,7 +6,6 @@ export const ListaContext = createContext();
 export const ListaProvider = ({ children }) => {
  const { data, status, error, reload } = useMostrarReferencias();
  const location = useLocation();
- 
   // VOLVER A CARGAR TODOS LOS OPERARIOS
   const [lista, setLista] = useState([]);
   const [modulo, setModulo] = useState(9999);

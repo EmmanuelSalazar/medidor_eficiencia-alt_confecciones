@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 // FUNCION PARA OBTENER DATOS
-const FetchProduccion = async () => {
+const FetchProduccion = async (pagina) => {
     const apiURL = import.meta.env.VITE_API_URL;
-    const query = await axios.get(`${apiURL}/READ/mostrarProduccion.php`);
+    const query = await axios.get(`${apiURL}/READ/mostrarProduccion.php?pagina=${pagina}`);
     if (query.data.ok) {
         return query.data.respuesta;
     } else {

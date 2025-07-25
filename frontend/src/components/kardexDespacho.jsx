@@ -11,7 +11,7 @@ const KardexDespacho = () => {
     const [infoProduccion, setInfoProduccion] = useState([]);
     let fechaActual = new Date()
     const actualizarKardex = () => {
-        setInfoProduccion(produccion.filter((prod) => prod.client_id === cliente).map((prod) => {
+        setInfoProduccion(produccion?.datos?.filter((prod) => prod.client_id === cliente).map((prod) => {
             let orden = prod.orden_produccion;
             let referencia = prod.referencia;
             let color = prod.color;

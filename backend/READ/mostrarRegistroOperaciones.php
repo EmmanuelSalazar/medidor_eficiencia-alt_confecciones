@@ -2,6 +2,13 @@
 require_once '../config/cors.php';
 require_once '../config/baseDeDatos.php';
 require_once '../config/cortes.php';
+$page = 1;
+$limit = 50;
+if (isset($_GET['page'])) {
+    $page = $_GET['page'];
+}
+$offset = ($page - 1) * $limit;
+
 $respuesta = [
     "ok" => false,
     "respuesta" => []
@@ -109,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $sql .= " AND TIME(RP.fecha) <= '$horaFin:59'";
     }
 
-    $sql .= " ORDER BY regProd_id DESC";
+    $sql .= " ORDER BY regProd_id DESC LIMIT $limit OFFSET $offset";
 
     // Ejecutar la consulta
     $stmt = $mysqli->prepare($sql);
@@ -154,11 +161,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             ];
         }
         $respuesta["ok"] = true;
-        $respuesta["respuesta"] = $datosCompuestos;
-        
+        $respuesta["respuesta"]['datos'] = $datosCompuestos;
+        $sql = "SELECT RP.modulo AS modulo, COUNT(*) AS total FROM registro_produccion RP ";
+        if ($fechaInicio && $fechaFin) {
+        $sql .= 'WHERE ';
+        $sql .= "DATE(RP.fecha) BETWEEN '$fechaInicio 00:00:00' AND '$fechaFin 23:59:59'";
+    } elseif ($fechaInicio) {
+        $sql .= 'WHERE ';
+        $sql .= "DATE(RP.fecha) = '$fechaInicio'";
+    } elseif ($fechaFin) {
+        $sql .= 'WHERE ';
+        $sql .= "DATE(RP.fecha) = '$fechaFin'";
+    }
+        $sql .= 'GROUP BY RP.modulo';
+        $stmt = $mysqli->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $totalModulos = [];
+        while ($row = $result->fetch_assoc()) {
+            $totalModulos[] = [
+                "modulo" => $row['modulo'],
+                "total" => $row['total'],
+            ];
+        }
+        $respuesta["respuesta"]['totalModulos'] = $totalModulos;
     } else {
         $respuesta["ok"] = true;
-        $respuesta["respuesta"] = ["No se encontraron resultados."];
+        $respuesta["respuesta"]['datos'] = ["No se encontraron resultados."];
+        $respuesta["respuesta"]['total'] = 0;
     }
 
     // Devolver la respuesta como JSON
