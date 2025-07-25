@@ -15,9 +15,9 @@
             exit();
         }
         if($tipo === 1) {
-            $sql = 'UPDATE bodega SET fecha_ingresoPlanta = ? WHERE odp_id = ?';
+            $sql = 'UPDATE bodega SET fecha_ingresoPlanta = ?, temporal = 1 WHERE odp_id = ?';
         } elseif($tipo === 2) {
-            $sql = 'UPDATE bodega SET fecha_salidaPlanta = ? WHERE odp_id = ?';
+            $sql = 'UPDATE bodega SET fecha_salidaPlanta = ?, temporal = 2 WHERE odp_id = ?';
         }
         $stmt = $mysqli->prepare($sql);
         $stmt->bind_param("si", $fecha, $id);

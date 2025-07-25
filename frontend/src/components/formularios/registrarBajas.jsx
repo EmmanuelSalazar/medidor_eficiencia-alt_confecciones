@@ -85,7 +85,7 @@ const RegistrarBajas = () => {
             nombre: datos.nombre
         }
     })
-    const ordenesDeProduccion = produccion.filter((dato) => dato.estado === 1 || dato.estado === 3).map((datos) => {
+    const ordenesDeProduccion = produccion?.datos?.filter((dato) => dato.estado === 1 || dato.estado === 3).map((datos) => {
         return {
             opd_id: datos.odp_id,
             orden_produccion: datos.orden_produccion,

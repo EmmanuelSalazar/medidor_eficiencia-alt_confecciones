@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Row, Col, Button, Collapse } from 'react-bootstrap';
 import { ReloadOutlined, VerticalAlignMiddleOutlined } from '@ant-design/icons';
 import RegistrarProduccion from '../components/formularios/registrarProduccion';
@@ -8,14 +9,25 @@ import { useState } from 'react';
 function Bodega() {
     const { reload } = useMostrarProduccion();
     const [visible, setVisible] = useState(true);
+    const [size, setSize] = useState(8)
+    useEffect(() => {
+        if(visible) {
+            setSize(8)
+        } else {
+            setTimeout(() => {
+            setSize(visible ? 8 : 11);
+        }, 250);
+        }
+        
+    }, [visible]);
     return (
         <div className='mx-1'>
-            <Row className='my-2'>
+            {/* <Row className='my-2'>
                 <Col className='text-center'>
                     <h1>Bodega</h1>
                 </Col>
-            </Row>
-            <Row>
+            </Row> */}
+            <Row className='my-2'>
                 <Col className='mb-3' lg={1}>
                     <Row>
                         <div className="d-flex flex-column gap-1">
@@ -31,7 +43,7 @@ function Bodega() {
                     </ListaProvider>
                     </Col>
                 </Collapse>
-                <Col lg={visible ? 8 : 11}>
+                <Col lg={size}>
                     <ListaProduccion />
                 </Col>
             </Row>

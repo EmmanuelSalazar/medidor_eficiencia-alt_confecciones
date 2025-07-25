@@ -13,10 +13,10 @@ const RegistrarProduccion = () => {
     const { lista, setModulo } = useContext(ListaContext);
     const { reload, data: produccion } = useMostrarProduccion();
     if(produccion) {
-        var listaColores = produccion.map((item) => {
-        return item.color;
-    })
-        var listaDetalles = produccion.map((item) => {
+        var listaColores = produccion?.datos?.map((item) => {
+            return item.color;
+        })
+        var listaDetalles = produccion?.datos?.map((item) => {
                 return item.detalle
         })
     }
@@ -70,7 +70,7 @@ const RegistrarProduccion = () => {
     }
     return (
         <>
-            <Form  style={{height: '80vh', overflow: 'auto'}} className='d-flex flex-column gap-2 bg bg-primary p-2 rounded text-light scrollBar'  ref={formRef} onSubmit={alEnviar}>
+            <Form  style={{height: '85vh', overflow: 'auto'}} className='d-flex flex-column gap-2 bg bg-primary p-2 rounded text-light scrollBar'  ref={formRef} onSubmit={alEnviar}>
                 <Form.Group>
                     <Form.Label>Orden de produccion</Form.Label>
                     <Form.Control className='selectCustom' placeholder='999999' type="text" ref={odpRef} />

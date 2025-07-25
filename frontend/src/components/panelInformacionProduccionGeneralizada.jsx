@@ -10,7 +10,7 @@ const PanelInformacionProduccionGeneralizada = () => {
         return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
     }
     const infoProduccion =  () => {
-        let informacionFiltrada = data.filter((datos) => datos.modulo === moduloEnLaUrl && datos.estado == 1 || datos.estado == 3)
+        let informacionFiltrada = data?.datos?.filter((datos) => datos.modulo === moduloEnLaUrl && datos.estado == 1 || datos.estado == 3)
         // TOTAL DE DÍAS DE TRABAJO DISPONIBLES
         let diasArray = informacionFiltrada.map((datos) => parseFloat(datos.DiasDeTrabajo));
         let diasTotales = diasArray.reduce((a,b) => a + b, 0);

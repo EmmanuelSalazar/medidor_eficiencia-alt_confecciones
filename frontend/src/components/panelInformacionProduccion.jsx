@@ -13,7 +13,7 @@ const InformacionProduccion = () => {
 
     function infoProduccion() {
         // FILTRAR POR MODULO
-       const datos = data.filter((datos) => datos.modulo === modulo && datos.estado === 1);
+       const datos = data?.datos?.filter((datos) => datos.modulo === modulo && datos.estado === 1);
        var datosFiltrados
         // VERTIFICAR SI HAY O NO DATOS
        if (datos.length === 0) {

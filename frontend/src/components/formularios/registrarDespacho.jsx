@@ -79,7 +79,7 @@ const RegistrarDespacho = () => {
             nombre: datos.nombre
         }
     })
-    const ordenesDeProduccion = produccion.filter((dato) => dato.estado === 1 || dato.estado === 3).map((datos) => {
+    const ordenesDeProduccion = produccion?.datos?.filter((dato) => dato.estado === 1 || dato.estado === 3).map((datos) => {
         console.log();
         return {
             opd_id: datos.odp_id,
@@ -101,7 +101,7 @@ const RegistrarDespacho = () => {
     const alCambiarOdp = (despachoId, odpId) => {
         const despachosActualizados = despachos.map((despacho) => {
             if (despacho.id === despachoId && despacho.estado === 0) {
-                const odpCompleta = produccion.filter((opd) => opd.odp_id === parseInt(odpId))
+                const odpCompleta = produccion?.datos?.filter((opd) => opd.odp_id === parseInt(odpId))
                 return { ...despacho, odp_id: odpId, informacionODP: odpCompleta }
             }
             return despacho;
@@ -264,7 +264,7 @@ const RegistrarDespacho = () => {
                             </Form.Group>
                             <Form.Group className='noImprimir '>
                                 <Form.Label>Unidades a despachar</Form.Label>
-                                <Form.Control disabled  className={`bg ${despacho.estado === 1 ? '' : 'bg-primary bg-opacity-75 text-white'}`} value={despacho.unidadesDespachadas}  ref={unidadesRef} onChange={(e) => alCambiarUnidades(despacho.id, e.target.value, 1)} type="number"  placeholder="Ingresa las unidades a despachar" required />
+                                <Form.Control   className={`bg ${despacho.estado === 1 ? '' : 'bg-primary bg-opacity-75 text-white'}`} value={despacho.unidadesDespachadas}  ref={unidadesRef} onChange={(e) => alCambiarUnidades(despacho.id, e.target.value, 1)} type="number"  placeholder="Ingresa las unidades a despachar" required />
                             </Form.Group>
                             <Form.Group >
                                 <Form.Label>Segundas</Form.Label>

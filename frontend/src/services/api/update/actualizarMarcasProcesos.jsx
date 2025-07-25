@@ -9,7 +9,9 @@ const ActualizarMarcasDeProcesos = () => {
     const actualizarRegistroOperacion = useCallback(async (values) => {
       let informacion = values ?? {};
         try {
-          const response = await axios.put(`${apiURL}/UPDATE/actualizarMarcasProcesos.php`, informacion);          // Validar estructura de respuesta
+            setLoading(true)
+          const response = await axios.put(`${apiURL}/UPDATE/actualizarMarcasProcesos.php`, informacion);
+          // Validar estructura de respuesta
           if (response.data.ok) {
             setData(response.data.respuesta);
             return response.data.respuesta; // Array garantizado
@@ -20,11 +22,13 @@ const ActualizarMarcasDeProcesos = () => {
         } catch (error) {
           console.error("Error al realizar la solicitud:", error);
           throw error;
+        } finally {
+            setLoading(false)
         }
       }, [apiURL]);
         useEffect(() => {
             actualizarRegistroOperacion();
         }, [actualizarRegistroOperacion]);
-        return {datos, error, actualizarRegistroOperacion}
+        return {datos, error, actualizarRegistroOperacion, loading}
 }
 export default ActualizarMarcasDeProcesos;

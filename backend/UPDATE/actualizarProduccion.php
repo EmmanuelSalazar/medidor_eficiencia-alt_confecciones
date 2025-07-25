@@ -12,17 +12,18 @@
         $estado = (int)$datos['estado']?? NULL;
         $detalle = $datos['detalle']?? NULL;
         $comentario = $datos['comentario']?? NULL;
+        $codigoBarras = $datos['codigoBarras']?? NULL;
         if (empty($odp) || empty($talla) || empty($color) || empty($detalle)) {
             $response =[
-                'ok' => 'false',
+                'ok' => false,
                 'respuesta' => 'Datos incompletos'
             ];
             echo json_encode($response);
             exit();
         }
-        $sql = "UPDATE bodega SET orden_produccion = ?, detalle = ?, talla = ?, color = ?, estado = ?, comentarios = ? WHERE odp_id = ?";
+        $sql = "UPDATE bodega SET orden_produccion = ?, detalle = ?, talla = ?, color = ?, estado = ?, comentarios = ?, codigoBarras = ? WHERE odp_id = ?";
         $stmt = $mysqli->prepare($sql);
-        $stmt->bind_param("ssssssi", $odp, $detalle, $talla, $color, $estado, $comentario, $odpID);
+        $stmt->bind_param("ssssssii", $odp, $detalle, $talla, $color, $estado, $comentario, $codigoBarras, $odpID);
         if($stmt->execute()){
             // Actualizar el estado de las otras ordenes de produccion del mismo modulo
             if($estado === 1) {
@@ -40,7 +41,7 @@
                         $stmt->close();
                     } else {
                         $responde = [
-                            'ok' => 'false',
+                            'ok' => false,
                         'respuesta' => 'No se pudo actualizar'
                         ];
                         http_response_code(500);
@@ -48,7 +49,7 @@
                     }   
                 } else {
                     $responde = [
-                        'ok' => 'false',
+                        'ok' => false,
                       'respuesta' => 'No se pudo actualizar'
                     ];
                     http_response_code(500);
@@ -57,7 +58,7 @@
                 
             } else {
                 $responde = [
-                    'ok' => 'true',
+                    'ok' => true,
                     'respuesta' => 'Datos actualizados'
                 ];
                 http_response_code(200);
@@ -66,7 +67,7 @@
             
         } else {
             $responde = [
-                'ok' => 'false',
+                'ok' => false,
                'respuesta' => 'No se pudo actualizar'
             ];
             http_response_code(500);
@@ -74,7 +75,7 @@
         }
     } else {
         $responde = [
-            'ok' => 'false',
+            'ok' => false,
           'respuesta' => 'Metodo no permitido'
         ];
         http_response_code(405);

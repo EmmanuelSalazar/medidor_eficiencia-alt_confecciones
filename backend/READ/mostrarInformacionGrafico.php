@@ -11,7 +11,7 @@ require_once '../config/cortes.php';
         $fecha = date('Y-m-d');
         $cortes = obtenerCorte($fecha);
     }
-    $query = "SELECT
+    $query = "SELECT 
             o.nombre AS operario,
             ROUND(
                 COALESCE(

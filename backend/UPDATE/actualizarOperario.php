@@ -154,7 +154,7 @@ function recalculaMetas($mysqli, $modulo) {
         $updateQuery = "
             UPDATE metas
             JOIN referencias ON metas.ref_id = referencias.ref_id
-            SET metas.meta = FLOOR((546 * ?) / referencias.tiempoDeProduccion)
+            SET metas.meta = FLOOR((522 * ?) / referencias.tiempoDeProduccion)
             WHERE referencias.modulo = ? AND referencias.activo = 1
         ";
         $stmt = $mysqli->prepare($updateQuery);

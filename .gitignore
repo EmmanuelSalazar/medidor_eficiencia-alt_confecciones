@@ -7,3 +7,5 @@
 /backend/COPIA DE SEGURIDAD
 /backend/DESARROLLO-EMERGENCIA
 node_modules
+/backend/vendor
+.vscode

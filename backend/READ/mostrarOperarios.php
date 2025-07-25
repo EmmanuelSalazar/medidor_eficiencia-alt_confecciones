@@ -1,7 +1,6 @@
 <?php 
 require_once '../config/cors.php';
 require_once '../config/baseDeDatos.php';
-
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {  
     $redux = isset($_GET["redux"]) && $_GET["redux"] === "true"; // Verificar si redux es true            // Consulta especial cuando redux=true y no hay filtro de módulo
 
@@ -47,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             'respuesta' => 'Error al preparar la consulta'
         ];
         header('Content-Type: application/json');
-        echo json_encode($respuesta, JSON_PRETTY_PRINT);
+        echo json_encode($respuesta, true);
         exit;
     }
 

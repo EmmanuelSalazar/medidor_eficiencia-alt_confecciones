@@ -3,6 +3,9 @@
     require_once '../config/cors.php';
     
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+        $pagina = (int)$_GET['pagina'];
+        $limite = 100;
+        $offset = ($pagina - 1) * $limite;
         $sql = 'SELECT
                 b.odp_id,
                 b.orden_produccion,
@@ -19,7 +22,7 @@
                 b.fecha_final,
                 b.cantidad_producida,
                 COALESCE(b.comentarios, "N/A") AS comentarios,
-
+                b.temporal,
                 b.fecha_ingresoPlanta,
                 b.fecha_salidaPlanta,
                 r.referencia,
@@ -39,14 +42,24 @@
             ORDER BY
                 b.odp_id
             DESC
-            LIMIT 100';
+            LIMIT ?
+            OFFSET ?';
     $stmt = $mysqli->prepare($sql);
+    $stmt->bind_param("ii", $limite, $offset);
     if($stmt->execute()) {
             $resultado = $stmt->get_result();
             $bodega = $resultado->fetch_all(MYSQLI_ASSOC);
+            $sql = 'SELECT COUNT(*) AS total FROM bodega';
+            $stmt = $mysqli->prepare($sql);
+            $stmt->execute();
+            $resultado = $stmt->get_result();
+            $total = $resultado->fetch_assoc()['total'];
             $respuesta = [
                 'ok' => true,
-                'respuesta' => $bodega
+                'respuesta' => [
+                    'total' => $total,
+                    'datos' => $bodega
+                ]
             ];
             http_response_code(200);
             echo json_encode($respuesta, true);

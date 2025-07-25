@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Table, Tag, Spin, Popconfirm } from 'antd'
+import { Table, Tag, Spin, Popconfirm, Pagination } from 'antd'
 import { Alert, Button, Modal, Form } from 'react-bootstrap'
 import useMostrarProduccion from '../../hooks/mostrarProduccion.hook';
 import ActualizarMarcasDeProcesos from '../../services/api/update/actualizarMarcasProcesos';
@@ -10,25 +10,37 @@ import { colorPorReferencia, colorPorRestante } from './../utils/colorCeldas.lis
 import { coloresUnicos } from '../utils/coloresUnicos';
 import moment from 'moment';
 const ListaProduccion = () => {
-    const { data, status, error, reload } = useMostrarProduccion();
-    const { actualizarRegistroOperacion } = ActualizarMarcasDeProcesos();
+    // PAGINACION
+    const [pagina, setPagina] = useState(1);
+    const { data, status, error, reload } = useMostrarProduccion(pagina);    
+    /* useEffect(() => {
+        const actualizarDatos = async () => {
+            await reload();
+        }
+    }, [pagina]) */
+    //
+    const { actualizarRegistroOperacion, loading:updating } = ActualizarMarcasDeProcesos();
     if(data) {
-        var listaColores = data.map((item) => {
+        var listaColores = data?.datos.map((item) => {
             return item.color;
         });
         var listaColoresUnicos = coloresUnicos(listaColores);
-        var listaTallas = data.map((item) => {
+        var listaTallas = data?.datos.map((item) => {
             return item.talla;
         })
         var listaTallaUnicas = coloresUnicos(listaTallas);
-        var listaReferencias = data.map((item) => {
+        var listaReferencias = data?.datos.map((item) => {
             return item.referencia;
         })
         var listaReferenciaUnicas = coloresUnicos(listaReferencias);
-        var listaClientes = data.map((item) => {
+        var listaClientes = data?.datos.map((item) => {
             return item.cliente;
         })
         var listaClienteUnicas = coloresUnicos(listaClientes);
+         var listaOrdenProduccion = data?.datos.map((item) => {
+            return item.orden_produccion;
+        })
+        var listaOrdenProduccionUnicas = coloresUnicos(listaOrdenProduccion);
     }
     const { fetchData } = EliminarOrdenProduccion();
     const [mostrarModal, setMostrarModal] = useState(false);
@@ -40,7 +52,8 @@ const ListaProduccion = () => {
     const [odpID, setOdpID] = useState();
     const [detalle, setDetalle] = useState();
     const [referencia, setReferencia] = useState();
-    const [comentario, setComentario] = useState();
+    const [comentario, setComentario] = useState(null);
+    const [codigoBarras, setCodigoBarras] = useState();
     const { actualizarProduccion } = ActualizarProduccion();
     const [informacionModal, setInformacionModal] = useState();
     // MANEJO DE ALERTAS EXITO/ALERTA/ERROR
@@ -83,11 +96,13 @@ const ListaProduccion = () => {
             color: color,
             estado: estado,
             detalle: detalle,
-            comentario: comentario,
+            comentario: comentario?.length > 0 ? comentario : null,
+            codigoBarras: codigoBarras?.length > 0 ? codigoBarras : null,
         }
         try {
-            await actualizarProduccion(values)
-            setMensajeDeExito("El registro se ha actualizado exitosamente");
+            const response = await actualizarProduccion(values);
+            if(response?.ok) throw new Error(response?.respuesta);
+            setMensajeDeExito("La orden de producción se ha actualizado exitosamente");
             setMostrarModal(false);
             await reload();
             setOdp("");
@@ -97,13 +112,48 @@ const ListaProduccion = () => {
             setOdpID("");
             setReferencia("");
             setDetalle("");
-
+            setComentario("");
+            setCodigoBarras("");
+            setMostrarModal(false);
         } catch (error) {
-            setMensajeDeError("Ha ocurrido un error al actualizar el registro, si el error persiste, contacta al administrativo");
+            setMensajeDeError("Ha ocurrido un error al actualizar el registro, si el error persiste, contacta al administrador");
             console.log(error)
+            reload();
         } finally {
             setLoading(false);
         }
+    }
+    const actualizarMarca = async (record) => {
+        if(record.tipo === 1) {
+            if(window.confirm("¿Estás seguro que deseas dejar la marca de que esta orden de produccion ya está en planta?")) {
+             setLoading(true)
+            try {
+                await actualizarRegistroOperacion(record)
+                window.alert('Se ha generado un cambio en la marca, ahora se encuentra en planta :)');
+                await reload();
+            } catch (error) {
+                console.log(error)
+                setMensajeDeError(error || "Ha ocurrido un error al actualizar el registro, si el error persiste, contacta al administrativo");
+            } finally {
+                setLoading(false)
+            }
+        }
+        } else {
+            if(window.confirm("¿Estás seguro que deseas dejar la marca de que esta orden de produccion ya salió de la planta?")) {
+             setLoading(true)
+            try {
+                await actualizarRegistroOperacion(record)
+                window.alert('Se ha generado un cambio en la marca, ahora se encuentra lista para despacho :)');
+                await reload();
+            } catch (error) {
+                console.log(error)
+                setMensajeDeError(error || "Ha ocurrido un error al actualizar el registro, si el error persiste, contacta al administrativo");
+            } finally {
+                setLoading(false)
+            }
+        }
+        }
+       
     }
     const establecerEstados = (estado) => {
         switch (estado) {
@@ -130,13 +180,13 @@ const ListaProduccion = () => {
  */        }
     }
     // MANEJO DEL ESTADO DE LA SOLICITUD
-    if (status === 'pending') {
+    if (status === 'pending' ) {
         return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>
       }
     if (status === 'error') {
         return <Alert variant='danger'>Error: {error.message}</Alert>;
     }
-    if (loading) return (
+    if (loading || updating) return (
         <Spin tip="Cargando..."><div></div></Spin>
     );
     if (error) return <Alert variant="danger">Ha ocurrido un error</Alert>
@@ -150,7 +200,16 @@ const ListaProduccion = () => {
         ], onFilter: (value, record) => {
             return String(record.cliente).toUpperCase() === String(value).toUpperCase();
         } },
-        { title: 'Orden de produccion', dataIndex: 'orden_produccion', key: 'orden_produccion', width: 150 },
+        { title: 'Orden de produccion', dataIndex: 'orden_produccion', key: 'orden_produccion', width: 150,
+            filters: [
+                ...listaOrdenProduccionUnicas.map((orden) => ({
+                    text: orden,
+                    value: orden,
+                })),
+            ], onFilter: (value, record) => {
+                return String(record.orden_produccion).toUpperCase() === String(value).toUpperCase();
+            }
+         },
         { title: 'Referencia', dataIndex: 'referencia', key: 'referencia', width: 120, onCell: (record) => {
             return colorPorReferencia(record?.referencia);
         }, filters: [
@@ -209,7 +268,8 @@ const ListaProduccion = () => {
         {mensajeDeExito && <Alert variant="success">{mensajeDeExito}</Alert>}
         {mensajeDeAlerta && <Alert variant="warning">{mensajeDeAlerta}</Alert>}
         {mensajeDeError && <Alert variant="danger">{mensajeDeError}</Alert>}
-        <Table rowKey='odp_id' columns={columns} dataSource={data}  scroll={{y: 600}} pagination={false}/>
+        <Table rowKey='odp_id' columns={columns} dataSource={data?.datos}  scroll={{y: 600}} pagination={false}/>
+        <Pagination current={pagina} onChange={(value) => setPagina(value)} total={data?.total} pageSize={100} showSizeChanger={false} />
         <Modal show={mostrarModal} onHide={cerrarModal}>
             <Modal.Header closeButton>
                 <Modal.Title>Editar registro</Modal.Title>
@@ -227,6 +287,10 @@ const ListaProduccion = () => {
                     <Form.Group>
                         <Form.Label>Detalle</Form.Label>
                         <Form.Control onChange={(e) => setDetalle(e.target.value)} type="text" defaultValue={informacionModal?.detalle} />
+                    </Form.Group>
+                    <Form.Group>
+                        <Form.Label>Codigo de barras</Form.Label>
+                        <Form.Control onChange={(e) => setCodigoBarras(e.target.value)} type="text" defaultValue={informacionModal?.codigoBarras} />
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Talla</Form.Label>
@@ -254,12 +318,16 @@ const ListaProduccion = () => {
                         </Form.Text>
                     </Form.Group>
                 </Modal.Body>
-                <Modal.Footer>
+                <Modal.Footer className='d-flex justify-content-between '>
                     <div>
-                        <Button variant='warning' onClick={() => actualizarRegistroOperacion({id: informacionModal?.odp_id, tipo: 1})}>Marcar en planta</Button>
+                        {informacionModal?.temporal === 0 ? <Button variant='warning' onClick={() => actualizarMarca({id: informacionModal?.odp_id, tipo: 1})}>Marcar entrada a planta</Button> : null}
+                        {informacionModal?.temporal === 1 ? <Button variant='success' onClick={() => actualizarMarca({id: informacionModal?.odp_id, tipo: 2})}>Marcar salida a planta</Button> : null}
+                        {informacionModal?.temporal === 2 && <Button variant='success' disabled>Esta orden ya está en despacho</Button>}
                     </div>
-                    <Button variant='secondary' onClick={cerrarModal}>Cerrar</Button>
-                    <Button variant='primary' type='submit'>Actualizar</Button>
+                    <div className='d-flex gap-1'>
+                        <Button variant='secondary' onClick={cerrarModal}>Cerrar</Button>
+                        <Button variant='primary' type='submit'>Actualizar</Button>
+                    </div>
                 </Modal.Footer>
             </Form>
         </Modal>

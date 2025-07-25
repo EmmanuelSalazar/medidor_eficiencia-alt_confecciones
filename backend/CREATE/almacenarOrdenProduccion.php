@@ -15,7 +15,7 @@
         $codBarras = (int)mysqli_real_escape_string($mysqli, $datos['codBarras'])?? null;
         $clientID = (int)mysqli_real_escape_string($mysqli, $datos['cliente'])?? null;
         $comentario = (string)mysqli_real_escape_string($mysqli, string: $datos['comentario'])?? null;
-        if (empty ($odp) || empty($talla) || empty($color) || empty($cantidad) || empty($referencia) || empty($codBarras) || empty($clientID)) {
+        if (empty ($odp) || empty($talla) || empty($color) || empty($cantidad) || empty($referencia) || empty($clientID)) {
             $respuesta = [
                 'ok' => false,
                 'respuesta' => 'Formulario incompleto'

@@ -8,15 +8,15 @@
     $fechongas -= 1;
     $fechongas = $cortesJson[$fechongas];
     $fechaDia = $fecha[2] ?? date('d');
-    if ($fechaDia < 15) {
+    if ($fechaDia <= 15) {
         $fechaCorteInicial = date("Y-"). $fechongas["primerCorte"][0]["fechaInicial"];
         $fechaCorteFinal =  date("Y-"). $fechongas["primerCorte"][0]["fechaFinal"];
-        return $fechasDeCortes = [$fechaCorteInicial, $fechaCorteFinal];
+        return [$fechaCorteInicial, $fechaCorteFinal];
 
     } else {
         $fechaCorteInicial = date("Y-"). $fechongas["segundoCorte"][0]["fechaInicial"];
         $fechaCorteFinal =  date("Y-"). $fechongas["segundoCorte"][0]["fechaFinal"];
-        return $fechasDeCortes = [$fechaCorteInicial, $fechaCorteFinal];
+        return [$fechaCorteInicial, $fechaCorteFinal];
     }
 }
 

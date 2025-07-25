@@ -27,7 +27,7 @@ require_once '../config/baseDeDatos.php';
         b.detalle,
         b.color,
         b.talla,
-        SUM(unidadesDespachadas),
+        SUM(unidadesDespachadas + segundasDespachadas) as total_unidades,
         br.numeroDeRemision
     FROM
         `bodega_remision` br
@@ -67,7 +67,7 @@ require_once '../config/baseDeDatos.php';
                         <td><?=$registro['detalle']?></td>
                         <td><?=$registro['color']?></td>
                         <td><?=$registro['talla']?></td>
-                        <td><?=$registro['SUM(unidadesDespachadas)']?></td>
+                        <td><?=$registro['total_unidades']?></td>
                     </tr>
                 <?php
             }
