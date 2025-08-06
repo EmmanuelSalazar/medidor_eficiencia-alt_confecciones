@@ -101,7 +101,6 @@ const ListaOperarios = () => {
 
     if (status === 'loading') return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
     if (error) return <Alert variant='danger'>Error: {error.message}</Alert>;
-    console.log(lista)
     return (
         <div>
             {mensajeDeExito && <Alert variant="success">{mensajeDeExito}</Alert>}

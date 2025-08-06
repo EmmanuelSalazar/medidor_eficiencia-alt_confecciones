@@ -52,8 +52,8 @@ function Informes() {
 
     return (
         <Container>
-            <Alert className="noImprimir" variant="warning">Esta funcion se encuentra en mantenimiento, por lo que puedes encontrar algunos errores y/o fallas</Alert>
-            <Row className="my-3">
+{/*             <Alert className="noImprimir" variant="warning">Esta funcion se encuentra en mantenimiento, por lo que puedes encontrar algunos errores y/o fallas</Alert>
+ */}            <Row className="my-3">
                 <Col className="noImprimir" lg={4}>
                     <Row className="mb-5">
                         <h1>Modulo {seccion}</h1>

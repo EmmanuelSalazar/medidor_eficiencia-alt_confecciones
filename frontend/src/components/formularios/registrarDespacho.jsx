@@ -264,7 +264,9 @@ const RegistrarDespacho = () => {
                             </Form.Group>
                             <Form.Group className='noImprimir '>
                                 <Form.Label>Unidades a despachar</Form.Label>
-                                <Form.Control   className={`bg ${despacho.estado === 1 ? '' : 'bg-primary bg-opacity-75 text-white'}`} value={despacho.unidadesDespachadas}  ref={unidadesRef} onChange={(e) => alCambiarUnidades(despacho.id, e.target.value, 1)} type="number"  placeholder="Ingresa las unidades a despachar" required />
+                                <Form.Control   className={`bg ${despacho.estado === 1 ? '' : 'bg-primary bg-opacity-75 text-white'}`} value={despacho?.unidadesDespachadas > 0 ? despacho.unidadesDespachadas : ''}  ref={unidadesRef} onChange={(e) => alCambiarUnidades(despacho.id, e.target.value, 1)} type="number"  placeholder="Ingresa las unidades a despachar" required />
+
+
                             </Form.Group>
                             <Form.Group >
                                 <Form.Label>Segundas</Form.Label>
