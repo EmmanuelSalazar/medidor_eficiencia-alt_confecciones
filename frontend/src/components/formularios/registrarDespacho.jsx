@@ -33,7 +33,7 @@ const RegistrarDespacho = () => {
     }, [mensajeDeExito, mensajeDeAlerta, mensajeDeError]);
     // CONTEXTOS
     const { data } = useMostrarClientes();
-    const { data: produccion } = useMostrarProduccion();
+    const { data: produccion } = useMostrarProduccion(1, 1);
     const { setCliente, setObservaciones, despachos, setDespachos, setSumatoriaUnidades, numeroRemision, cliente } = useContext(PlantillaDespachoContext);
 
     // ACTUALIZAR UNIDADES POR EL CODIGO DE BARRAS
@@ -80,8 +80,8 @@ const RegistrarDespacho = () => {
         }
     })
     const ordenesDeProduccion = produccion?.datos?.filter((dato) => dato.estado === 1 || dato.estado === 3).map((datos) => {
-        console.log();
-        return {
+/*         console.log(datos);
+ */        return {
             opd_id: datos.odp_id,
             orden_produccion: `${datos.orden_produccion}-T${datos.talla}-${datos.color}`,
         }
@@ -169,7 +169,7 @@ const RegistrarDespacho = () => {
     const cargarDatosCliente = (e) => {
         let seleccionado = parseInt(e.target.value);
         if (seleccionado === 0) {
-            setMensajeDeAlerta("Debes seleccionar una opción valida")
+            setMensajeDeAlerta("Debes seleccionar una opci├│n valida")
             return;
         } else {
             const informacionCliente = data.filter((cliente) => {
@@ -252,9 +252,9 @@ const RegistrarDespacho = () => {
                     return (
                         <div key={index} className={`noImprimir border ${despacho.estado === 1 ? 'bg-success border-secondary' : 'bg bg-primary bg-opacity-50 border-primary' } p-2 rounded border-2`}>
                             <Form.Group className={`noImprimir `}>
-                                <Form.Label>Selecciona la orden de producción</Form.Label>
+                                <Form.Label>Selecciona la orden de producci├│n</Form.Label>
                                 <Form.Select className={`bg ${despacho.estado === 1 ? '' : 'bg-primary bg-opacity-75 text-white'}`} disabled={despacho.estado === 1 ? true : false} id={index + 1} ref={odpRef} onChange={(e) => alCambiarOdp(despacho.id, e.target.value)} required>
-                                        <option value={0} className='disabled'>Selecciona una orden de producción</option>
+                                        <option value={0} className='disabled'>Selecciona una orden de producci├│n</option>
                                     {ordenesDeProduccion.map((orden) => {
                                         return (
                                             <option value={orden.opd_id} key={orden.opd_id}>{orden.orden_produccion}</option>
@@ -264,7 +264,7 @@ const RegistrarDespacho = () => {
                             </Form.Group>
                             <Form.Group className='noImprimir '>
                                 <Form.Label>Unidades a despachar</Form.Label>
-                                <Form.Control   className={`bg ${despacho.estado === 1 ? '' : 'bg-primary bg-opacity-75 text-white'}`} value={despacho?.unidadesDespachadas > 0 ? despacho.unidadesDespachadas : ''}  ref={unidadesRef} onChange={(e) => alCambiarUnidades(despacho.id, e.target.value, 1)} type="number"  placeholder="Ingresa las unidades a despachar" required />
+                                <Form.Control disabled className={`bg ${despacho.estado === 1 ? '' : 'bg-primary bg-opacity-75 text-white'}`} value={despacho?.unidadesDespachadas > 0 ? despacho.unidadesDespachadas : ''}  ref={unidadesRef} onChange={(e) => alCambiarUnidades(despacho.id, e.target.value, 1)} type="number"  placeholder="Ingresa las unidades a despachar" required />
                             </Form.Group>
                             <Form.Group >
                                 <Form.Label>Segundas</Form.Label>
@@ -275,7 +275,7 @@ const RegistrarDespacho = () => {
                                 <Form.Control disabled={despacho.estado === 1 ? true : false} ref={bajasRef} onChange={(e) => unidadesBajas(despacho.id, e.target.value)} className={`mb-2 bg ${despacho.estado === 1 ? '' : 'bg-primary bg-opacity-75 text-white'}`}  type='number' placeholder='# de bajas' />
                             </Form.Group>
                             <div className='noImprimir d-flex align-items-center mt-2 gap-3 justi'>
-                                <Tooltip title="Este número representa la posicion de la caja en la remisión">
+                                <Tooltip title="Este n├║mero representa la posicion de la caja en la remisi├│n">
                                     <Form.Text className='bg bg-warning text-dark rounded py-1 px-2'>
                                         #{index + 1}
                                     </Form.Text>
@@ -299,7 +299,7 @@ const RegistrarDespacho = () => {
                     })}  
             <Form.Group className='noImprimir d-flex gap-2'>
                 <Button variant="secondary" onClick={agregarDespacho}>
-                <PlusOutlined/> <span >Añadir orden</span>
+                <PlusOutlined/> <span >A├▒adir orden</span>
                 </Button>
             </Form.Group>
             <Form.Group className='noImprimir'>

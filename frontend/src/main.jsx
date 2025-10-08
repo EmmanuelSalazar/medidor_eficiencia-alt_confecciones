@@ -1,6 +1,9 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ConfigProvider } from 'antd'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './assets/css/styles.css'
+import './assets/css/custom.scss'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import es_ES from 'antd/locale/es_ES'; // Importa el idioma español
 import dayjs from 'dayjs';

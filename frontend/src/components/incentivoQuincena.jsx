@@ -60,7 +60,7 @@ const IncentivoQuincena = () => {
     const PanelCompleto = () => {
         return (<Stack style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
                   <div className="p-2"><h4><strong>BENEFICIO</strong></h4></div>
-                  <Stack direction="horizontal" gap={2} className="mb-2">
+                  <Stack direction="horizontal" gap={2} className="mb-2 d-flex justify-content-center">
                     <div className={`p-2 rounded bg-dark numeroConPorcentaje`}><strong className="beneficios">{beneficio}</strong></div>
                     <div className={`p-2 rounded bg-dark numeroConPorcentaje`}><strong className="beneficios">{porcentajeEstatico}</strong></div>
                   </Stack>

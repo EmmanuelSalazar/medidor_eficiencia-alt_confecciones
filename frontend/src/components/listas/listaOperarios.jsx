@@ -74,9 +74,9 @@ const ListaOperarios = () => {
     const columns = [
         { title: 'ID', dataIndex: 'op_id', key: 'op_id', width: 65 },
         { title: 'Nombre', dataIndex: 'nombre', key: 'nombre', width: 100 },
-        { title: 'Módulo', dataIndex: 'modulo', key: 'modulo', width: 83},
+        { title: 'Modulo', dataIndex: 'modulo', key: 'modulo', width: 83},
         { title: 'Estado', dataIndex: 'estado', key: 'estado', width: 76 },
-        { title: 'Revisor', dataIndex: 'revisor', key: 'revisor', width: 100 },
+        { title: 'Rol', dataIndex: 'Rol', key: 'rol', width: 100 },
         {
             title: 'Acciones',
             key: 'acciones',
@@ -87,7 +87,7 @@ const ListaOperarios = () => {
                         Editar
                     </Button>
                     <Popconfirm
-                    title="Eliminar operario" description="¿Estás seguro de eliminar este operario?" onConfirm={() => handleDelete(record.op_id)} okText="Sí" cancelText="No">
+                    title="Eliminar operario" description="┬┐Est├ís seguro de eliminar este operario?" onConfirm={() => handleDelete(record.op_id)} okText="S├¡" cancelText="No">
                         <Button variant="danger" className="mx-1 mb-1">
                             Eliminar
                         </Button>
@@ -123,7 +123,7 @@ const ListaOperarios = () => {
                                 <Form.Control type="text" defaultValue={operarioSeleccionado.nombre} required ref={nombreOperarioRef}/>
                             </Form.Group>
                             <Form.Group className="mb-3">
-                                <Form.Label>Módulo</Form.Label>
+                                <Form.Label>M├│dulo</Form.Label>
                                 <Form.Control type="number" defaultValue={operarioSeleccionado.modulo} required ref={moduloRef}/>
                             </Form.Group>
                             <Form.Group className="mb-3">
@@ -154,7 +154,7 @@ const ListaOperarios = () => {
                             <Form.Group className="mb-3">
                                     <Form.Label>Posicion del operario</Form.Label>
                                     <Form.Select ref={posicionRef}>
-                                        <option>Seleccionar posición</option>    
+                                        <option>Seleccionar posici├│n</option>    
                                         {lista.map((item, index) => {
                                             return (
                                                 <option key={item.op_id} value={index+1}>{index+1}</option>

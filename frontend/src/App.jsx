@@ -1,8 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './assets/css/styles.css'
-import './assets/css/custom.scss'
+
 import Tablero from './pages/tableros'
 import Referencias from './pages/referencias'
 import Operarios from "./pages/operarios";

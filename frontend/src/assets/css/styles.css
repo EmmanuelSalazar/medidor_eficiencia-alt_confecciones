@@ -1,3 +1,6 @@
+html, body {
+    overscroll-behavior-y: contain;
+}
 #root {
     width: 100%;
 }
@@ -40,7 +43,7 @@
 }
 .numeroConPorcentaje {
     width: 100%;
-    text-align: CENTER;
+    text-align: center;
 }
 .beneficios {
     font-size: 35px;
@@ -71,8 +74,8 @@
     overflow-wrap: anywhere;
 }
 .listaRotulos {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: grid!important;
+    grid-template-columns: repeat(2, 1fr)!important;
     gap: 1rem;
     max-height: 60vh;
     overflow-y: auto;
@@ -88,7 +91,7 @@
 }
 @media print {
     .noImprimir {
-        display: none;
+        display: none!important;
     }
     body {
         margin: 0;
