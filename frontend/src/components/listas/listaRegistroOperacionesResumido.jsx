@@ -3,13 +3,12 @@ import { Table, Spin } from "antd";
 import { Alert } from "react-bootstrap";
 import useRegistroOperacionesResumido from "../../hooks/mostrarRegistroOperacionesResumido.hook";
 import FechaActual from "../fechaActual";
-const ListaRegistroOperacionesResumido = ({ modulo, fechaInicio, fechaFin }) => {
+const ListaRegistroOperacionesResumido = ({ modulo, fechaInicio, fechaFin, datos = [{}] }) => {
     const { obtenerCortes } = FechaActual();
     const cortes = obtenerCortes();
     const fechaInicioSeleccionada = fechaInicio || cortes.fechaInicio;
     const fechaFinSeleccionada = fechaFin || cortes.fechaFinal;
 
-    const { data, status, error } = useRegistroOperacionesResumido(modulo, fechaInicioSeleccionada, fechaFinSeleccionada);
     const columns = [
         { title: 'Nombre', dataIndex: 'NombreOperario', key: 'nombre', width: 300 },
         { title: 'Total UND', dataIndex: 'TotalUnidadesProducidas', key: 'totalUnidades', width: 165},
@@ -20,15 +19,9 @@ const ListaRegistroOperacionesResumido = ({ modulo, fechaInicio, fechaFin }) => 
         { title: 'Modulo 3', dataIndex: 'modulo_3', key: 'modulo3', width: 100 },
         { title: 'Modulo 4', dataIndex:'modulo_4', key:'modulo4', width: 100 },
     ]
-    if (status === 'pending') {
-        return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>
-      }
     
-    if (status === 'error') {
-        return <Alert variant='danger'>Error: {error.message}</Alert>;
-    }
     return (
-        <Table columns={columns} dataSource={data} pagination={false} size="small" />
+        <Table columns={columns} dataSource={datos} pagination={false} size="small" />
     )
 }
 export default ListaRegistroOperacionesResumido;

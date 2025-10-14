@@ -1,13 +1,13 @@
 <?php 
-require 'rutas.php';
-require '../vendor/autoload.php';
+require __DIR__ . '/rutas.php';
+require  __DIR__ . '/../vendor/autoload.php';
 use Dotenv\Dotenv;
 $dotenv = Dotenv::createImmutable(ROOT_PATH);
 $dotenv->load();
-    $host = $_ENV['DB_HOST'] ?: /* 'srv449.hstgr.io' */ 'localhost';
-    $user = $_ENV['DB_USER'] ?: /* 'u125170969_medidor' */ 'root';
-    $password = $_ENV['DB_PASSWORD'] ?: /* '7OSOX$0V:v' */ '';
-    $dbname = $_ENV['DB_NAME'] ?: /* 'u125170969_eficiencia' */ 'eficiencia_desarrollo';
+    $host = $_ENV['DB_HOST'] ?: /* 'srv449.hstgr.io' */ 'srv449.hstgr.io';
+    $user = $_ENV['DB_USER'] ?: /* 'u125170969_medidor' */ 'u125170969_medidor';
+    $password = $_ENV['DB_PASSWORD'] ?: /* '7OSOX$0V:v' */ 'gstf>tM6I8!';
+    $dbname = $_ENV['DB_NAME'] ?: /* 'u125170969_eficiencia' */ 'u125170969_eficiencia';
 date_default_timezone_set('America/Bogota');
 $mysqli = new mysqli($host, $user, $password, $dbname);
 if ($mysqli->connect_errno) {

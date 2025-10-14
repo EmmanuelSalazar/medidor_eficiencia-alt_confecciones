@@ -11,17 +11,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                     o.modulo,
                     o.activo,
                     o.posicion,
-                    o.revisador,
+                    o.rol,
                     CASE 
                         WHEN activo = 1 THEN 'Activo'
                         WHEN activo = 0 THEN 'Inactivo'
                         ELSE 'desconocido'
                     END AS estado,
                     CASE
-                        WHEN revisador = 1 THEN 'Revisador/a'
-                        WHEN revisador = 0 THEN 'Operario/a'
+                        WHEN rol = 1 THEN 'Operario/a'
+                        WHEN rol = 2 THEN 'Revisador/a'
+                        WHEN rol = 3 THEN 'Empaquetador/a'
                         ELSE 'desconocido'
-                    END AS revisor
+                    END AS Rol
                 FROM 
                     operarios o ";
             if ($redux) {
@@ -73,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $stmt->close();
     $mysqli->close();
 } else {
-    http_response_code(400);
+    http_response_code(405);
     echo json_encode(['ok' => false, 'respuesta' => 'Método no permitido'], JSON_PRETTY_PRINT);
 }
 ?>

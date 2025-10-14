@@ -4,6 +4,7 @@ import EliminarOperario from '../../services/api/delete/eliminarOperario';
 import ActualizarOperario from '../../services/api/update/actualizarOperario';
 import { Table, Spin, Popconfirm } from 'antd';
 import { Alert, Button, Modal, Form } from 'react-bootstrap';
+import { reordenarArreglo } from './../utils/organizarArreglo';
 const ListaOperarios = () => {
     const { lista, status, error, actualizarLista } = useContext(ListaContext);
     const [mostrar, setMostrar] = useState(false);
@@ -57,8 +58,8 @@ const ListaOperarios = () => {
             "nombreOperario": nombreOperarioRef.current.value,
             "modulo": moduloRef.current.value,
             "actividad": actividadRef.current.value,
-            "revisor" : revisorRef.current.value,
-            "posicion": posicionRef.current.value
+            "rol" : revisorRef.current.value,
+            "posicion": posicionRef.current.value == 0 ? operarioSeleccionado.posicion : posicionRef.current.value
         };
         try {
             await actualizarOperario(operarioSeleccionado.op_id, false, values);
@@ -70,6 +71,16 @@ const ListaOperarios = () => {
             console.error("Ha ocurrido un error: ", error);
         }
     }
+    // ROLES
+    var roles = [
+        { value: 1, label: 'Operario/a' },
+        { value: 2, label: 'Revisador/a' },
+        { value: 3, label: 'Empaquetador/a' },
+    ];
+    // ORDENAR ROLES
+    roles = reordenarArreglo(roles, operarioSeleccionado?.rol)
+    // MARCAR POSICION
+
     // COLUMNAS DE LA TABLA
     const columns = [
         { title: 'ID', dataIndex: 'op_id', key: 'op_id', width: 65 },
@@ -123,7 +134,7 @@ const ListaOperarios = () => {
                                 <Form.Control type="text" defaultValue={operarioSeleccionado.nombre} required ref={nombreOperarioRef}/>
                             </Form.Group>
                             <Form.Group className="mb-3">
-                                <Form.Label>M├│dulo</Form.Label>
+                                <Form.Label>Módulo</Form.Label>
                                 <Form.Control type="number" defaultValue={operarioSeleccionado.modulo} required ref={moduloRef}/>
                             </Form.Group>
                             <Form.Group className="mb-3">
@@ -134,27 +145,21 @@ const ListaOperarios = () => {
                                 </Form.Select>
                             </Form.Group>
                             <Form.Group className="mb-3">
-                                <Form.Label>Revisor</Form.Label>
+                                <Form.Label>Rol</Form.Label>
                                 <Form.Select ref={revisorRef}>
                                     {
-                                    operarioSeleccionado.revisador == 1 ? (
-                                        <>
-                                            <option value="1" selected>Revisador/a</option>
-                                            <option value="0">Operario/a</option>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <option value="0" selected>Operario/a</option>
-                                            <option value="1">Revisador/a</option>
-                                        </>
-                                    )
+                                        roles.map((item) => {
+                                            return (
+                                                <option key={item.value} value={item.value}>{item.label}</option>
+                                            )
+                                        })
                                     }
                                 </Form.Select>
                             </Form.Group>
                             <Form.Group className="mb-3">
                                     <Form.Label>Posicion del operario</Form.Label>
                                     <Form.Select ref={posicionRef}>
-                                        <option>Seleccionar posici├│n</option>    
+                                        <option value="0">Seleccionar posición</option>    
                                         {lista.map((item, index) => {
                                             return (
                                                 <option key={item.op_id} value={index+1}>{index+1}</option>

@@ -22,6 +22,8 @@
         }
         $sql = "SELECT
     O.nombre AS NombreOperario,
+    RP.rol AS Rol,
+    O.Rol AS RolOperario,
     COALESCE(SUM(RP.unidadesProducidas), 0) AS TotalUnidadesProducidas,
     ROUND(COALESCE(SUM(RP.MetaPorEficiencia), 0), 0) AS TotalMeta,
     ROUND(COALESCE(AVG(RP.eficiencia), 0), 1) AS PromedioEficiencia, -- Evita NULLs

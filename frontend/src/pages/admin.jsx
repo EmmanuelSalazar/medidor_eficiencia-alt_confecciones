@@ -4,7 +4,7 @@ import { jwtDecode } from 'jwt-decode';
 import ListaUsuarios from '../components/listas/listaUsuarios';
 import AgregarUsuarios from '../components/formularios/agregarUsuarios';
 import PanelAdministrativo from '../components/modal/seleccionarOperarioContador'
-import TiempoDeMontaje from "../components/modal/ingresarTiempoDeMontaje";
+import TiempoDeMontaje from "../components/modal/ingresarTiempoDeMontaje.jsx";
 function Admin() {
     const token = localStorage.getItem('token') || null;
     const userInfo = jwtDecode(token);

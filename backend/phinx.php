@@ -14,7 +14,7 @@ return
             'host' => 'srv449.hstgr.io',
             'name' => 'u125170969_eficiencia',
             'user' => 'u125170969_medidor',
-            'pass' => '7OSOX$0V:v',
+            'pass' => '*n3qN75U3z^B',
             'port' => '3306',
             'charset' => 'utf8',
         ],
@@ -29,10 +29,10 @@ return
         ],
         'testing' => [
             'adapter' => 'mysql',
-            'host' => 'localhost',
-            'name' => 'testing_db',
-            'user' => 'root',
-            'pass' => '',
+            'host' => 'altconfecciones.local',
+            'name' => 'eficiencia_pruebas',
+            'user' => 'migracion',
+            'pass' => 'Evelynn123.',
             'port' => '3306',
             'charset' => 'utf8',
         ]

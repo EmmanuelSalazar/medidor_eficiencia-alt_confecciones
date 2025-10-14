@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import FetchRemisiones from '../services/api/read/mostrarRemisiones';
+import { FetchRemisiones } from '../services/api/read/mostrarRemisiones';
 // HOOK PARA ALMACENAR Y PROCESAR DATOS EN CACHÉ
 const useMostrarRemisiones = () => {
     const { status, data, error, refetch } = useQuery({

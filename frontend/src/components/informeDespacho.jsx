@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col, Button, Form } from 'react-bootstrap';
+import { Spin } from 'antd';
 import Logo from '../assets/img/svg/logo.svg';
 import { PlantillaDespachoContext } from '../contexts/plantillaDespacho';
 import { format } from 'date-fns';
@@ -15,7 +16,7 @@ const InformeDespacho = () => {
      // Configura el locale al montar el componente
     setFecha(format(ahora, 'PPPP', { locale: es }));
   }, []);
-    const { cliente, observaciones, despachos, fecha:fechaRegistro, numeroRemision } = useContext(PlantillaDespachoContext);
+    const { cliente, observaciones, despachos, fecha:fechaRegistro, numeroRemision, cargando } = useContext(PlantillaDespachoContext);
     let fechaRegistroFormateada = format(fechaRegistro || ahora, 'PPPP', { locale: es })
     const informacionCliente = cliente || [{ nombre: 'Nombre', nit: 'NIT', direccion: 'Direccion', ciudad: 'Ciudad', telefono: 'Telefono'}];
     let totalPrimeras = despachos.reduce((acumulador, despacho) => {
@@ -61,11 +62,14 @@ const InformeDespacho = () => {
         despachosConsolidados = consolidarDespachos(despachos);
       }, [despachos]);
       // Uso:
+    if (cargando) {
+        return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>
+    }
     return (
         <>  
             <Row className='d-flex justify-content-between imprimir mb-2'>
             <div className='noImprimir'>
-              <input type='text' placeholder='Consecutivo Inicial' onChange={(e) => setConsecutivoCaja(e.target.value)} />
+              <Form.Control type='text' placeholder='Consecutivo Inicial' onChange={(e) => setConsecutivoCaja(e.target.value || 1)} />
             </div>
                 <Col className='d-flex flex-column justify-content-center align-items-center'>
                 <Row>

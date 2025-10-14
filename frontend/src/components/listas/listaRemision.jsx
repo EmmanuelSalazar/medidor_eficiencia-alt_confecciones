@@ -4,11 +4,12 @@ import { Alert, Button } from 'react-bootstrap';
 import { EyeOutlined } from '@ant-design/icons';
 import useMostrarRemisiones from '../../hooks/mostrarRemisiones.hook';
 import useMostrarClientes from '../../hooks/mostrarClientes.hook';
+import { FetchRemisionDetallada } from '../../services/api/read/mostrarRemisiones';
 import { PlantillaDespachoContext } from '../../contexts/plantillaDespacho';
 const ListaRemision = () => {
     const { data, status, error } = useMostrarRemisiones();
     const { data:clientes } = useMostrarClientes();
-    const { setCliente, setObservaciones, setDespachos, setFecha, setNumeroRemision } = useContext(PlantillaDespachoContext);
+    const { setCliente, setObservaciones, setDespachos, setFecha, setNumeroRemision, setCargando } = useContext(PlantillaDespachoContext);
      // MANEJO DE ALERTAS EXITO/ALERTA/ERROR
      const [mensajeDeExito, setMensajeDeExito] = useState("");
      const [mensajeDeAlerta, setMensajeDeAlerta] = useState("");
@@ -23,54 +24,42 @@ const ListaRemision = () => {
              return () => clearTimeout(timer);
          }
      }, [mensajeDeExito, mensajeDeAlerta, mensajeDeError]);
+
     if (data === undefined) {
         return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>
     }
-    // REORGANIZAR Y AGRUPAR LOS DATOS
-    function agruparArreglo(datos) {
-        const grupos = datos.reduce((a, b) => {
-            const clave = b.numeroDeRemision;
-            if (!a[clave]) {
-                a[clave] = [];
-            }
-            a[clave].push(b);
-            return a;
-        }, {});
-        const arregloAgrupado = Object.keys(grupos).map(clave => {
-            const primerElemento = grupos[clave][0];
-            let unidadesPrimeras = grupos[clave].reduce((a, b) => a + b.unidadesDespachadas, 0);
-            let unidadesSegundas = grupos[clave].reduce((a, b) => a + b.segundasDespachadas, 0);
-            let unidadesBajas = grupos[clave].reduce((a, b) => a + b.bajas, 0);
-            let unidadesTotales = unidadesPrimeras + unidadesSegundas + unidadesBajas;
-            return {
-                numeroDeRemision: Number(clave),
-                orden_produccion: primerElemento.orden_produccion,
-                nombreCliente: primerElemento.nombreCliente,
-                referencia: primerElemento.referencia,
-                ordenesDespachadas: grupos[clave].length, // Obtener la longitud del grupo para obtener el número de ordenes de despachadas
-                unidadesDespachadas: unidadesTotales,
-                bajas: grupos[clave].reduce((a, b) => a + b.segundasDespachadas, 0),
-                observaciones: primerElemento.observaciones,
-                fecha: primerElemento.fecha,
-            }
-        })
-        return arregloAgrupado;
+
+    const cargarRemision = async (remision) => {
+        const remisionNumero = remision.numeroDeRemision;
+        console.log(remision)
+        var infoRemision = {
+            numeroDeRemision: remisionNumero,
+            client_id: remision.client_id,
+            fecha: remision.fecha,
+        };
+        try {
+            setCargando(true);
+            const remisionDetallada = await FetchRemisionDetallada(remisionNumero);
+            infoRemision.datosFiltrados = remisionDetallada;
+                cargarDatos(infoRemision);
+        } catch (error) {
+            setMensajeDeError(error.message);
+        } finally {
+            setCargando(false);
+        }
     }
-    // INICIAR FUNCION Y ORGANIZAR ARREGLO
-    let arregloArreglado = agruparArreglo(data);
-    arregloArreglado.sort((a,b) => b.numeroDeRemision - a.numeroDeRemision)
-    // CARGAR DATOS AL CONTEXTO
+
     const cargarDatos = (arreglo) => {
-        const datosFiltrados = data.filter((item) => item.numeroDeRemision === arreglo.numeroDeRemision);
         // DATOS DEL CLIENTE
-        const datosCliente = clientes.filter((cliente) => cliente.client_id === datosFiltrados[0].client_id)
+        const datosCliente = clientes.filter((cliente) => cliente.client_id === arreglo.client_id)
         setCliente(datosCliente)
         // CARGAR NUMERO DE REMISION
         setNumeroRemision(arreglo.numeroDeRemision);
         // OBSERVACIONES
-        setObservaciones(datosFiltrados[0].observaciones);
+        setObservaciones(arreglo.observaciones);
+        console.log(arreglo);
         // DATOS DE LAS ODP
-        const datosODP = datosFiltrados.map((dato) => {
+        const datosODP = arreglo.datosFiltrados.map((dato) => {
             return {
                 id: Date.now(),
                 odp_id: dato.odp_id,
@@ -91,7 +80,7 @@ const ListaRemision = () => {
         })
         setDespachos(datosODP)
         // FECHA
-        setFecha(datosFiltrados[0].fecha)
+        setFecha(arreglo.fecha)
         setMensajeDeExito("Los datos se han cargado correctamente");
     }
     const columns = [
@@ -103,18 +92,18 @@ const ListaRemision = () => {
         },
         {
             title: 'Cliente',
-            dataIndex: 'nombreCliente',
+            dataIndex: 'cliente',
             key: 'cliente',
             width: 100
         },
         {
             title: 'Ordenes despachadas',
-            dataIndex: 'ordenesDespachadas',
+            dataIndex: 'OrdenesDespachadas',
             key: 'unidadesDespachadas',
             width: 100
         },{
             title: 'Und. despachadas',
-            dataIndex: 'unidadesDespachadas',
+            dataIndex: 'TotalUnidadesProducidas',
             key: 'unidadesDespachd',
             width: 100
         },
@@ -138,7 +127,7 @@ const ListaRemision = () => {
             fixed: 'right',
             render: (text, record) => (
                 <Tooltip title='Ver remisión'>
-                    <Button onClick={() => cargarDatos(record)}>
+                    <Button onClick={() => cargarRemision(record)}>
                         <EyeOutlined />
                     </Button>
                 </Tooltip>  
@@ -152,7 +141,7 @@ const ListaRemision = () => {
             {mensajeDeExito && <Alert variant='success'>{mensajeDeExito}</Alert>}
             {mensajeDeAlerta && <Alert variant='warning'>{mensajeDeAlerta}</Alert>}
             {mensajeDeError && <Alert variant='danger'>{mensajeDeError}</Alert>}
-        <Table size='middle' scroll={{y: 500}} pagination={false} rowKey='numeroDeRemision' columns={columns} dataSource={arregloArreglado} />
+        <Table size='middle' scroll={{y: 500}} pagination={false} rowKey='numeroDeRemision' columns={columns} dataSource={data} />
         </>
     )
 }

@@ -81,6 +81,20 @@ html, body {
     overflow-y: auto;
     margin-bottom: 2rem;
 }
+.watermark {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 50px;
+        color: rgba(0, 0, 0, 0.1);
+        z-index: 1!important;
+        pointer-events: none;
+        opacity: 0.2;
+    }
+.z-index-2 {
+    z-index: 2!important;
+}
 @media screen and (width < 768px) {
     .tablaLimitadaLargo {
         max-height: 300px;

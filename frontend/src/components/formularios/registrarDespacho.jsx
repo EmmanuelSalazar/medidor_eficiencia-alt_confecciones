@@ -169,7 +169,7 @@ const RegistrarDespacho = () => {
     const cargarDatosCliente = (e) => {
         let seleccionado = parseInt(e.target.value);
         if (seleccionado === 0) {
-            setMensajeDeAlerta("Debes seleccionar una opci├│n valida")
+            setMensajeDeAlerta("Debes seleccionar una opción válida")
             return;
         } else {
             const informacionCliente = data.filter((cliente) => {
@@ -199,6 +199,15 @@ const RegistrarDespacho = () => {
     // ENVIAR DATOS AL BACKEND
     const enviarDatos = async (e) => {
         e.preventDefault();
+        if(clienteRef.current.value === "0"){
+            setMensajeDeAlerta("Debes seleccionar un cliente válido")
+            alert("Debes seleccionar un cliente válido");
+            return;
+        }
+        let confirmar = confirm("Una vez registrada la remisión, no se podrán modificar los datos. ¿Está seguro de que los datos son correctos?");
+        if(!confirmar){
+            return;
+        }
         const odpInfo = despachos.map((despacho) => {
                 if (despacho.modificable != 0) {
                     let odp = despacho.odp_id;
@@ -252,9 +261,9 @@ const RegistrarDespacho = () => {
                     return (
                         <div key={index} className={`noImprimir border ${despacho.estado === 1 ? 'bg-success border-secondary' : 'bg bg-primary bg-opacity-50 border-primary' } p-2 rounded border-2`}>
                             <Form.Group className={`noImprimir `}>
-                                <Form.Label>Selecciona la orden de producci├│n</Form.Label>
+                                <Form.Label>Selecciona la orden de producción</Form.Label>
                                 <Form.Select className={`bg ${despacho.estado === 1 ? '' : 'bg-primary bg-opacity-75 text-white'}`} disabled={despacho.estado === 1 ? true : false} id={index + 1} ref={odpRef} onChange={(e) => alCambiarOdp(despacho.id, e.target.value)} required>
-                                        <option value={0} className='disabled'>Selecciona una orden de producci├│n</option>
+                                        <option value={0} className='disabled'>Selecciona una orden de producción</option>
                                     {ordenesDeProduccion.map((orden) => {
                                         return (
                                             <option value={orden.opd_id} key={orden.opd_id}>{orden.orden_produccion}</option>
@@ -299,7 +308,7 @@ const RegistrarDespacho = () => {
                     })}  
             <Form.Group className='noImprimir d-flex gap-2'>
                 <Button variant="secondary" onClick={agregarDespacho}>
-                <PlusOutlined/> <span >A├▒adir orden</span>
+                    <PlusOutlined/> <span >Añadir orden</span>
                 </Button>
             </Form.Group>
             <Form.Group className='noImprimir'>

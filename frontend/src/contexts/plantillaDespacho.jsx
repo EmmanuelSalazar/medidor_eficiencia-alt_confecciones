@@ -2,6 +2,7 @@ import { createContext, useState } from 'react'
 export const PlantillaDespachoContext = createContext()
 
 export const PlantillaDespachoProvider = ({ children }) => {
+    const [cargando, setCargando] = useState(false);
     const [cliente, setCliente] = useState()
     const [observaciones, setObservaciones] = useState()
     const [odp, setOdp] = useState([])
@@ -21,7 +22,7 @@ export const PlantillaDespachoProvider = ({ children }) => {
         unidadesBajas: 0
     }])
     return (
-        <PlantillaDespachoContext.Provider value={{ cliente, setCliente, odp, setOdp, unidades, setUnidades, observaciones, setObservaciones, despachos, setDespachos, fecha, setFecha, sumatoriaUnidades, setSumatoriaUnidades, primerasConSegundas, setPrimerasConSegundas, numeroRemision, setNumeroRemision }}>
+        <PlantillaDespachoContext.Provider value={{ cliente, setCliente, odp, setOdp, unidades, setUnidades, observaciones, setObservaciones, despachos, setDespachos, fecha, setFecha, sumatoriaUnidades, setSumatoriaUnidades, primerasConSegundas, setPrimerasConSegundas, numeroRemision, setNumeroRemision, cargando, setCargando }}>
             {children}
         </PlantillaDespachoContext.Provider>
     )

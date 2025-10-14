@@ -1,37 +1,65 @@
 <?php 
     require_once '../config/baseDeDatos.php';
     require_once '../config/cors.php';
-
+    $url = $_SERVER['REQUEST_URI'];
+    $url = parse_url($url, PHP_URL_PATH);
+    $url = explode('/', $url);
+    $url = end($url);
     if($_SERVER['REQUEST_METHOD'] == 'GET'){
-        $sql = "SELECT
-                bm.rem_id AS id,
+        $remision = $_GET['remision'] ?? null;
+        if($url == 'detallarRemision') {
+            $sql = 'SELECT
                 b.orden_produccion,
+                b.codigoBarras,
+                b.client_id,
+                r.referencia,
+                b.detalle,
                 b.talla,
                 b.color,
-                b.odp_id,
-                COALESCE(b.detalle, 'N/A') AS detalle,
-                bc.nombre AS nombreCliente,
-                bm.unidadesDespachadas,
-                bm.segundasDespachadas,
-                bm.client_id,
-                COALESCE(bm.observaciones, 'N/A') AS observaciones,
-                bm.fecha,
-                r.referencia,
-                bm.numeroDeRemision,
-                bm.bajas
+                br.unidadesDespachadas,
+                br.segundasDespachadas,
+                br.bajas,
+                (
+                    unidadesDespachadas + segundasDespachadas
+                ) AS TotalDespachado
             FROM
-                `bodega_remision` bm
-            JOIN bodega_clientes bc ON
-                bm.client_id = bc.client_id
-            INNER JOIN bodega b ON
-                bm.odp_id = b.odp_id
+                bodega_remision br
+            JOIN bodega b ON
+                b.odp_id = br.odp_id
             JOIN referencias r ON
-                b.ref_id = r.ref_id
-            ORDER BY
-                bm.numeroDeRemision
-            ASC LIMIT 1000
-                ";
+                r.ref_id = b.ref_id
+            WHERE
+                br.numeroDeRemision = ?
+            GROUP BY
+                br.rem_id;
+            ';
+            $stmt = $mysqli->prepare($sql);
+            $stmt->bind_param("i", $remision);
+        } else {
+            $sql = "SELECT
+        br.numeroDeRemision,
+        bc.nombre AS cliente,
+        br.client_id,
+        COUNT(*) AS OrdenesDespachadas,
+        (
+            SUM(br.unidadesDespachadas) + SUM(segundasDespachadas) + SUM(bajas)
+        ) AS TotalUnidadesProducidas,
+        COALESCE(br.observaciones, 'N/A') AS observaciones,
+        br.fecha
+    FROM
+        `bodega_remision` br
+    JOIN bodega_clientes bc ON
+        bc.client_id = br.client_id
+    JOIN bodega b ON
+        b.odp_id = br.odp_id
+    GROUP BY
+        br.numeroDeRemision
+    ORDER BY
+        br.numeroDeRemision
+    DESC
+        ";
         $stmt = $mysqli->prepare($sql);
+        }        
         if ($stmt->execute()) {
             $resultado = $stmt->get_result();
             $respuesta = [
