@@ -18,5 +18,10 @@
     {
         "label" : "Auditoría",
         "value" : 5
+    },
+    {
+        "label" : "Otros",
+        "value" : 6
     }
+
 ]

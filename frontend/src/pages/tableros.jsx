@@ -1,49 +1,38 @@
-import React from "react";
+import { useState, useEffect } from "react";
 import { Container } from 'react-bootstrap'
 import TableroMensajes from "../components/tablero/tableroMensajes";
 import TableroGrafico from "../components/tablero/tableroGrafica";
+import { useSocketListener } from "../hooks/useSocketListener";
 function Tablero() {
-  const [pantalla, setPantalla] = React.useState(1);
-  /* 
-    const [tiempo, setTiempo] = React.useState(3600000);
-  #####################
-  DEPRECATED: Algunas funciones de este componente ya no se usan, pero se dejan para referencia en caso de que se necesite
-  #####################
-  */
- 
-    // CAMBIO DE TIEMPO
-    /* React.useEffect(() => {
-      if(pantalla === 1){
-        setTiempo(3600000);
-        setTimeout(() => {
-          cambioDePantalla();
-        }, 5000);
-      }else{
-        setTiempo(150000);
-        setTimeout(() => {
-          cambioDePantalla();
-        }, 5000);
-      }
-    },[pantalla]) */
-    // CAMBIO DE PANTALLA
-    /* const cambioDePantalla = () => {
-        const interval = setInterval(() => {
-          setPantalla((pantalla) => (pantalla === 1 ? 2 : 1));
-        }, tiempo);
-        return () => clearInterval(interval);
-    } */
-    // TABLEROS
-    const tableroPorcentajes = (
-       <TableroGrafico />
-      )
-    const tableroMensajes = (
-          <TableroMensajes />
-    )
+  const { pantallaActiva, notificacion } = useSocketListener();
+  const [isTemporario, setIsTemporario] = useState(false);
 
+  useEffect(() => {
+    let timer;
+
+    if (Number(pantallaActiva) === 2){ 
+      setIsTemporario(true);
+      timer = setTimeout(() => {
+        setIsTemporario(false);
+      }, 300000);
+    }
+    return () => {
+      clearTimeout(timer);
+    }
+  }, [pantallaActiva]);
+
+
+  const cambioDePantalla = () => {
+    if(!isTemporario){
+      return <TableroGrafico />
+    }else{
+      return <TableroMensajes notificacion={notificacion.mensaje} />
+    }
+  }
   return (
    
       <Container className="mt-2" style={{minWidth: '100%'}}>
-      {pantalla === 1 ? tableroPorcentajes : tableroMensajes}
+        {pantallaActiva ? cambioDePantalla() : <TableroGrafico />}
       </Container>
     
   )

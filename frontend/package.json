@@ -34,6 +34,7 @@
     "react-popconfirm": "^0.1.1",
     "react-router-dom": "^7.1.5",
     "react-to-print": "^3.1.0",
+    "socket.io-client": "^4.8.1",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
