@@ -283,8 +283,8 @@ const RegistrarDespacho = () => {
                                 <Form.Label>Bajas</Form.Label>
                                 <Form.Control disabled={despacho.estado === 1 ? true : false} ref={bajasRef} onChange={(e) => unidadesBajas(despacho.id, e.target.value)} className={`mb-2 bg ${despacho.estado === 1 ? '' : 'bg-primary bg-opacity-75 text-white'}`}  type='number' placeholder='# de bajas' />
                             </Form.Group>
-                            <div className='noImprimir d-flex align-items-center mt-2 gap-3 justi'>
-                                <Tooltip title="Este n├║mero representa la posicion de la caja en la remisi├│n">
+                            <div className='noImprimir d-flex align-items-center mt-2 gap-3 justify-content-start'>
+                                <Tooltip title="Este número representa la posicion de la caja en la remisión">
                                     <Form.Text className='bg bg-warning text-dark rounded py-1 px-2'>
                                         #{index + 1}
                                     </Form.Text>
