@@ -278,27 +278,27 @@ const ListaProduccion = () => {
                 <Modal.Body>
                     <Form.Group>
                         <Form.Label>Orden de produccion</Form.Label>
-                        <Form.Control onChange={(e) => setOdp(e.target.value)} type="text" defaultValue={informacionModal?.orden_produccion}/>
+                        <Form.Control required onChange={(e) => setOdp(e.target.value)} type="text" defaultValue={informacionModal?.orden_produccion}/>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Referencia</Form.Label>
-                        <Form.Control  type="text" defaultValue={informacionModal?.referencia} disabled/>
+                        <Form.Control required type="text" defaultValue={informacionModal?.referencia} disabled/>
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Detalle</Form.Label>
-                        <Form.Control onChange={(e) => setDetalle(e.target.value)} type="text" defaultValue={informacionModal?.detalle} />
+                        <Form.Control  required onChange={(e) => setDetalle(e.target.value)} type="text" defaultValue={informacionModal?.detalle} />
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Codigo de barras</Form.Label>
-                        <Form.Control onChange={(e) => setCodigoBarras(e.target.value)} type="text" defaultValue={informacionModal?.codigoBarras} />
+                        <Form.Control required onChange={(e) => setCodigoBarras(e.target.value)} type="text" defaultValue={informacionModal?.codigoBarras} />
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Talla</Form.Label>
-                        <Form.Control onChange={(e) => setTalla(e.target.value)} type="text" defaultValue={informacionModal?.talla} />
+                        <Form.Control required onChange={(e) => setTalla(e.target.value)} type="text" defaultValue={informacionModal?.talla} />
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Color</Form.Label>
-                        <Form.Control onChange={(e) => setColor(e.target.value)} type="text" defaultValue={informacionModal?.color} />
+                        <Form.Control required onChange={(e) => setColor(e.target.value)} type="text" defaultValue={informacionModal?.color} />
                     </Form.Group>
                     <Form.Group>
                         <Form.Label>Comentarios</Form.Label>

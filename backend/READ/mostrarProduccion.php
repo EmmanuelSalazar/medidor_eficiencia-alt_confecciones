@@ -5,6 +5,7 @@
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $pagina = (int)$_GET['pagina'];
         $limite = 100;
+        $activos = (bool)$_GET['activos'] ?? 0;
         $offset = ($pagina - 1) * $limite;
         $sql = 'SELECT
                 b.odp_id,
@@ -39,11 +40,13 @@
                 b.ref_id = m.ref_id
             JOIN bodega_clientes bc ON
                 bc.client_id = b.client_id
-            ORDER BY
+             ';
+            $sql .= $activos ? 'WHERE b.estado <> 2 ' : '';
+            $sql .= ' ORDER BY
                 b.odp_id
-            DESC
-            LIMIT ?
-            OFFSET ?';
+                DESC
+                LIMIT ?
+                OFFSET ?';
     $stmt = $mysqli->prepare($sql);
     $stmt->bind_param("ii", $limite, $offset);
     if($stmt->execute()) {

@@ -7,13 +7,16 @@
         "build:front": "cd frontend && npm run build"
     },
     "dependencies": {
+        "cors": "^2.8.5",
         "date-fns": "^4.1.0",
+        "express": "^5.1.0",
         "howler": "^2.2.4",
         "jspdf": "^3.0.1",
         "jwt-decode": "^4.0.0",
         "moment": "^2.30.1",
         "react-countup": "^6.5.3",
         "react-popconfirm": "^0.1.1",
-        "react-to-print": "^3.1.0"
+        "react-to-print": "^3.1.0",
+        "socket.io": "^4.8.1"
     }
 }

@@ -4,13 +4,20 @@ import { jwtDecode } from 'jwt-decode';
 import ListaUsuarios from '../components/listas/listaUsuarios';
 import AgregarUsuarios from '../components/formularios/agregarUsuarios';
 import PanelAdministrativo from '../components/modal/seleccionarOperarioContador'
-import TiempoDeMontaje from "../components/modal/ingresarTiempoDeMontaje";
+import TiempoDeMontaje from "../components/modal/ingresarTiempoDeMontaje.jsx";
+import AdminPanel from '../components/formularios/adminPanel.jsx';
+
 function Admin() {
     const token = localStorage.getItem('token') || null;
     const userInfo = jwtDecode(token);
     const userName = userInfo.nombre;
     const userRol = userInfo.rol;
     const items = [
+        {
+            key: '2',
+            label: 'Panel de control',
+            children: <AdminPanel />
+        },
         userRol > 2 ? {
             key: '1',
             label: 'Usuarios',

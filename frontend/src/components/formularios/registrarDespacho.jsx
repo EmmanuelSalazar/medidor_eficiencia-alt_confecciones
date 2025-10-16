@@ -33,7 +33,7 @@ const RegistrarDespacho = () => {
     }, [mensajeDeExito, mensajeDeAlerta, mensajeDeError]);
     // CONTEXTOS
     const { data } = useMostrarClientes();
-    const { data: produccion } = useMostrarProduccion();
+    const { data: produccion } = useMostrarProduccion(1, 1);
     const { setCliente, setObservaciones, despachos, setDespachos, setSumatoriaUnidades, numeroRemision, cliente } = useContext(PlantillaDespachoContext);
 
     // ACTUALIZAR UNIDADES POR EL CODIGO DE BARRAS
@@ -80,8 +80,8 @@ const RegistrarDespacho = () => {
         }
     })
     const ordenesDeProduccion = produccion?.datos?.filter((dato) => dato.estado === 1 || dato.estado === 3).map((datos) => {
-        console.log();
-        return {
+/*         console.log(datos);
+ */        return {
             opd_id: datos.odp_id,
             orden_produccion: `${datos.orden_produccion}-T${datos.talla}-${datos.color}`,
         }
@@ -169,7 +169,7 @@ const RegistrarDespacho = () => {
     const cargarDatosCliente = (e) => {
         let seleccionado = parseInt(e.target.value);
         if (seleccionado === 0) {
-            setMensajeDeAlerta("Debes seleccionar una opción valida")
+            setMensajeDeAlerta("Debes seleccionar una opción válida")
             return;
         } else {
             const informacionCliente = data.filter((cliente) => {
@@ -199,6 +199,15 @@ const RegistrarDespacho = () => {
     // ENVIAR DATOS AL BACKEND
     const enviarDatos = async (e) => {
         e.preventDefault();
+        if(clienteRef.current.value === "0"){
+            setMensajeDeAlerta("Debes seleccionar un cliente válido")
+            alert("Debes seleccionar un cliente válido");
+            return;
+        }
+        let confirmar = confirm("Una vez registrada la remisión, no se podrán modificar los datos. ¿Está seguro de que los datos son correctos?");
+        if(!confirmar){
+            return;
+        }
         const odpInfo = despachos.map((despacho) => {
                 if (despacho.modificable != 0) {
                     let odp = despacho.odp_id;
@@ -264,7 +273,7 @@ const RegistrarDespacho = () => {
                             </Form.Group>
                             <Form.Group className='noImprimir '>
                                 <Form.Label>Unidades a despachar</Form.Label>
-                                <Form.Control   className={`bg ${despacho.estado === 1 ? '' : 'bg-primary bg-opacity-75 text-white'}`} value={despacho.unidadesDespachadas}  ref={unidadesRef} onChange={(e) => alCambiarUnidades(despacho.id, e.target.value, 1)} type="number"  placeholder="Ingresa las unidades a despachar" required />
+                                <Form.Control disabled className={`bg ${despacho.estado === 1 ? '' : 'bg-primary bg-opacity-75 text-white'}`} value={despacho?.unidadesDespachadas > 0 ? despacho.unidadesDespachadas : ''}  ref={unidadesRef} onChange={(e) => alCambiarUnidades(despacho.id, e.target.value, 1)} type="number"  placeholder="Ingresa las unidades a despachar" required />
                             </Form.Group>
                             <Form.Group >
                                 <Form.Label>Segundas</Form.Label>
@@ -274,7 +283,7 @@ const RegistrarDespacho = () => {
                                 <Form.Label>Bajas</Form.Label>
                                 <Form.Control disabled={despacho.estado === 1 ? true : false} ref={bajasRef} onChange={(e) => unidadesBajas(despacho.id, e.target.value)} className={`mb-2 bg ${despacho.estado === 1 ? '' : 'bg-primary bg-opacity-75 text-white'}`}  type='number' placeholder='# de bajas' />
                             </Form.Group>
-                            <div className='noImprimir d-flex align-items-center mt-2 gap-3 justi'>
+                            <div className='noImprimir d-flex align-items-center mt-2 gap-3 justify-content-start'>
                                 <Tooltip title="Este número representa la posicion de la caja en la remisión">
                                     <Form.Text className='bg bg-warning text-dark rounded py-1 px-2'>
                                         #{index + 1}
@@ -299,7 +308,7 @@ const RegistrarDespacho = () => {
                     })}  
             <Form.Group className='noImprimir d-flex gap-2'>
                 <Button variant="secondary" onClick={agregarDespacho}>
-                <PlusOutlined/> <span >Añadir orden</span>
+                    <PlusOutlined/> <span >Añadir orden</span>
                 </Button>
             </Form.Group>
             <Form.Group className='noImprimir'>

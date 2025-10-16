@@ -4,6 +4,7 @@ import EliminarOperario from '../../services/api/delete/eliminarOperario';
 import ActualizarOperario from '../../services/api/update/actualizarOperario';
 import { Table, Spin, Popconfirm } from 'antd';
 import { Alert, Button, Modal, Form } from 'react-bootstrap';
+import { reordenarArreglo } from './../utils/organizarArreglo';
 const ListaOperarios = () => {
     const { lista, status, error, actualizarLista } = useContext(ListaContext);
     const [mostrar, setMostrar] = useState(false);
@@ -57,8 +58,8 @@ const ListaOperarios = () => {
             "nombreOperario": nombreOperarioRef.current.value,
             "modulo": moduloRef.current.value,
             "actividad": actividadRef.current.value,
-            "revisor" : revisorRef.current.value,
-            "posicion": posicionRef.current.value
+            "rol" : revisorRef.current.value,
+            "posicion": posicionRef.current.value == 0 ? operarioSeleccionado.posicion : posicionRef.current.value
         };
         try {
             await actualizarOperario(operarioSeleccionado.op_id, false, values);
@@ -70,13 +71,23 @@ const ListaOperarios = () => {
             console.error("Ha ocurrido un error: ", error);
         }
     }
+    // ROLES
+    var roles = [
+        { value: 1, label: 'Operario/a' },
+        { value: 2, label: 'Revisador/a' },
+        { value: 3, label: 'Empaquetador/a' },
+    ];
+    // ORDENAR ROLES
+    roles = reordenarArreglo(roles, operarioSeleccionado?.rol)
+    // MARCAR POSICION
+
     // COLUMNAS DE LA TABLA
     const columns = [
         { title: 'ID', dataIndex: 'op_id', key: 'op_id', width: 65 },
         { title: 'Nombre', dataIndex: 'nombre', key: 'nombre', width: 100 },
-        { title: 'Módulo', dataIndex: 'modulo', key: 'modulo', width: 83},
+        { title: 'Modulo', dataIndex: 'modulo', key: 'modulo', width: 83},
         { title: 'Estado', dataIndex: 'estado', key: 'estado', width: 76 },
-        { title: 'Revisor', dataIndex: 'revisor', key: 'revisor', width: 100 },
+        { title: 'Rol', dataIndex: 'Rol', key: 'rol', width: 100 },
         {
             title: 'Acciones',
             key: 'acciones',
@@ -87,7 +98,7 @@ const ListaOperarios = () => {
                         Editar
                     </Button>
                     <Popconfirm
-                    title="Eliminar operario" description="¿Estás seguro de eliminar este operario?" onConfirm={() => handleDelete(record.op_id)} okText="Sí" cancelText="No">
+                    title="Eliminar operario" description="┬┐Est├ís seguro de eliminar este operario?" onConfirm={() => handleDelete(record.op_id)} okText="S├¡" cancelText="No">
                         <Button variant="danger" className="mx-1 mb-1">
                             Eliminar
                         </Button>
@@ -101,7 +112,6 @@ const ListaOperarios = () => {
 
     if (status === 'loading') return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
     if (error) return <Alert variant='danger'>Error: {error.message}</Alert>;
-    console.log(lista)
     return (
         <div>
             {mensajeDeExito && <Alert variant="success">{mensajeDeExito}</Alert>}
@@ -135,27 +145,21 @@ const ListaOperarios = () => {
                                 </Form.Select>
                             </Form.Group>
                             <Form.Group className="mb-3">
-                                <Form.Label>Revisor</Form.Label>
+                                <Form.Label>Rol</Form.Label>
                                 <Form.Select ref={revisorRef}>
                                     {
-                                    operarioSeleccionado.revisador == 1 ? (
-                                        <>
-                                            <option value="1" selected>Revisador/a</option>
-                                            <option value="0">Operario/a</option>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <option value="0" selected>Operario/a</option>
-                                            <option value="1">Revisador/a</option>
-                                        </>
-                                    )
+                                        roles.map((item) => {
+                                            return (
+                                                <option key={item.value} value={item.value}>{item.label}</option>
+                                            )
+                                        })
                                     }
                                 </Form.Select>
                             </Form.Group>
                             <Form.Group className="mb-3">
                                     <Form.Label>Posicion del operario</Form.Label>
                                     <Form.Select ref={posicionRef}>
-                                        <option>Seleccionar posición</option>    
+                                        <option value="0">Seleccionar posición</option>    
                                         {lista.map((item, index) => {
                                             return (
                                                 <option key={item.op_id} value={index+1}>{index+1}</option>

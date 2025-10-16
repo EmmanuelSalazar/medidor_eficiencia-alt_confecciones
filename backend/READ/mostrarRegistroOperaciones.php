@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             RP.modulo,
             RP.adicionales as Comentarios,
             horario,
-            rol,
+            RP.rol,
             O.nombre AS NombreOperario,
             R.referencia AS Referencia,
             RP.unidadesProducidas,

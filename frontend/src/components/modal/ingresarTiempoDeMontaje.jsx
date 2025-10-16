@@ -31,21 +31,19 @@ const TiempoDeMontaje = () => {
         setVisible(false)
     }
     // LIMITAR TIEMPO DE MONTAJE
-     const limitarTiempo = (e) => {
-        let limiteTiempo = e.target.value;
+     const limitarTiempo = (limiteTiempo) => {
         limiteTiempo = parseInt(limiteTiempo);
-        console.log(limiteTiempo)
-        if (limiteTiempo > 30) {
-            setMensajeDeAlerta("El tiempo de montaje no puede ser mayor a 30 minutos, en caso de ser mayor, repartir en dos horarios distintos");
-            console.log("Haz alcanzado el limite")
+        if (limiteTiempo > 55) {
+            setMensajeDeAlerta("El tiempo de montaje no puede ser mayor a 55 minutos, en caso de ser mayor, repartir en dos horarios distintos");
+            return true
         } else {
-            console.log("No has alcanzado el limite")
+            return false
         }
      }
     // FUNCION PARA ENVIAR LOS DATOS DEL MODAL
     const enviarDatos = async () => {
-        if (tiempoDeMontaje.current.value > 60) {
-            setMensajeDeError("El tiempo de montaje no puede ser mayor a 60 minutos");
+        if (limitarTiempo(tiempoDeMontaje.current.value)) {
+            return setMensajeDeAlerta("El tiempo de montaje no puede ser mayor a 55 minutos, en caso de ser mayor, repartir en dos horarios distintos");;
         }
         const datos = {
             "tiempoDeMontaje": tiempoDeMontaje.current.value,
@@ -54,7 +52,6 @@ const TiempoDeMontaje = () => {
         }
         try {
             const respuesta = await AlmacenarTiempoDeMontaje(datos);
-            console.log(respuesta);
             setMensajeDeExito(respuesta)
             setTimeout(() => {
                 setVisible(false);
@@ -79,14 +76,14 @@ const TiempoDeMontaje = () => {
                     <Form>
                         <Form.Group>
                             <Form.Label>Ingresa el tiempo de montaje (Minutos)</Form.Label>
-                            <Form.Control onChange={limitarTiempo} type="number" placeholder="##" ref={tiempoDeMontaje}/>
+                            <Form.Control onChange={(e) => limitarTiempo(e.target.value)} type="number" placeholder="##" ref={tiempoDeMontaje}/>
                         </Form.Group>
                         <Form.Group>
-                            <Form.Label>Modulo el cual se verá afectado</Form.Label>
+                            <Form.Label>Modulo el cual se ver├í afectado</Form.Label>
                             <Form.Control  type="number" placeholder="Modulo" ref={moduloDeMontaje}/>
                         </Form.Group>
                         <Form.Group>
-                            <Form.Label>Horario en el que se hará el montaje</Form.Label>
+                            <Form.Label>Horario en el que se har├í el montaje</Form.Label>
                             <Form.Select ref={horarioDeMontaje}>
                                 <option value="1">7:00 AM</option>
                                 <option value="2">8:00 AM</option>

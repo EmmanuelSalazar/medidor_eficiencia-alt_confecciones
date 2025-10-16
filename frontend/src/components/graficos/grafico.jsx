@@ -2,14 +2,12 @@ import { useContext } from 'react';
 import { Bar } from 'react-chartjs-2';
 import 'chart.js/auto';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { ListaContext } from '../../contexts/informacionGrafico';
 import { Alert, Spinner } from 'react-bootstrap';
 
-const HorizontalBarChart = () => {
-    const { listaOperarios, status, error } = useContext(ListaContext);
-    const nombre_operario = listaOperarios.map(persona => `${persona.operario}  (${persona.EficienciaDelDia}%)`);
-    const totalUnidadesProducidas = listaOperarios.map(persona => persona.TotalProducido);
-    const totalMetaEficiencia = listaOperarios.map(persona => persona.TotalMeta);
+const HorizontalBarChart = ( { operatorData = [{}], incentiveData = [{}], graphicHeight = '500px', verticalFontHeight = 40 }) => {
+    const nombre_operario = operatorData.map(persona => `${persona.operario}  (${persona.EficienciaDelDia}%)`);
+    const totalUnidadesProducidas = operatorData.map(persona => persona.TotalProducido);
+    const totalMetaEficiencia = operatorData.map(persona => persona.TotalMeta);
     const calcularValorMaximo = Math.max(
       ...totalUnidadesProducidas,
       ...totalMetaEficiencia
@@ -35,7 +33,6 @@ const HorizontalBarChart = () => {
       
     ],
   };
-
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -44,7 +41,7 @@ const HorizontalBarChart = () => {
         y: {
           ticks: {
             font: {
-              size: 40,
+              size: verticalFontHeight,
               weight: 'bold'
             },
             color: 'white',
@@ -87,33 +84,12 @@ const HorizontalBarChart = () => {
 
   const styles = {
     width: '1320px',
-    height: '1000px',
+    height: graphicHeight,
     display: 'flex',
     justifyContent: 'center',
   };
 
-  if (status === 'loading') {
-    return (
-      <div style={styles}>
-        <div className="text-center">
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden">Cargando...</span>
-          </Spinner>
-          <p className="mt-2">Cargando datos...</p>
-        </div>
-      </div>
-    );
-  }
 
-  if (error) {
-    return (
-      <div style={styles}>
-        <Alert variant="danger">
-          Error al cargar los datos: {error.message}
-        </Alert>
-      </div>
-    );
-  }
   return (
     <div style={styles}>
       <Bar data={data} options={options} plugins={[ChartDataLabels]}/>

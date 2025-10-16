@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from 'react';
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col, Button, Form } from 'react-bootstrap';
+import { Spin } from 'antd';
 import Logo from '../assets/img/svg/logo.svg';
 import { PlantillaDespachoContext } from '../contexts/plantillaDespacho';
 import { format } from 'date-fns';
@@ -9,12 +10,13 @@ const InformeDespacho = () => {
   const apiURL = import.meta.env.VITE_API_URL;
   const [searchParams, setSearchParams] = useSearchParams();
     const [fecha, setFecha] = useState('');
+    const [consecutivoCaja, setConsecutivoCaja] = useState(1);
     const ahora = new Date();
     useEffect(() => {
      // Configura el locale al montar el componente
     setFecha(format(ahora, 'PPPP', { locale: es }));
   }, []);
-    const { cliente, observaciones, despachos, fecha:fechaRegistro, numeroRemision } = useContext(PlantillaDespachoContext);
+    const { cliente, observaciones, despachos, fecha:fechaRegistro, numeroRemision, cargando } = useContext(PlantillaDespachoContext);
     let fechaRegistroFormateada = format(fechaRegistro || ahora, 'PPPP', { locale: es })
     const informacionCliente = cliente || [{ nombre: 'Nombre', nit: 'NIT', direccion: 'Direccion', ciudad: 'Ciudad', telefono: 'Telefono'}];
     let totalPrimeras = despachos.reduce((acumulador, despacho) => {
@@ -26,8 +28,8 @@ const InformeDespacho = () => {
     let totalBajas = despachos.reduce((acumulador, despacho) => {
         return acumulador + despacho.unidadesBajas;
       }, 0);
-      // Función para obtener la cantidad de unidades por orden de producción 
-      // Función para consolidar los despachos
+      // Funci├│n para obtener la cantidad de unidades por orden de producci├│n 
+      // Funci├│n para consolidar los despachos
     const consolidarDespachos = (despachos) => {
         if (!Array.isArray(despachos)) return [];
         const agrupados = despachos.reduce((acumulador, despacho) => {
@@ -37,7 +39,7 @@ const InformeDespacho = () => {
       
           if (!codigoBarras) return acumulador;
           
-          // Lógica de consolidación
+          // L├│gica de consolidaci├│n
           if (acumulador[codigoBarras]) {
             acumulador[codigoBarras].unidadesDespachadas += despacho.unidadesDespachadas;
           } else {
@@ -60,22 +62,28 @@ const InformeDespacho = () => {
         despachosConsolidados = consolidarDespachos(despachos);
       }, [despachos]);
       // Uso:
+    if (cargando) {
+        return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>
+    }
     return (
         <>  
             <Row className='d-flex justify-content-between imprimir mb-2'>
+            <div className='noImprimir'>
+              <Form.Control type='text' placeholder='Consecutivo Inicial' onChange={(e) => setConsecutivoCaja(e.target.value || 1)} />
+            </div>
                 <Col className='d-flex flex-column justify-content-center align-items-center'>
                 <Row>
-                  <h1 className='imprimir'>Remisión</h1>
+                  <h1 className='imprimir'>Remisi├│n</h1>
                 </Row>
                 <Row>
-                  <h5 className='imprimir'>N° {numeroRemision < 10 ? `00${numeroRemision}` : `0${numeroRemision}`}</h5>
+                  <h5 className='imprimir'>N┬░ {numeroRemision < 10 ? `00${numeroRemision}` : `0${numeroRemision}`}</h5>
                 </Row>
                 </Col>
                 <Col className='d-flex flex-column align-items-center'>
                     <h3 className='imprimir'>ALT Confecciones</h3>
                     <h6 className='imprimir'>NIT: 901235934</h6>
-                    <span className='imprimir'>📍Carrera 43G #27-60</span>
-                    <span className='imprimir'>📞(301) 489-8313</span>
+                    <span className='imprimir'>­ƒôìCarrera 43G #27-60</span>
+                    <span className='imprimir'>­ƒô×(301) 489-8313</span>
                 </Col>
                 <Col className='d-flex justify-content-end'>
                     <img className='imprimir' src={Logo} width='40%' />
@@ -127,9 +135,10 @@ const InformeDespacho = () => {
                               <th colSpan="4">Bajas</th>
                           </tr>
                           {despachos.map((despacho, index) => {
+                              var consecutivo = parseInt(consecutivoCaja) + index;
                               return (
                                   <tr key={index}>
-                                    <td>{index+1}</td>
+                                    <td>{consecutivo}</td>
                                     <td colSpan="4">{despacho?.informacionODP?.[0]?.orden_produccion || "N/A"}</td>
                                     <td colSpan="4">{despacho?.informacionODP?.[0]?.referencia || "N/A"}</td>
                                     <td colSpan="4">{despacho?.informacionODP?.[0]?.detalle || "N/A"}</td>
@@ -181,7 +190,7 @@ const InformeDespacho = () => {
             const porDespachar = despacho?.informacionODP?.[0]?.cantidad_producida - (despacho?.unidadesDespachadas + despacho?.bajas);
             
             return (
-              <tr key={`${despacho.id}-${index}`}> {/* Key único */}
+              <tr key={`${despacho.id}-${index}`}> {/* Key ├║nico */}
                 <td className='bg bg-primary bg-opacity-10'>{despacho?.informacionODP?.[0]?.orden_produccion || 'N/A'}</td>
                 <td>{(despacho?.unidadesDespachadas + despacho?.bajas) || 0}</td>
                 <td>{porDespachar}</td>

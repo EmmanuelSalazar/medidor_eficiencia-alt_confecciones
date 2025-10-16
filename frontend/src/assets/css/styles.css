@@ -1,3 +1,6 @@
+html, body {
+    overscroll-behavior-y: contain;
+}
 #root {
     width: 100%;
 }
@@ -40,7 +43,7 @@
 }
 .numeroConPorcentaje {
     width: 100%;
-    text-align: CENTER;
+    text-align: center;
 }
 .beneficios {
     font-size: 35px;
@@ -71,12 +74,26 @@
     overflow-wrap: anywhere;
 }
 .listaRotulos {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: grid!important;
+    grid-template-columns: repeat(2, 1fr)!important;
     gap: 1rem;
     max-height: 60vh;
     overflow-y: auto;
     margin-bottom: 2rem;
+}
+.watermark {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 50px;
+        color: rgba(0, 0, 0, 0.1);
+        z-index: 1!important;
+        pointer-events: none;
+        opacity: 0.2;
+    }
+.z-index-2 {
+    z-index: 2!important;
 }
 @media screen and (width < 768px) {
     .tablaLimitadaLargo {
@@ -88,7 +105,7 @@
 }
 @media print {
     .noImprimir {
-        display: none;
+        display: none!important;
     }
     body {
         margin: 0;

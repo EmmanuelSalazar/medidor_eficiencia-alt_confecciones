@@ -23,7 +23,8 @@ require_once '../config/cortes.php';
             SUM(unidadesProducidas) AS TotalProducido,
             ROUND(SUM(MetaPorEficiencia))AS TotalMeta,
             rp.modulo,
-            o.posicion
+            o.posicion,
+            o.rol
         FROM
             `registro_produccion` rp
         JOIN operarios o ON

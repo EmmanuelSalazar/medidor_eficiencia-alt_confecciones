@@ -42,8 +42,8 @@ export const ListaProvider = ({ children }) => {
 
   useEffect(() => {
     if(data) {
-      let totalModulo = data?.totalModulos.filter((item) => item.modulo === modulo);
-      setTotal(totalModulo[0]?.total);
+      let totalModulo = data?.totalModulos?.filter((item) => item.modulo === modulo);
+      setTotal(totalModulo?.[0]?.total);
       if(data.length === 0) {
         setLista([]);
       } else {

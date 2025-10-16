@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $adicionales = NULL;
     }
 
-    if (empty($operador) || empty($unidadesProducidas)) {
+    if (empty($operador) || $unidadesProducidas === null) {
         http_response_code(401);
         echo json_encode([
             'ok' => false,
