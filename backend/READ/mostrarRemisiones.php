@@ -56,7 +56,8 @@
         br.numeroDeRemision
     ORDER BY
         br.numeroDeRemision
-    DESC
+    DESC 
+    LIMIT 500
         ";
         $stmt = $mysqli->prepare($sql);
         }        

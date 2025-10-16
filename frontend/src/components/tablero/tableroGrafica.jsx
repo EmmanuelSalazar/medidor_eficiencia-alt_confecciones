@@ -3,7 +3,6 @@ import { Row, Col, Stack, Spinner, Alert} from 'react-bootstrap'
 import HorizontalBarChart from '..//graficos/grafico';
 import PorcentajeDeEficienciaPorCorte from "..//porcentajeEficienciaDeCorte";
 import PorcentajeDeEficienciaDiaria from "..//porcentajeEficienciaDelDia";
-import PanelNotificaciones from "..//panelNotificaciones";
 import IncentivoQuincena from "..//incentivoQuincena";
 import InformacionProduccion from "../panelInformacionProduccion";
 import PanelInformacionProduccionGeneralizada from "../panelInformacionProduccionGeneralizada";
@@ -41,7 +40,7 @@ const TableroGrafico = () => {
     useEffect(() => {
       const operatorData = listaOperarios.filter((operario) => operario.rol === 1)
       setOperatorData(operatorData)
-      const revisorData = listaOperarios.filter((operario) => operario.rol === 2)
+      const revisorData = listaOperarios.filter((operario) => operario.rol === 2 || operario.rol === 4)
       setRevisorData(revisorData)
       const packageData = listaOperarios.filter((operario) => operario.rol === 3)
       setPackageData(packageData)
@@ -113,7 +112,7 @@ const TableroGrafico = () => {
             <Col lg={9} xs={12} sm={12} md={4} className=' text-center' >            
               <div style={{display: 'flex', flexDirection: 'column', gap: '0.3rem'}}>
                 <div className="bg-black rounded" style={{display: 'flex', justifyContent: 'center'}}>
-                      <HorizontalBarChart operatorData={operatorData} graphicHeight="700px" />
+                      <HorizontalBarChart operatorData={operatorData} graphicHeight="715px" verticalFontHeight={35} />
                 </div>
                 <div  className="bg-black rounded" style={{display: 'flex', justifyContent: 'center'}}>
                       <HorizontalBarChart operatorData={revisorData} graphicHeight="180px" verticalFontHeight={35} />

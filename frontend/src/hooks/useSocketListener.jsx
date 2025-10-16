@@ -1,7 +1,7 @@
 import { useEffect, useState }  from 'react';
 import io from 'socket.io-client';
 
-const SOCKET_URL = 'http://192.168.1.15:4000';
+const SOCKET_URL = 'http://ws-services.altconfecciones.local:4000';
 
 export function useSocketListener() {
     const [pantallaActiva, setPantallaActiva] = useState(null);

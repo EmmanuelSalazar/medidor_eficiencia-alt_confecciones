@@ -26,7 +26,7 @@
     O.Rol AS RolOperario,
     COALESCE(SUM(RP.unidadesProducidas), 0) AS TotalUnidadesProducidas,
     ROUND(COALESCE(SUM(RP.MetaPorEficiencia), 0), 0) AS TotalMeta,
-    ROUND(COALESCE(AVG(RP.eficiencia), 0), 1) AS PromedioEficiencia, -- Evita NULLs
+    ROUND(COALESCE((SUM(RP.unidadesProducidas) / SUM(RP.MetaPorEficiencia) * 100), 0), 1) AS PromedioEficiencia, -- Evita NULLs
     COALESCE(
 		CASE
 			WHEN COUNT(DISTINCT CASE WHEN RP.modulo = 1 THEN DATE(RP.fecha) END) >= 11
