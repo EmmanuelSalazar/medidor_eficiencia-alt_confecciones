@@ -10,7 +10,7 @@ function Tablero() {
   useEffect(() => {
     let timer;
 
-    if (Number(pantallaActiva) === 2){ 
+    if (Number(pantallaActiva) === 2 || notificacion?.img !== null) { 
       setIsTemporario(true);
       timer = setTimeout(() => {
         setIsTemporario(false);
@@ -26,7 +26,7 @@ function Tablero() {
     if(!isTemporario){
       return <TableroGrafico />
     }else{
-      return <TableroMensajes notificacion={notificacion.mensaje} />
+      return <TableroMensajes notificacion={notificacion?.mensaje} imagen={notificacion?.img || null} />
     }
   }
   return (
