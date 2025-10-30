@@ -9,10 +9,12 @@ import PanelInformacionProduccionGeneralizada from "../panelInformacionProduccio
 import { useSearchParams } from "react-router-dom";
 import FechaActual from "../fechaActual";
 import { ListaProvider } from "../../contexts/actualizarRegistroOperaciones";
+import useMostrarOrdenesDeProduccion from "../../hooks/useCargarOrdenesDeProduccion";
 import { ListaContext } from "../../contexts/informacionGrafico";
 const TableroGrafico = () => {
   const { PanelCompleto } = IncentivoQuincena();
-  const { listaOperarios, status, error } = useContext(ListaContext);
+  const { data: ordenesDeProduccion, status, error } = useMostrarOrdenesDeProduccion();
+  const { listaOperarios, status: statusLista, error: errorLista } = useContext(ListaContext);
   const {fechaFormateada, corteQuincena} = FechaActual();  
     const [moduloConMarca, setModuloConMarca] = React.useState("");
     const [operatorData, setOperatorData] = useState([]);
@@ -51,7 +53,7 @@ const TableroGrafico = () => {
     display: 'flex',
     justifyContent: 'center',
   };
-      if (status === 'loading') {
+      if (status === 'loading' || statusLista === 'loading') {
     return (
       <div style={styles}>
         <div className="text-center">
@@ -64,7 +66,7 @@ const TableroGrafico = () => {
     );
   }
 
-  if (error) {
+  if (error || errorLista ) {
     return (
       <div style={styles}>
         <Alert variant="danger">
@@ -103,10 +105,10 @@ const TableroGrafico = () => {
                 </Stack>
               </Row>
               <Row className='border border-black me-1 bg-black rounded-top rounded-bottom-0   text-light justify-content-center'>
-                  <InformacionProduccion />
+                  <InformacionProduccion data={ordenesDeProduccion} />
               </Row>
               <Row className='border border-black me-1 bg-black rounded rounded-top-0   text-light justify-content-center'>
-                  <PanelInformacionProduccionGeneralizada />
+                  <PanelInformacionProduccionGeneralizada data={ordenesDeProduccion} />
               </Row>
             </Col>
             <Col lg={9} xs={12} sm={12} md={4} className=' text-center' >            
