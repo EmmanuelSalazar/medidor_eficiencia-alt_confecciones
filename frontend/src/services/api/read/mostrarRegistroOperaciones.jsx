@@ -9,7 +9,6 @@ const FetchRegistrosOperaciones = async (modulo, fecha_inicio, fecha_final, pagi
     let paginaSeleccionada = pagina?? 1;
     try {
         const response = await axios.get(`${apiURL}/READ/mostrarRegistroOperaciones.php?fecha_inicio=${fechaInicioSeleccionada}&fecha_fin=${fechaFinSeleccionada}&modulo=${moduloSeleccionado}&page=${paginaSeleccionada}`)
-        console.log(response);
         if (response.data.ok) {
             return response.data.respuesta
         } else {

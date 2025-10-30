@@ -1,16 +1,15 @@
-import useMostrarProduccion from "../hooks/mostrarProduccion.hook"
 import { Spin } from "antd";
-import { Alert, Row, Col } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import { useSearchParams } from "react-router-dom";
-const PanelInformacionProduccionGeneralizada = () => {
+const PanelInformacionProduccionGeneralizada = ( { data = [{}] }) => {
     const [buscarParametro] = useSearchParams();
     let moduloEnLaUrl = parseInt(buscarParametro.get('modulo'));
-    const { data, status, error } = useMostrarProduccion();
     if (!data) {
         return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
     }
     const infoProduccion =  () => {
-        let informacionFiltrada = data?.datos?.filter((datos) => datos.modulo === moduloEnLaUrl && datos.estado == 1 || datos.estado == 3)
+        let informacionFiltrada = data?.filter((datos) => datos.modulo === moduloEnLaUrl)
+
         // TOTAL DE DÍAS DE TRABAJO DISPONIBLES
         let diasArray = informacionFiltrada.map((datos) => parseFloat(datos.DiasDeTrabajo));
         let diasTotales = diasArray.reduce((a,b) => a + b, 0);
