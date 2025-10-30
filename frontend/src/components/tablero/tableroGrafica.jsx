@@ -104,12 +104,12 @@ const TableroGrafico = () => {
                   <div className="p-2"><h5><strong>{fechaFormateada}</strong></h5></div>
                 </Stack>
               </Row>
-              <Row className='border border-black me-1 bg-black rounded-top rounded-bottom-0   text-light justify-content-center'>
+              <Row className='border border-black me-1 bg-black rounded-top rounded-bottom   text-light justify-content-center'>
                   <InformacionProduccion data={ordenesDeProduccion} />
               </Row>
-              <Row className='border border-black me-1 bg-black rounded rounded-top-0   text-light justify-content-center'>
+              {/* <Row className='border border-black me-1 bg-black rounded rounded-top-0  text-light justify-content-center'>
                   <PanelInformacionProduccionGeneralizada data={ordenesDeProduccion} />
-              </Row>
+              </Row> */}
             </Col>
             <Col lg={9} xs={12} sm={12} md={4} className=' text-center' >            
               <div style={{display: 'flex', flexDirection: 'column', gap: '0.3rem'}}>
