@@ -73,17 +73,17 @@ const InformeDespacho = () => {
             </div>
                 <Col className='d-flex flex-column justify-content-center align-items-center'>
                 <Row>
-                  <h1 className='imprimir'>Remisi├│n</h1>
+                  <h1 className='imprimir'>Remisión</h1>
                 </Row>
                 <Row>
-                  <h5 className='imprimir'>N┬░ {numeroRemision < 10 ? `00${numeroRemision}` : `0${numeroRemision}`}</h5>
+                  <h5 className='imprimir'>N° {numeroRemision < 10 ? `00${numeroRemision}` : `0${numeroRemision}`}</h5>
                 </Row>
                 </Col>
                 <Col className='d-flex flex-column align-items-center'>
                     <h3 className='imprimir'>ALT Confecciones</h3>
                     <h6 className='imprimir'>NIT: 901235934</h6>
-                    <span className='imprimir'>­ƒôìCarrera 43G #27-60</span>
-                    <span className='imprimir'>­ƒô×(301) 489-8313</span>
+                    <span className='imprimir'>📍Carrera 43G #27-60</span>
+                    <span className='imprimir'>📞(301) 489-8313</span>
                 </Col>
                 <Col className='d-flex justify-content-end'>
                     <img className='imprimir' src={Logo} width='40%' />
