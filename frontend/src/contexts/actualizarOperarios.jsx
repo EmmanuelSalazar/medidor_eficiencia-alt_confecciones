@@ -8,6 +8,7 @@ export const ListaProvider = ({ children }) => {
   const [modulo, setModulo] = useState(0);
   const [lista, setLista] = useState([]);
   const [operariosRetirados, setOperariosRetirados] = useState([]);
+  const [registroMultipleActivo, setRegistroMultipleActivo] = useState(false);
   // RECIBIR INFORMACIÓN DE LA API
   const { data, status, error, reload } = useMostrarOperarios(redux);
   const location = useLocation();
@@ -54,7 +55,7 @@ export const ListaProvider = ({ children }) => {
     }
   };
   return (
-    <ListaContext.Provider value={{ setModulo, lista, status, error, setRedux, actualizarLista, operariosRetirados, setOperariosRetirados }}>
+    <ListaContext.Provider value={{ setModulo, lista, status, error, setRedux, actualizarLista, operariosRetirados, setOperariosRetirados, registroMultipleActivo, setRegistroMultipleActivo }}>
       {children}
     </ListaContext.Provider>
   );

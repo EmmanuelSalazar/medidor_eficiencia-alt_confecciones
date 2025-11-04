@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import { Button, Form, Alert, Col, Stack } from "react-bootstrap";
 import { Switch, Checkbox, Spin } from "antd";
 import AlmacenarDatos from "../../services/api/create/almacenarRegistroOperaciones";
@@ -9,9 +9,9 @@ import { throttle } from "lodash";
 
 const RegistrarOperaciones = () => {
     // CONTEXTOS
-    const { lista, setOperariosRetirados } = React.useContext(ListaContext);
-    const { lista:listaReferencias } = React.useContext(ContextoEnLista2);
-    const { actualizarLista, status, error } = React.useContext(ContextoEnLista);
+    const { lista, setOperariosRetirados } = useContext(ListaContext);
+    const { lista:listaReferencias } = useContext(ContextoEnLista2);
+    const { actualizarLista, status, error } = useContext(ContextoEnLista);
     // ACTIVAR/DESACTIVARR REGISTROS MULTIPLES/COMENTARIOS ADICIONALES
     const [registroMultiple, setRegistroMultiple] = useState(true);
     const [comentarios, setComentarios] = useState(false);
@@ -45,6 +45,7 @@ const RegistrarOperaciones = () => {
     }, [registroMultiple]);
 
     const activarRegistroMultiple = (valor) => {
+        console.log(valor);
         setRegistroMultiple(valor);
     };
     
