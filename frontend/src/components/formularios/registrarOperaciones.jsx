@@ -1,17 +1,17 @@
-import React, { useRef, useState, useEffect, useContext } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import { Button, Form, Alert, Col, Stack } from "react-bootstrap";
 import { Switch, Checkbox, Spin } from "antd";
 import AlmacenarDatos from "../../services/api/create/almacenarRegistroOperaciones";
 import { ListaContext as ContextoEnLista } from "../../contexts/actualizarRegistroOperaciones";
 import { ListaContext, ListaProvider } from "../../contexts/actualizarOperarios";
 import { ListaContext as ContextoEnLista2 } from "../../contexts/actualizarReferencias";
-import { throttle } from "lodash";
+import { isBoolean, throttle } from "lodash";
 
 const RegistrarOperaciones = () => {
     // CONTEXTOS
-    const { lista, setOperariosRetirados } = useContext(ListaContext);
+    const { lista, setOperariosRetirados, setRegistroMultipleActivo } = useContext(ListaContext);
     const { lista:listaReferencias } = useContext(ContextoEnLista2);
-    const { actualizarLista, status, error } = useContext(ContextoEnLista);
+    const { actualizarLista, status, error, ordenesDeProduccionModulo } = useContext(ContextoEnLista);
     // ACTIVAR/DESACTIVARR REGISTROS MULTIPLES/COMENTARIOS ADICIONALES
     const [registroMultiple, setRegistroMultiple] = useState(true);
     const [comentarios, setComentarios] = useState(false);
@@ -38,17 +38,21 @@ const RegistrarOperaciones = () => {
     // ACTIVAR/DESACTIVAR REGISTROS MULTIPLES
     useEffect(() => {
         try {
-/*             setOperariosRetirados();
- */        } catch (error) {
+            setOperariosRetirados();
+        } catch (error) {
             setMensajeDeError("Ha ocurrido un error: ", error);
         }
     }, [registroMultiple]);
 
     const activarRegistroMultiple = (valor) => {
-        console.log(valor);
+        if (!valor) {
         setRegistroMultiple(valor);
+        setRegistroMultipleActivo(valor);
+        } else {
+        setRegistroMultiple(valor);
+        setRegistroMultipleActivo(valor);
+        }
     };
-    
     const activarComentarios = (checked) => {
         setComentarios(checked); // Actualiza el estado basado en el valor del checkbox
     };
@@ -92,6 +96,9 @@ const RegistrarOperaciones = () => {
     return (
         <Col className="formularioConBotones">
             <ListaProvider>
+                <div>
+                    Orden en producción: 
+                </div>
                 <Form className="mx-5" style={{ width: "100%" }} onSubmit={handleSubmit} ref={formRef}>
                     {mensajeDeExito && <Alert variant="success">{mensajeDeExito}</Alert>}
                     {mensajeDeAlerta && <Alert variant="warning">{mensajeDeAlerta}</Alert>}

@@ -18,6 +18,12 @@ export const ListaProvider = ({ children }) => {
       setOperariosRetirados([]);
     }
   }, [location]);
+  // VACIAR LA LISTA DE OPERARIOS RETIRADOS CUANDO SE ACTIVA LA OPCIÓN DE REGISTRO MULTIPLE
+  useEffect(() => {
+    if(registroMultipleActivo === false) {
+      setOperariosRetirados([]);
+    }
+  }, [registroMultipleActivo]);
   // VOLVER A CARGAR TODOS LOS OPERARIOS
   useEffect(() => {
     const intervalo = setInterval(() => {
@@ -37,6 +43,7 @@ export const ListaProvider = ({ children }) => {
       setLista([]);
     }
   }, [modulo]);
+
   // MOSTRAR OPERARIOS SEGÚN EL MODULO Y ELIMINAR OPERARIOS RETIRADOS
   useEffect(() => {
     if (data) {
