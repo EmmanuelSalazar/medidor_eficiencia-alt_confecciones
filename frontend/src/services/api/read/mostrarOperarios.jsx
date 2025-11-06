@@ -5,7 +5,6 @@ const fetchOperarios = async (modulo, redux) => {
     let reduxFinal = redux?? false;
     try {
         const response = await axios.get(`${apiURL}/READ/mostrarOperarios.php?modulo=${moduloFinal}&redux=${reduxFinal}`)
-        console.log(response)
         if (response.data.ok) {
             return response.data.respuesta
         } else {

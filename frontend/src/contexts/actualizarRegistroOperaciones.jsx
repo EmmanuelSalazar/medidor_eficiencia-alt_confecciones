@@ -23,6 +23,7 @@ export const ListaProvider = ({ children }) => {
   const actualizarLista = async () => {
     try {
       await reload();
+      await reloadOrdenes();
     } catch (error) {
       console.error('Ha ocurrido un error al actualizar sus datos', error);
       throw error;
@@ -66,7 +67,7 @@ export const ListaProvider = ({ children }) => {
   },[modulo, data])
 
   return (
-    <ListaContext.Provider value={{ status, error, actualizarLista, setModulo, lista, setFechaInicio, setFechaFin, total, pagina, setPagina, ordenesDeProduccionModulo }}>
+    <ListaContext.Provider value={{ status, error, actualizarLista, setModulo, lista, setFechaInicio, setFechaFin, total, pagina, setPagina, ordenesDeProduccionModulo, statusOrdenes, errorOrdenes }}>
       {children}
     </ListaContext.Provider>
   );

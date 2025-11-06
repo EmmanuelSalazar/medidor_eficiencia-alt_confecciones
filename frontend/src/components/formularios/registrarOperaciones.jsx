@@ -11,7 +11,7 @@ const RegistrarOperaciones = () => {
     // CONTEXTOS
     const { lista, setOperariosRetirados, setRegistroMultipleActivo } = useContext(ListaContext);
     const { lista:listaReferencias } = useContext(ContextoEnLista2);
-    const { actualizarLista, status, error, ordenesDeProduccionModulo } = useContext(ContextoEnLista);
+    const { actualizarLista, status, error, ordenesDeProduccionModulo, statusOrdenes, errorOrdenes } = useContext(ContextoEnLista);
     // ACTIVAR/DESACTIVARR REGISTROS MULTIPLES/COMENTARIOS ADICIONALES
     const [registroMultiple, setRegistroMultiple] = useState(true);
     const [comentarios, setComentarios] = useState(false);
@@ -90,14 +90,16 @@ const RegistrarOperaciones = () => {
         e.preventDefault();
         throttlingFormulario()
     };
-    
-     if (status === 'loading') return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
-     if (error) return <Alert variant='danger'>Error: {error.message}</Alert>;
+
+     if (status === 'loading' || statusOrdenes === 'loading') return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
+     if (error || errorOrdenes) return <Alert variant='danger'>Ha ocurrido un error: {error?.message || errorOrdenes?.message}</Alert>;
     return (
         <Col className="formularioConBotones">
             <ListaProvider>
-                <div>
-                    Orden en producción: 
+                <div className="d-flex flex-column justify-content-center align-items-center">
+                    <span>Orden en producción: <strong>{ ordenesDeProduccionModulo?.[0]?.ordenProduccion }</strong></span>
+                    <span>Total de unidades asignadas: <strong>{ ordenesDeProduccionModulo?.[0]?.cantidadEntrada }</strong></span>
+                    <span>Unidades restantes: <strong>{ ordenesDeProduccionModulo?.[0]?.cantidadEntrada - ordenesDeProduccionModulo?.[0]?.unidadesProducidas }</strong></span>
                 </div>
                 <Form className="mx-5" style={{ width: "100%" }} onSubmit={handleSubmit} ref={formRef}>
                     {mensajeDeExito && <Alert variant="success">{mensajeDeExito}</Alert>}
@@ -116,7 +118,7 @@ const RegistrarOperaciones = () => {
                     <Form.Group className="m-5">
                         <Form.Label>Seleccione la referencia</Form.Label>
                         <Form.Select required ref={referenciaRef} size="lg">
-                            {listaReferencias.map((dato, index) => (
+                            {ordenesDeProduccionModulo?.map((dato, index) => (
                                 <option key={index} value={dato.ref_id}>
                                     {dato.referencia}
                                 </option>
