@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect, useContext } from "react";
+import { useRef, useState, useEffect, useContext, useCallback } from "react";
 import { Button, Form, Alert, Col, Stack } from "react-bootstrap";
 import { Switch, Checkbox, Spin } from "antd";
 import AlmacenarDatos from "../../services/api/create/almacenarRegistroOperaciones";
@@ -15,6 +15,8 @@ const RegistrarOperaciones = () => {
     // ACTIVAR/DESACTIVARR REGISTROS MULTIPLES/COMENTARIOS ADICIONALES
     const [registroMultiple, setRegistroMultiple] = useState(true);
     const [comentarios, setComentarios] = useState(false);
+    // ORDENES DE PRODUCCION
+    const ordenRef = useRef({});
     // ALMACENAR FORMULARIO
     const operarioRef = useRef();
     const unidadesProducidasRef = useRef();
@@ -43,7 +45,15 @@ const RegistrarOperaciones = () => {
             setMensajeDeError("Ha ocurrido un error: ", error);
         }
     }, [registroMultiple]);
-
+    // ACTUALIZAR ORDENES DE PRODUCCION
+    useEffect(() => {
+        if (ordenesDeProduccionModulo) {
+            ordenRef.current = ({
+                ordenProduccion: ordenesDeProduccionModulo?.[0]?.ordenProduccion,
+                cantidadEntrada: ordenesDeProduccionModulo?.[0]?.cantidadEntrada,
+            });
+        }
+    }, [ordenesDeProduccionModulo])
     const activarRegistroMultiple = (valor) => {
         if (!valor) {
         setRegistroMultiple(valor);
@@ -57,7 +67,16 @@ const RegistrarOperaciones = () => {
         setComentarios(checked); // Actualiza el estado basado en el valor del checkbox
     };
     const enviarDatos = async () => {
+        if(!ordenRef.current){
+            setMensajeDeError("Los datos de la orden no se han cargado aún.");
+            return;
+        }
+
         const values = {
+            orden: {
+                orden: ordenRef.current?.ordenProduccion,
+                unidadesDisponibles: ordenRef.current?.cantidadEntrada,
+            },
             operario: operarioRef.current.value,
             unidadesProducidas: unidadesProducidasRef.current.value,
             referencia: referenciaRef.current.value,
@@ -118,11 +137,15 @@ const RegistrarOperaciones = () => {
                     <Form.Group className="m-5">
                         <Form.Label>Seleccione la referencia</Form.Label>
                         <Form.Select required ref={referenciaRef} size="lg">
-                            {ordenesDeProduccionModulo?.map((dato, index) => (
+                            {ordenesDeProduccionModulo?.length > 0 ? ordenesDeProduccionModulo?.map((dato, index) => (
                                 <option key={index} value={dato.ref_id}>
                                     {dato.referencia}
                                 </option>
-                            ))}
+                            )) : listaReferencias?.map((dato, index) => (
+                                <option key={index} value={dato.ref_id}>
+                                    {dato.referencia}
+                                </option>
+                                ))}
                         </Form.Select>
                     </Form.Group>
                     <Form.Group className="m-5">
