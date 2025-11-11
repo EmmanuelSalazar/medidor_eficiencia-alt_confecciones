@@ -16,11 +16,11 @@ const ListaRegistroOperaciones = () => {
     //
     const [visible, setVisible] = useState(false);
     const [registroSeleccionado, setRegistroSeleccionado] = useState("");
-/*     const [pagina, setPagina] = useState(1);
- */    // Almacenar Formulario
+    // Almacenar Formulario
     const referenciaRef = useRef();
     const unidadesProducidasRef = useRef();
     const horarioRef = useRef();
+    const recalcularMetaRef = useRef();
     // Estado para almacenar el valor del filtro
     const [searchText, setSearchText] = useState('');
     const [searchedColumn, setSearchedColumn] = useState('');
@@ -59,17 +59,17 @@ const ListaRegistroOperaciones = () => {
             setMensajeDeError("Ha ocurrido un error al eliminar el registro: ", error);
         }
     }
-    // Paginación
-        const paginacion = (pagina) => {
-            console.log
-        }
     // Funcion para procesar los cambios
     const handleOk = async () => {
         const values = {
             "regProd_id" : registroSeleccionado.regProd_id,
             "ref_id": referenciaRef.current.value,
+            "op_id": registroSeleccionado.op_id,
             "unidadesProducidas": unidadesProducidasRef.current.value,
-            "horario": horarioRef.current.value
+            "modulo": registroSeleccionado.modulo,
+            "horario": horarioRef.current.value,
+            "meta": registroSeleccionado.metaDecimal,
+            "recalcularMeta": recalcularMetaRef.current.checked,
         }
         try {
             await actualizarRegistroOperacion(values);
@@ -206,6 +206,9 @@ const ListaRegistroOperaciones = () => {
                         <Form.Group>
                             <Form.Label>Meta de eficiencia</Form.Label>
                             <Form.Control defaultValue={registroSeleccionado.metaAjustada} type="number" disabled/>
+                        </Form.Group>
+                        <Form.Group className='mt-2'>
+                            <Form.Check label="Recalcular meta" type="checkbox" ref={recalcularMetaRef} />
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Eficiencia</Form.Label>
