@@ -3,7 +3,11 @@
 require_once '../config/cors.php';
 require_once '../config/baseDeDatos.php';
 require_once '../config/horarios.php';
+require_once '../func/obtenerMeta.php';
 
+$minutesPerDay = getenv('MINUTES_PER_DAY') ?: 522;
+$hoursPerDay = getenv('HOURS_PER_DAY') ?: 8.7;
+$tiempoDeMontaje = NULL;
 // Manejar solicitud OPTIONS (preflight)
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     http_response_code(200);
@@ -20,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $unidadesProducidas = $postData['unidadesProducidas'] ?? null;
     $referencia = $postData['referencia'] ?? null;
     $adicionales = $postData['adicionales'] ?? null;
-
+    $modulo = $postData['modulo'] ?? null;
     if ($adicionales == "" || $adicionales == null) {
         $adicionales = NULL;
     }
@@ -34,37 +38,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
 
-    // Calcular la hora límite (1 hora antes de la fecha actual) ESTA FUNCION ES UTIL, PERO ESTÁ BAJO REVISIÓN POR QUE NO SE TERMINA DE INTEGRARA AL SISTEMA
-    $horaLimite = (new DateTime())->modify('-10 seconds')->format('Y-m-d H:i:s');
-
-    // Verificar si ya existe un registro para el mismo op_id en la última hora
-    $stmtVerificacion = $mysqli->prepare("SELECT COUNT(*) AS count FROM registro_produccion WHERE op_id = ? AND fecha >= ?");
-    $stmtVerificacion->bind_param("is", $operador, $horaLimite);
-    $stmtVerificacion->execute();
-    $result = $stmtVerificacion->get_result();
-    $row = $result->fetch_assoc();
-
-    if ($row['count'] > 0) {
-        // Ya existe un registro para este operario en la última hora
-        http_response_code(response_code: 400);
-        $respuesta = [
-            'ok' => false,
-            'respuesta' => '¿Horario duplicado? (CONERR6)'
-        ];
-        echo json_encode($respuesta, true);
-        $stmtVerificacion->close();
-        exit();
-    }
+    // OBTENER META POR EFICIENCIA
+    $metaPorHora = obtenerMeta($mysqli, $operador, $referencia, $modulo, $fechaString, $minutesPerDay, $hoursPerDay);
 
     // Insertar en base de datos
-    $stmt = $mysqli->prepare("INSERT INTO registro_produccion (fecha, op_id, ref_id, unidadesProducidas, adicionales) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("siiis", $fechaString, $operador, $referencia,  $unidadesProducidas, $adicionales);
+    $stmt = $mysqli->prepare("INSERT INTO registro_produccion (fecha, op_id, ref_id, unidadesProducidas, MetaPorEficiencia, adicionales) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("siiiss", $fechaString, $operador, $referencia,  $unidadesProducidas, $metaPorHora, $adicionales); 
 
     if ($stmt->execute()) {
+        $last_id = $mysqli->insert_id;
         http_response_code(200);
         echo json_encode([
             'ok' => true,
             'respuesta' => 'Solicitud exitosa',
+            'id_del_recurso_creado' => $last_id
         ]);
     } else {
         http_response_code(500);
