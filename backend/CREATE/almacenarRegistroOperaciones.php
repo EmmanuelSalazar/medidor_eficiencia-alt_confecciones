@@ -17,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 // Manejar solicitud POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $postData = json_decode(file_get_contents('php://input'), true);
-
     // Validar datos
     $fechaString = (new DateTime())->format('Y-m-d H:i:s'); // Fecha y hora actual
     $operador = $postData['operario'] ?? null;

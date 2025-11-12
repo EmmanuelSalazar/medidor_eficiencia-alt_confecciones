@@ -5,7 +5,7 @@ import AlmacenarDatos from "../../services/api/create/almacenarRegistroOperacion
 import { ListaContext as ContextoEnLista } from "../../contexts/actualizarRegistroOperaciones";
 import { ListaContext, ListaProvider } from "../../contexts/actualizarOperarios";
 import { ListaContext as ContextoEnLista2 } from "../../contexts/actualizarReferencias";
-import { isBoolean, throttle } from "lodash";
+import { throttle } from "lodash";
 
 const RegistrarOperaciones = () => {
     // CONTEXTOS
@@ -88,15 +88,14 @@ const RegistrarOperaciones = () => {
             return;
         }
         try {
-            setOperariosRetirados(prevOperarios => [...prevOperarios, parseInt(values.operario)]);
-
             await AlmacenarDatos(values);
             await actualizarLista();
             setMensajeDeExito("El registro se ha guardado correctamente");
+            setOperariosRetirados(prevOperarios => [...prevOperarios, parseInt(values.operario)]);
             formRef.current.reset();
         } catch (error) {
-            setMensajeDeError("Ha ocurrido un error, por favor intente de nuevo más tarde: ", error);
-            console.error("Ha ocurrido un error: ", error);
+            setMensajeDeError(error);
+            console.error(error);
         }
     }
     // THROTTLING PARA LIMITAR LA CANTIDAD DE LLAMADAS A LA API

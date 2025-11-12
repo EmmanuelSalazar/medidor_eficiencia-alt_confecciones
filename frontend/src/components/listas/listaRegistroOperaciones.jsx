@@ -77,7 +77,8 @@ const ListaRegistroOperaciones = () => {
             setVisible(false)
             setMensajeDeExito("El registro ha sido modificado con exito");
         } catch (error) {
-            setMensajeDeError("Ha ocurrido un error, si este persiste, contacte al administrador: ", error);
+            console.log(error);
+            setMensajeDeError('Error: ' + error);
             console.log("Ha ocurrido un error: ", error)
         }
     }
@@ -164,8 +165,12 @@ const ListaRegistroOperaciones = () => {
             <Modal show={visible} onHide={handleCancel}>
                 <Modal.Header closeButton>
                     <Modal.Title>Editar Registro</Modal.Title>
+
                 </Modal.Header>
                 <Modal.Body>
+                    {mensajeDeExito && <Alert variant="success">{mensajeDeExito}</Alert>}
+                    {mensajeDeAlerta && <Alert variant="warning">{mensajeDeAlerta}</Alert>}
+                    {mensajeDeError && <Alert variant="danger">{mensajeDeError}</Alert>}
                     <Form>
                         <Form.Group>
                             <Form.Label>Fecha del registro</Form.Label>
