@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext, useCallback } from "react";
 import { Button, Form, Alert, Col, Stack } from "react-bootstrap";
 import { Switch, Checkbox, Spin } from "antd";
 import AlmacenarDatos from "../../services/api/create/almacenarRegistroOperaciones";
@@ -9,12 +9,14 @@ import { throttle } from "lodash";
 
 const RegistrarOperaciones = () => {
     // CONTEXTOS
-    const { lista, setOperariosRetirados } = React.useContext(ListaContext);
-    const { lista:listaReferencias } = React.useContext(ContextoEnLista2);
-    const { actualizarLista, status, error } = React.useContext(ContextoEnLista);
+    const { lista, setOperariosRetirados, setRegistroMultipleActivo } = useContext(ListaContext);
+    const { lista:listaReferencias } = useContext(ContextoEnLista2);
+    const { actualizarLista, status, error, ordenesDeProduccionModulo, statusOrdenes, errorOrdenes } = useContext(ContextoEnLista);
     // ACTIVAR/DESACTIVARR REGISTROS MULTIPLES/COMENTARIOS ADICIONALES
     const [registroMultiple, setRegistroMultiple] = useState(true);
     const [comentarios, setComentarios] = useState(false);
+    // ORDENES DE PRODUCCION
+    const ordenRef = useRef({});
     // ALMACENAR FORMULARIO
     const operarioRef = useRef();
     const unidadesProducidasRef = useRef();
@@ -38,40 +40,62 @@ const RegistrarOperaciones = () => {
     // ACTIVAR/DESACTIVAR REGISTROS MULTIPLES
     useEffect(() => {
         try {
-/*             setOperariosRetirados();
- */        } catch (error) {
+            setOperariosRetirados();
+        } catch (error) {
             setMensajeDeError("Ha ocurrido un error: ", error);
         }
     }, [registroMultiple]);
-
+    // ACTUALIZAR ORDENES DE PRODUCCION
+    useEffect(() => {
+        if (ordenesDeProduccionModulo) {
+            ordenRef.current = ({
+                ordenProduccion: ordenesDeProduccionModulo?.[0]?.ordenProduccion,
+                cantidadEntrada: ordenesDeProduccionModulo?.[0]?.cantidadEntrada,
+            });
+        }
+    }, [ordenesDeProduccionModulo])
     const activarRegistroMultiple = (valor) => {
+        if (!valor) {
         setRegistroMultiple(valor);
+        setRegistroMultipleActivo(valor);
+        } else {
+        setRegistroMultiple(valor);
+        setRegistroMultipleActivo(valor);
+        }
     };
-    
     const activarComentarios = (checked) => {
         setComentarios(checked); // Actualiza el estado basado en el valor del checkbox
     };
     const enviarDatos = async () => {
+        if(!ordenRef.current){
+            setMensajeDeError("Los datos de la orden no se han cargado aún.");
+            return;
+        }
+
         const values = {
+            orden: {
+                orden: ordenRef.current?.ordenProduccion,
+                unidadesDisponibles: ordenRef.current?.cantidadEntrada,
+            },
             operario: operarioRef.current.value,
             unidadesProducidas: unidadesProducidasRef.current.value,
             referencia: referenciaRef.current.value,
-            adicionales: adicionalesRef.current.value ?? null
+            adicionales: adicionalesRef.current.value ?? null,
+            modulo: window.moduloSeleccionado,
         };
         if (window.moduloSeleccionado == "" || window.moduloSeleccionado == null){
             setMensajeDeError("No se ha seleccionado un modulo");
             return;
         }
         try {
-            setOperariosRetirados(prevOperarios => [...prevOperarios, parseInt(values.operario)]);
-
             await AlmacenarDatos(values);
             await actualizarLista();
             setMensajeDeExito("El registro se ha guardado correctamente");
+            setOperariosRetirados(prevOperarios => [...prevOperarios, parseInt(values.operario)]);
             formRef.current.reset();
         } catch (error) {
-            setMensajeDeError("Ha ocurrido un error, por favor intente de nuevo más tarde: ", error);
-            console.error("Ha ocurrido un error: ", error);
+            setMensajeDeError(error);
+            console.error(error);
         }
     }
     // THROTTLING PARA LIMITAR LA CANTIDAD DE LLAMADAS A LA API
@@ -85,12 +109,17 @@ const RegistrarOperaciones = () => {
         e.preventDefault();
         throttlingFormulario()
     };
-    
-     if (status === 'loading') return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
-     if (error) return <Alert variant='danger'>Error: {error.message}</Alert>;
+
+     if (status === 'loading' || statusOrdenes === 'loading') return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
+     if (error || errorOrdenes) return <Alert variant='danger'>Ha ocurrido un error: {error?.message || errorOrdenes?.message}</Alert>;
     return (
         <Col className="formularioConBotones">
             <ListaProvider>
+                {/* <div className="d-flex flex-column justify-content-center align-items-center">
+                    <span>Orden en producción: <strong>{ ordenesDeProduccionModulo?.[0]?.ordenProduccion }</strong></span>
+                    <span>Total de unidades asignadas: <strong>{ ordenesDeProduccionModulo?.[0]?.cantidadEntrada }</strong></span>
+                    <span>Unidades restantes: <strong>{ ordenesDeProduccionModulo?.[0]?.cantidadEntrada - ordenesDeProduccionModulo?.[0]?.unidadesProducidas }</strong></span>
+                </div> */}
                 <Form className="mx-5" style={{ width: "100%" }} onSubmit={handleSubmit} ref={formRef}>
                     {mensajeDeExito && <Alert variant="success">{mensajeDeExito}</Alert>}
                     {mensajeDeAlerta && <Alert variant="warning">{mensajeDeAlerta}</Alert>}
@@ -108,11 +137,15 @@ const RegistrarOperaciones = () => {
                     <Form.Group className="m-5">
                         <Form.Label>Seleccione la referencia</Form.Label>
                         <Form.Select required ref={referenciaRef} size="lg">
-                            {listaReferencias.map((dato, index) => (
+                            {ordenesDeProduccionModulo?.length > 0 ? ordenesDeProduccionModulo?.map((dato, index) => (
                                 <option key={index} value={dato.ref_id}>
                                     {dato.referencia}
                                 </option>
-                            ))}
+                            )) : listaReferencias?.map((dato, index) => (
+                                <option key={index} value={dato.ref_id}>
+                                    {dato.referencia}
+                                </option>
+                                ))}
                         </Form.Select>
                     </Form.Group>
                     <Form.Group className="m-5">

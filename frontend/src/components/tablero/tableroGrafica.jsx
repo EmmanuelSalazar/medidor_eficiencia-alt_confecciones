@@ -66,7 +66,7 @@ const TableroGrafico = () => {
     );
   }
 
-  if (error || errorLista ) {
+  if ( errorLista ) {
     return (
       <div style={styles}>
         <Alert variant="danger">
@@ -104,9 +104,18 @@ const TableroGrafico = () => {
                   <div className="p-2"><h5><strong>{fechaFormateada}</strong></h5></div>
                 </Stack>
               </Row>
+              {status === 'success' ? (
               <Row className='border border-black me-1 bg-black rounded-top rounded-bottom   text-light justify-content-center'>
                   <InformacionProduccion data={ordenesDeProduccion} />
               </Row>
+              ): status === 'error' ? (
+                  <Row className="text-center">
+                    <Alert variant="danger">
+                      Error al cargar las ordenes en producción: {error.message}
+                    </Alert>
+                  </Row>
+              ) : null
+              }
               {/* <Row className='border border-black me-1 bg-black rounded rounded-top-0  text-light justify-content-center'>
                   <PanelInformacionProduccionGeneralizada data={ordenesDeProduccion} />
               </Row> */}

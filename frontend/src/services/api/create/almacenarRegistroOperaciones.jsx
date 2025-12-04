@@ -1,19 +1,19 @@
 import axios from "axios"
 
 const AlmacenarDatos = async (values) => {
-  const apiURL = import.meta.env.VITE_API_URL;
+  const apiURL = import.meta.env.VITE_API_MIDDLEWARE_SERVER;
   try {
-    const response = await axios.post(`${apiURL}/CREATE/almacenarRegistroOperaciones.php`, values)
+    const response = await axios.post(`${apiURL}/registrarOperacion`, values)
+    console.log(response);
     if (response.data.ok) {
       return response.data
     } else {
-      throw new Error("Ha ocurrido un error al almacenar el registro, si el error persiste, contacta al administrador: ", response.data)
-    }
-   //console.log("Datos almacenados correctamente:", response.data)
-    
+      throw new Error(response.data.respuesta || 'Ha ocurrido un error, intentalo denuevo mas tarde')
+    }    
   } catch (error) {
-    console.error("Error al enviar los datos", error)
-    throw error
+    console.error(error)
+/*     console.error(error?.response?.data?.respuesta || error)
+ */    throw error?.response?.data?.respuesta || error
   }
 }
 

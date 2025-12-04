@@ -4,14 +4,16 @@ import { Container, Row, Col, Button, Alert } from "react-bootstrap";
 import { Segmented, Calendar, Spin } from "antd";
 import { InfoCircleFilled, PrinterOutlined, ReloadOutlined } from '@ant-design/icons';
 import useRegistroOperacionesResumido from "../hooks/mostrarRegistroOperacionesResumido.hook";
-/* import IncentivoQuincena from "../components/utils/incentivoQuincena"; */
 import IncentivoQuincena from "../components/incentivoQuincena";
 import FechaActual from "../components/fechaActual";
 import logo from '../assets/img/svg/logo.svg'
 import { useNavigate } from "react-router-dom";
+import PorcentajeDeEficienciaPorCorte from "../components/porcentajeEficienciaDeCorte";
+import useMostrarInformacionGrafico from "../hooks/mostrarInformacionGrafico.hook";
 function Informes() {
     const { obtenerCortes } = FechaActual();
     const { beneficio, porcentajeEstatico } = IncentivoQuincena();
+    console.log(porcentajeEstatico)
     const navigate = useNavigate();
     const cortes = obtenerCortes();
     const [seccion, setSeccion] = useState(1);
@@ -24,15 +26,23 @@ function Informes() {
     const [eficienciaEmpaque, setEficienciaEmpaque] = useState([]);
     const [fechaInicio, setFechaInicio] = useState(cortes.fechaInicio);
     const [fechaFin, setFechaFin] = useState(cortes.fechaFinal);
+    const [eficienciaDelModulo, setEficienciaDelModulo] = useState("--");
     const { reload, data, status, error } = useRegistroOperacionesResumido(seccion,fechaInicio, fechaFin);
+    const { reload: reloadGrafico, data:dataGrafico, status:statusGrafico, error:errorGrafico } = useMostrarInformacionGrafico(fechaInicio);
     useEffect(() => {
         if (status === 'success') {
-            console.log(data);
             setListaOperarios(data.filter(item => item.RolOperario === 1));
             setListaRevisiones(data.filter(item => item.RolOperario === 2 || item.RolOperario === 4));
             setListaEmpaque(data.filter(item => item.RolOperario === 3));
         }
     }, [status, data]);
+    console.log(dataGrafico?.[1]?.filter(item => item.modulo === Number(seccion))?.[0]?.eficienciaQuincenal || "--")
+    useEffect(() => {
+        console.log(seccion)
+        if (statusGrafico === 'success') {
+            setEficienciaDelModulo(dataGrafico?.[1]?.filter(item => item.modulo === Number(seccion))?.[0]?.eficienciaQuincenal || "--");
+        } 
+    }, [seccion, statusGrafico])
     useEffect(() => {
         setEficienciaOperarias(obtenerEficiencia(listaOperarios));
         setEficienciaRevisiones(obtenerEficiencia(listaRevisiones));
@@ -99,6 +109,23 @@ function Informes() {
                                 <h1 className="imprimir">Modulo {seccion}</h1>
                                 <h5>{fechaInicio} / {fechaFin}</h5>
                                 <p className="text-secondary">Formato: AAAA-MM-DD</p>
+                            </Col>
+                            <Col className="d-flex flex-column text-center">
+                                    <table className="table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <h5>Eficiencia</h5>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="p-2">Presilla</td>
+                                            </tr>
+                                            <tr>
+                                                <td>{dataGrafico?.[1]?.filter(item => item.modulo === Number(seccion))?.[0]?.eficienciaQuincenal || "--"}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                             </Col>
                             <Col className="d-flex flex-column text-center">
                                 <div className="d-flex justify-content-end">

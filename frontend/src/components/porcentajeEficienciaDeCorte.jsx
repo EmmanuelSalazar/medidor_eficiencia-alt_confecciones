@@ -10,42 +10,19 @@ const PorcentajeDeEficienciaPorCorte = () => {
     const [cargando, setCargando] = useState(false);
     // ACTUALIZAR AL RECIBIR NUEVOS DATOS
     useEffect(() => {
+
         if (eficiencia[0]) {
-            setCargando(true)
-            setPorcentaje(parseFloat(eficiencia[0].eficienciaQuincenal))
-            setCargando(false)   
+                setCargando(true)
+                setPorcentaje(parseFloat(eficiencia[0].eficienciaQuincenal))
+                setCargando(false)            
+        } else {
+                  setCargando(true)
+                setPorcentaje('--')
+                setCargando(false)
         }
+
     }, [eficiencia])
         
-        /* // ESTA FUNCIÓN ESTÁ BAJO REVISIÓN POR FUTURA OBSOLECENCIA
-         const actualizarRegistros = async () => {
-            const fechasDeCortes = obtenerCortes(fechaEnLaUrl || fechaActualDia);
-            let fechaInicio = fechasDeCortes.fechaInicio;
-            let fechaFinal = fechasDeCortes.fechaFinal;
-            setCargando(true);
-            try {
-                await actualizarListaRegistro(modulo, fechaInicio, fechaFinal, null, null, 1, 1);
-            } catch (error) {
-                console.log('Error: ', error)
-            } finally {
-                establecerEficiencia();
-                setCargando(false);
-            }
-        }
-            const establecerEficiencia = () => {
-                // OBTENER REGISTRO CONTADOR
-                const registroCalculador = listaRegistroQuincenal.filter((registro) => registro.modulo === modulo && registro.rol === 1)
-            // CALCULAR EL TOTAL PRODUCIDO
-                let totalProducido = registroCalculador.map(item => item.unidadesProducidas || 0);
-                totalProducido = totalProducido.reduce((a,b) => a + b, 0);
-            // CALCULAR EL TOTAL DE LA META
-                let totalMeta = registroCalculador.map(item => item.metaDecimal || 0);
-                totalMeta = totalMeta.reduce((a,b) => a + b, 0);
-            // RETORNAR EFICIENCIA
-                const eficienciaCalculada = ((totalProducido / totalMeta) * 100).toFixed(1);
-            // ESTABLECER EFICIENCIA
-                setPorcentaje(parseFloat(eficienciaCalculada));
-            } */
     //DAR COLOR AL RECUADRO SEGUN EFICIENCIA
     const obtenerColorEficiencia = () => {
         if (porcentaje > 69.9) {
