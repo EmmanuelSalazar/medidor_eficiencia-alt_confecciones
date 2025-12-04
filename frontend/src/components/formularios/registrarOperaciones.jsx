@@ -115,11 +115,11 @@ const RegistrarOperaciones = () => {
     return (
         <Col className="formularioConBotones">
             <ListaProvider>
-                <div className="d-flex flex-column justify-content-center align-items-center">
+                {/* <div className="d-flex flex-column justify-content-center align-items-center">
                     <span>Orden en producción: <strong>{ ordenesDeProduccionModulo?.[0]?.ordenProduccion }</strong></span>
                     <span>Total de unidades asignadas: <strong>{ ordenesDeProduccionModulo?.[0]?.cantidadEntrada }</strong></span>
                     <span>Unidades restantes: <strong>{ ordenesDeProduccionModulo?.[0]?.cantidadEntrada - ordenesDeProduccionModulo?.[0]?.unidadesProducidas }</strong></span>
-                </div>
+                </div> */}
                 <Form className="mx-5" style={{ width: "100%" }} onSubmit={handleSubmit} ref={formRef}>
                     {mensajeDeExito && <Alert variant="success">{mensajeDeExito}</Alert>}
                     {mensajeDeAlerta && <Alert variant="warning">{mensajeDeAlerta}</Alert>}

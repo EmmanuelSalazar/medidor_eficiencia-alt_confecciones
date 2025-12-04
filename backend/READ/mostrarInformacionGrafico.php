@@ -21,7 +21,7 @@ require_once '../config/cortes.php';
                 1
             ) AS EficienciaDelDia,
             SUM(unidadesProducidas) AS TotalProducido,
-            ROUND(SUM(MetaPorEficiencia))AS TotalMeta,
+            CEILING(SUM(MetaPorEficiencia))AS TotalMeta,
             rp.modulo,
             o.posicion,
             o.rol

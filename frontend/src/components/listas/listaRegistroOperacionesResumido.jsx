@@ -13,7 +13,12 @@ const ListaRegistroOperacionesResumido = ({ modulo, fechaInicio, fechaFin, datos
         { title: 'Nombre', dataIndex: 'NombreOperario', key: 'nombre', width: 300 },
         { title: 'Total UND', dataIndex: 'TotalUnidadesProducidas', key: 'totalUnidades', width: 165},
         { title: 'Meta', dataIndex: 'TotalMeta', key: 'totalMeta', width: 120 },
-        { title: 'Eficiencia', dataIndex: 'PromedioEficiencia', key: 'eficiencia', width: 100 },
+                { title: 'Eficiencia en und', dataIndex: 'Eficiencia', key: 'eficiencia', width: 100,
+            render: (text, record) => record.Eficiencia + '%'
+         },
+        { title: 'Eficiencia promedio', dataIndex: 'PromedioEficiencia', key: 'eficienciaPromedio', width: 100, 
+            render: (text, record) => record.PromedioEficiencia + '%'
+         },
         { title: 'Modulo 1', dataIndex: 'modulo_1', key: 'modulo1', width: 100 },
         { title: 'Modulo 2', dataIndex: 'modulo_2', key: 'modulo2', width: 100 },
         { title: 'Modulo 3', dataIndex: 'modulo_3', key: 'modulo3', width: 100 },

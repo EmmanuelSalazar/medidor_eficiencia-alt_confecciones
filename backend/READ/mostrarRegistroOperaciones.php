@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     // Agregar filtro por módulo si se proporciona
     if ($moduloFiltro) {
-        $sql .= " AND R.modulo = $moduloFiltro";
+        $sql .= " AND RP.modulo = $moduloFiltro";
     }
 
     // Agregar filtro por rango de fechas si se proporcionan

@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
-import useMostrarInformacionGrafico from '../hooks/mostrarInformacionGrafico.'; 
+import useMostrarInformacionGrafico from '../hooks/mostrarInformacionGrafico.hook'; 
 import { useSearchParams } from 'react-router-dom';
 export const ListaContext = createContext();
 import FechaActual from '../components/fechaActual';
