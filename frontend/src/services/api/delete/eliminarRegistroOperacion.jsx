@@ -1,14 +1,14 @@
 import {useState, useCallback} from "react";
 import axios from 'axios';
 const EliminarRegistroOperacion = () => {
-    const apiURL = import.meta.env.VITE_API_URL;
+    const apiURL = import.meta.env.VITE_API_MIDDLEWARE_SERVER;
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null);
     const fetchData = useCallback(async (id) => {
         setLoading(true)
             try {
-                const response = await axios.delete(`${apiURL}/DELETE/eliminarRegistroOperacion.php?id=${id}`)
+                const response = await axios.delete(`${apiURL}/eliminarOperacion/${id}`)
                 if (!response.data.ok) {
                     return console.error('Ha ocurrido un error, reinicie, si este persiste, contacte al administrador')
                 }

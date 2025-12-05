@@ -122,7 +122,7 @@ function Informes() {
                                                 <td className="p-2">Presilla</td>
                                             </tr>
                                             <tr>
-                                                <td>{dataGrafico?.[1]?.filter(item => item.modulo === Number(seccion))?.[0]?.eficienciaQuincenal || "--"}</td>
+                                                <td>{dataGrafico?.[1]?.filter(item => item.modulo === Number(seccion))?.[0]?.eficienciaQuincenal || "--"}%</td>
                                             </tr>
                                         </tbody>
                                     </table>

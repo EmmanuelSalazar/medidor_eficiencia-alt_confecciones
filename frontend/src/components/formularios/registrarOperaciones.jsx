@@ -102,7 +102,7 @@ const RegistrarOperaciones = () => {
     const throttlingFormulario = useRef(
         throttle(async () => {
             await enviarDatos();
-        }, 1000, { leading: true, trailing: false  })
+        }, 2000, { leading: true, trailing: false  })
     ).current;
     // ALMACENAR, ENVIAR Y ACTUALIZAR INFORMACIÓN
     const handleSubmit = async (e) => {
@@ -139,7 +139,7 @@ const RegistrarOperaciones = () => {
                         <Form.Select required ref={referenciaRef} size="lg">
                             {ordenesDeProduccionModulo?.length > 0 ? ordenesDeProduccionModulo?.map((dato, index) => (
                                 <option key={index} value={dato.ref_id}>
-                                    {dato.referencia}
+                                    OP ({dato.ordenProduccion}) - REF ({dato.referencia})
                                 </option>
                             )) : listaReferencias?.map((dato, index) => (
                                 <option key={index} value={dato.ref_id}>
