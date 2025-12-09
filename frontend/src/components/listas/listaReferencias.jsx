@@ -31,7 +31,7 @@ const ListaReferencias = () => {
                 }, 3000);
             return () => clearTimeout(timer);
             }
-        }, [mensajeDeExito, mensajeDeAlerta, mensajeDeError]);
+    }, [mensajeDeExito, mensajeDeAlerta, mensajeDeError]);
         // ABRIR MODAL Y CARGAR DATOS
         const showModal = (referencia) => {
             setReferenciaSeleccionada(referencia)

@@ -21,7 +21,6 @@
             ]);
             exit();
         }
-
         // CIFRAR CONTRASEÑA
 
         $contrasenaUsuario = password_hash($contrasenaUsuario, PASSWORD_BCRYPT);
