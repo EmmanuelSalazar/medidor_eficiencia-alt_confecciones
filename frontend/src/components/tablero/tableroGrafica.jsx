@@ -3,17 +3,18 @@ import { Row, Col, Stack, Spinner, Alert} from 'react-bootstrap'
 import HorizontalBarChart from '..//graficos/grafico';
 import PorcentajeDeEficienciaPorCorte from "..//porcentajeEficienciaDeCorte";
 import PorcentajeDeEficienciaDiaria from "..//porcentajeEficienciaDelDia";
-import PanelNotificaciones from "..//panelNotificaciones";
 import IncentivoQuincena from "..//incentivoQuincena";
 import InformacionProduccion from "../panelInformacionProduccion";
 import PanelInformacionProduccionGeneralizada from "../panelInformacionProduccionGeneralizada";
 import { useSearchParams } from "react-router-dom";
 import FechaActual from "../fechaActual";
 import { ListaProvider } from "../../contexts/actualizarRegistroOperaciones";
+import useMostrarOrdenesDeProduccion from "../../hooks/useCargarOrdenesDeProduccion";
 import { ListaContext } from "../../contexts/informacionGrafico";
 const TableroGrafico = () => {
   const { PanelCompleto } = IncentivoQuincena();
-  const { listaOperarios, status, error } = useContext(ListaContext);
+  const { data: ordenesDeProduccion, status, error } = useMostrarOrdenesDeProduccion();
+  const { listaOperarios, status: statusLista, error: errorLista } = useContext(ListaContext);
   const {fechaFormateada, corteQuincena} = FechaActual();  
     const [moduloConMarca, setModuloConMarca] = React.useState("");
     const [operatorData, setOperatorData] = useState([]);
@@ -41,7 +42,7 @@ const TableroGrafico = () => {
     useEffect(() => {
       const operatorData = listaOperarios.filter((operario) => operario.rol === 1)
       setOperatorData(operatorData)
-      const revisorData = listaOperarios.filter((operario) => operario.rol === 2)
+      const revisorData = listaOperarios.filter((operario) => operario.rol === 2 || operario.rol === 4)
       setRevisorData(revisorData)
       const packageData = listaOperarios.filter((operario) => operario.rol === 3)
       setPackageData(packageData)
@@ -52,7 +53,7 @@ const TableroGrafico = () => {
     display: 'flex',
     justifyContent: 'center',
   };
-      if (status === 'loading') {
+      if (status === 'loading' || statusLista === 'loading') {
     return (
       <div style={styles}>
         <div className="text-center">
@@ -65,7 +66,7 @@ const TableroGrafico = () => {
     );
   }
 
-  if (error) {
+  if ( errorLista ) {
     return (
       <div style={styles}>
         <Alert variant="danger">
@@ -103,17 +104,26 @@ const TableroGrafico = () => {
                   <div className="p-2"><h5><strong>{fechaFormateada}</strong></h5></div>
                 </Stack>
               </Row>
-              <Row className='border border-black me-1 bg-black rounded-top rounded-bottom-0   text-light justify-content-center'>
-                  <InformacionProduccion />
+              {status === 'success' ? (
+              <Row className='border border-black me-1 bg-black rounded-top rounded-bottom   text-light justify-content-center'>
+                  <InformacionProduccion data={ordenesDeProduccion} />
               </Row>
-              <Row className='border border-black me-1 bg-black rounded rounded-top-0   text-light justify-content-center'>
-                  <PanelInformacionProduccionGeneralizada />
-              </Row>
+              ): status === 'error' ? (
+                  <Row className="text-center">
+                    <Alert variant="danger">
+                      Error al cargar las ordenes en producción: {error.message}
+                    </Alert>
+                  </Row>
+              ) : null
+              }
+              {/* <Row className='border border-black me-1 bg-black rounded rounded-top-0  text-light justify-content-center'>
+                  <PanelInformacionProduccionGeneralizada data={ordenesDeProduccion} />
+              </Row> */}
             </Col>
             <Col lg={9} xs={12} sm={12} md={4} className=' text-center' >            
               <div style={{display: 'flex', flexDirection: 'column', gap: '0.3rem'}}>
                 <div className="bg-black rounded" style={{display: 'flex', justifyContent: 'center'}}>
-                      <HorizontalBarChart operatorData={operatorData} graphicHeight="700px" />
+                      <HorizontalBarChart operatorData={operatorData} graphicHeight="715px" verticalFontHeight={35} />
                 </div>
                 <div  className="bg-black rounded" style={{display: 'flex', justifyContent: 'center'}}>
                       <HorizontalBarChart operatorData={revisorData} graphicHeight="180px" verticalFontHeight={35} />

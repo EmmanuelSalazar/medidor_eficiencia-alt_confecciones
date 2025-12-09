@@ -22,11 +22,12 @@
         }
         $sql = "SELECT
     O.nombre AS NombreOperario,
+    RP.op_id as op_id,
     RP.rol AS Rol,
     O.Rol AS RolOperario,
     COALESCE(SUM(RP.unidadesProducidas), 0) AS TotalUnidadesProducidas,
     ROUND(COALESCE(SUM(RP.MetaPorEficiencia), 0), 0) AS TotalMeta,
-    ROUND(COALESCE(AVG(RP.eficiencia), 0), 1) AS PromedioEficiencia, -- Evita NULLs
+    ROUND(COALESCE((SUM(RP.unidadesProducidas) / SUM(RP.MetaPorEficiencia) * 100), 0), 1) AS Eficiencia, -- Evita NULLs
     COALESCE(
 		CASE
 			WHEN COUNT(DISTINCT CASE WHEN RP.modulo = 1 THEN DATE(RP.fecha) END) >= 11
@@ -86,13 +87,28 @@
         ]);
         exit();
         }
+
+
         
         if ($stmt->execute()) {
             $sql = $stmt->get_result();
             $sql = $sql->fetch_all(MYSQLI_ASSOC);
+
+            $data = $sql;
+            $sql = 'SELECT rp.fecha, o.nombre, (SUM(unidadesProducidas) / SUM(MetaPorEficiencia) * 100) as Eficiencia_dia FROM `registro_produccion` rp JOIN operarios o ON rp.op_id = o.op_id  WHERE DATE(fecha) BETWEEN ? AND ? AND rp.op_id = ? GROUP BY DATE(fecha)';
+            foreach ($data as $key => $value) {
+                $stmt = $mysqli->prepare($sql);
+                $stmt->bind_param("sss", $fechaInicio, $fechaFin, $value['op_id']);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                $result = $result->fetch_all(MYSQLI_ASSOC);
+                $data[$key]['PromedioEficiencia'] = number_format(array_sum(array_column($result, 'Eficiencia_dia')) / count($result), 1);
+            }
+
+
             $respuesta = [
                 "ok" => true,
-                "respuesta" => $sql
+                "respuesta" => $data
             ];
             http_response_code(200);
             echo json_encode($respuesta, true);

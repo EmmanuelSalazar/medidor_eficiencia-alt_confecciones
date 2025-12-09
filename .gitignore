@@ -9,3 +9,6 @@
 node_modules
 /backend/vendor
 .vscode
+/frontend/.env
+/frontend/.env.development
+/frontend/.env.production

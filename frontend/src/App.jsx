@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
-
 import Tablero from './pages/tableros'
 import Referencias from './pages/referencias'
 import Operarios from "./pages/operarios";
@@ -15,6 +14,7 @@ import Admin from './pages/admin';
 import NotFoundPage from './pages/404';
 import Bodega from './pages/bodega';
 import BodegaClientes from './pages/bodega_clientes';
+import InformePorOperario from './pages/informePorOperario';
 import BodegaDespachos from './pages/bodega_despachos';
 import Kardex from './pages/kardex';
 function App() {
@@ -53,6 +53,7 @@ function App() {
             {userRol >= 2 && <Route path='/estadisticas' element={<Estadisticas />}/>}
             {userRol >= 2 && <Route path='/admin' element={<Admin />}/>}
             {userRol >= 2 && <Route path='/informes' element={<Informes />}/>}
+            {userRol >= 2 && <Route path='/informe_operario' element={<InformePorOperario />}/>}
             <Route path='/bodega_clientes' element={<BodegaClientes />}/>
             <Route path='/bodega' element={<Bodega />}/>
             <Route path='/bodega_despacho' element={<BodegaDespachos />}/>

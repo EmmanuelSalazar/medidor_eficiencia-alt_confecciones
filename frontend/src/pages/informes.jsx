@@ -4,18 +4,21 @@ import { Container, Row, Col, Button, Alert } from "react-bootstrap";
 import { Segmented, Calendar, Spin } from "antd";
 import { InfoCircleFilled, PrinterOutlined, ReloadOutlined } from '@ant-design/icons';
 import useRegistroOperacionesResumido from "../hooks/mostrarRegistroOperacionesResumido.hook";
-/* import IncentivoQuincena from "../components/utils/incentivoQuincena"; */
 import IncentivoQuincena from "../components/incentivoQuincena";
 import FechaActual from "../components/fechaActual";
 import logo from '../assets/img/svg/logo.svg'
 import { useNavigate } from "react-router-dom";
+import PorcentajeDeEficienciaPorCorte from "../components/porcentajeEficienciaDeCorte";
+import useMostrarInformacionGrafico from "../hooks/mostrarInformacionGrafico.hook";
 function Informes() {
     const { obtenerCortes } = FechaActual();
     const { beneficio, porcentajeEstatico } = IncentivoQuincena();
+    console.log(porcentajeEstatico)
     const navigate = useNavigate();
     const cortes = obtenerCortes();
     const [seccion, setSeccion] = useState(1);
     const [listaOperarios, setListaOperarios] = useState([]);
+    const [listaAuditoria, setListaAuditoria] = useState([]);
     const [listaRevisiones, setListaRevisiones] = useState([]);
     const [listaEmpaque, setListaEmpaque] = useState([]);
     const [eficienciaOperarias, setEficienciaOperarias] = useState([]);
@@ -23,21 +26,27 @@ function Informes() {
     const [eficienciaEmpaque, setEficienciaEmpaque] = useState([]);
     const [fechaInicio, setFechaInicio] = useState(cortes.fechaInicio);
     const [fechaFin, setFechaFin] = useState(cortes.fechaFinal);
+    const [eficienciaDelModulo, setEficienciaDelModulo] = useState("--");
     const { reload, data, status, error } = useRegistroOperacionesResumido(seccion,fechaInicio, fechaFin);
+    const { reload: reloadGrafico, data:dataGrafico, status:statusGrafico, error:errorGrafico } = useMostrarInformacionGrafico(fechaInicio);
     useEffect(() => {
         if (status === 'success') {
             setListaOperarios(data.filter(item => item.RolOperario === 1));
-            setListaRevisiones(data.filter(item => item.RolOperario === 2));
-            setEficienciaRevisiones(obtenerEficiencia(listaRevisiones));
+            setListaRevisiones(data.filter(item => item.RolOperario === 2 || item.RolOperario === 4));
             setListaEmpaque(data.filter(item => item.RolOperario === 3));
-            setEficienciaEmpaque(obtenerEficiencia(listaEmpaque));
         }
     }, [status, data]);
+    console.log(dataGrafico?.[1]?.filter(item => item.modulo === Number(seccion))?.[0]?.eficienciaQuincenal || "--")
+    useEffect(() => {
+        console.log(seccion)
+        if (statusGrafico === 'success') {
+            setEficienciaDelModulo(dataGrafico?.[1]?.filter(item => item.modulo === Number(seccion))?.[0]?.eficienciaQuincenal || "--");
+        } 
+    }, [seccion, statusGrafico])
     useEffect(() => {
         setEficienciaOperarias(obtenerEficiencia(listaOperarios));
         setEficienciaRevisiones(obtenerEficiencia(listaRevisiones));
         setEficienciaEmpaque(obtenerEficiencia(listaEmpaque));
-        console.log('La eficincia es ' + obtenerEficiencia(listaOperarios))
     }, [listaOperarios, listaEmpaque, listaRevisiones])
 
     const obtenerEficiencia = (datos) => {
@@ -62,19 +71,12 @@ function Informes() {
             console.log(error);
         }
     }
-    const datosAMostrar = async (modulo) => {
-        let moduloSeleccionado = parseInt(modulo);
-        try {
-            await reload(moduloSeleccionado, fechaInicio, fechaFin);
-        } catch (error) {
-            console.log(error);
-        }
-    }
     const secciones = [
-        { label: 'Modulo 1', value: '1', icon: <InfoCircleFilled /> },
-        { label: 'Modulo 2', value: '2', icon: <InfoCircleFilled />},
-        { label: 'Modulo 3', value: '3', icon: <InfoCircleFilled /> },
+        { label: 'M-1', value: '1', icon: <InfoCircleFilled /> },
+        { label: 'M-2', value: '2', icon: <InfoCircleFilled />},
+        { label: 'M-3', value: '3', icon: <InfoCircleFilled /> },
         { label: 'Otros', value: '4', icon: <InfoCircleFilled /> },
+        { label: 'Auditoria', value: '5', icon: <InfoCircleFilled /> },
     ]
 
     return (
@@ -88,7 +90,7 @@ function Informes() {
                         </Row>
                         <Row className="my-3 mb-1">
                             <Col className="noImprimir">
-                                <Segmented  options={secciones} onChange={value => alCambio(value)} />
+                                <Segmented options={secciones} onChange={value => alCambio(value)} />
                             </Col>
                         </Row>
                         <Row className="pe-5">
@@ -96,7 +98,7 @@ function Informes() {
                         </Row>
                         <Row>
                             <div className=" d-flex gap-2">
-                                <Button  variant="secondary" onClick={() => datosAMostrar(seccion)}><ReloadOutlined /> Actualizar datos</Button>
+                                <Button  variant="secondary" onClick={() => reload()}><ReloadOutlined /> Actualizar datos</Button>
                                 <Button onClick={() => window.print()}><PrinterOutlined /> Imprimir informe</Button>
                             </div>
                         </Row>
@@ -107,6 +109,23 @@ function Informes() {
                                 <h1 className="imprimir">Modulo {seccion}</h1>
                                 <h5>{fechaInicio} / {fechaFin}</h5>
                                 <p className="text-secondary">Formato: AAAA-MM-DD</p>
+                            </Col>
+                            <Col className="d-flex flex-column text-center">
+                                    <table className="table-bordered">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <h5>Eficiencia</h5>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td className="p-2">Presilla</td>
+                                            </tr>
+                                            <tr>
+                                                <td>{dataGrafico?.[1]?.filter(item => item.modulo === Number(seccion))?.[0]?.eficienciaQuincenal || "--"}%</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                             </Col>
                             <Col className="d-flex flex-column text-center">
                                 <div className="d-flex justify-content-end">
@@ -134,31 +153,31 @@ function Informes() {
                         </Row>
                         <Row>
                             {status === 'pending' ? <Spin className='mt-5' tip="Cargando..."><div></div></Spin> :
-                            <>
-                                <div>
-                                    <h3>Operarios</h3>
-                                    <ListaRegistroOperacionesResumido datos={listaOperarios} modulo={seccion} fechaInicio={fechaInicio} fechaFin={fechaFin} />
-                                </div>
-                                <div>
-                                    <h3>Revisión</h3>
-                                    <ListaRegistroOperacionesResumido datos={listaRevisiones} modulo={seccion} fechaInicio={fechaInicio} fechaFin={fechaFin} />
-                                </div>
-                                <div>
-                                    <h3>Empaque</h3>
-                                    <ListaRegistroOperacionesResumido datos={listaEmpaque} modulo={seccion} fechaInicio={fechaInicio} fechaFin={fechaFin} />
-                                </div>
-                            </>   
+                                <>
+                                { seccion != 5 ? <>
+                                    <div>
+                                        <h3>Operarios</h3>
+                                        <ListaRegistroOperacionesResumido datos={listaOperarios} modulo={seccion} fechaInicio={fechaInicio} fechaFin={fechaFin} />
+                                    </div>
+                                    <div>
+                                        <h3>Revisión</h3>
+                                        <ListaRegistroOperacionesResumido datos={listaRevisiones} modulo={seccion} fechaInicio={fechaInicio} fechaFin={fechaFin} />
+                                    </div>
+                                    <div>
+                                        <h3>Empaque</h3>
+                                        <ListaRegistroOperacionesResumido datos={listaEmpaque} modulo={seccion} fechaInicio={fechaInicio} fechaFin={fechaFin} />
+                                    </div>
+                                </>  :    
+                                    <Row className="mt-5">
+                                        <h4>Auditoría</h4>
+                                        <ListaRegistroOperacionesResumido datos={listaOperarios} modulo={seccion} fechaInicio={fechaInicio} fechaFin={fechaFin} />
+                                        <span className="text-muted">La meta de auditoría se mide de esta forma: <strong>134</strong> (Unidades por hora) <strong>* 9.1</strong> (tiempo de trabajo) * <strong>(Dias trabajados en la quincena)</strong></span>
+                                        <span className="text-muted">Las unidades producidas resultan de la suma de ambas auditorías</span>
+                                    </Row>                              
+                                }
+                                 </>  
                             }
                         </Row>
-
-                        {seccion === 4 &&
-                            <Row className="mt-5">
-                                <h4>Auditoría</h4>
-                                <ListaRegistroOperacionesResumido modulo={5} fechaInicio={fechaInicio} fechaFin={fechaFin} />
-                                <span className="text-muted">La meta de auditoría se mide de esta forma: <strong>134</strong> (Unidades por hora) <strong>* 9.1</strong> (tiempo de trabajo) * <strong>(Dias trabajados en la quincena)</strong></span>
-                                <span className="text-muted">Las unidades producidas resultan de la suma de ambas auditorías</span>
-                            </Row>
-                        }
                         {/* <Row className="justify-content-center">
                             <EstadisticaInforme modulo={seccion} fechaFin={fechaFin} fechaInicio={fechaInicio} />
                         </Row> */}

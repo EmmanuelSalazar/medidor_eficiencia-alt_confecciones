@@ -1,7 +1,7 @@
 import { useEffect, useState }  from 'react';
 import io from 'socket.io-client';
 
-const SOCKET_URL = 'http://192.168.1.15:4000';
+const SOCKET_URL = import.meta.env.VITE_WEBSOCKET_URL;
 
 export function useSocketListener() {
     const [pantallaActiva, setPantallaActiva] = useState(null);
@@ -9,15 +9,22 @@ export function useSocketListener() {
     const [socket, setSocket] = useState(null); 
 
     useEffect(() => {
-        const newSocket = io(SOCKET_URL);
+        const newSocket = io(SOCKET_URL, {
+            reconnection: true,
+            reconnectionAttempts: Infinity,
+            reconnectionDelay: 1000,
+        });
         setSocket(newSocket);
         newSocket.on('connect', () => {
-            console.log('Conectado al servidor de sockets');
+            console.log('Conectado al servidor websocket');
         });
 
         newSocket.on('ui_update', (data) => {
             setPantallaActiva(data.pantallaId);
-            setNotificacion(data);
+            setNotificacion({
+                mensaje: data.mensaje,
+                img: data.img || null
+            });
 
         })
         return () => {

@@ -12,7 +12,7 @@ html, body {
     
 }
 .limitToPrint {
-    max-height: 34vh !important;
+    max-height: 58vh !important;
     overflow-y: auto;
 }
 .tablaCentrada {
@@ -122,6 +122,7 @@ html, body {
     }
     .imprimir {
         display: block;
+        overflow-y: auto;
     }
     .tablaImprimir {
         margin-left: 1rem;

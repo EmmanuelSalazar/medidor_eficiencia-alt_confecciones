@@ -4,6 +4,7 @@ require_once '../config/baseDeDatos.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     // Obtener el parámetro "modulo" del query string
+    $activo = isset($_GET['activo']) ? intval($_GET['activo']) : 0;
     // Construir la consulta base
     $sql = "
         SELECT 
@@ -16,9 +17,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 WHEN activo = 0 THEN 'Inactivo'
                 ELSE 'Desconocido' -- Manejar valores inesperados
             END AS estado
-        FROM referencias ORDER BY ref_id DESC
+        FROM referencias  
     ";
-
+    if($activo == 1) {
+        $sql .= " WHERE activo = 1 ";
+    }
+    $sql .= ' ORDER BY ref_id DESC';
     // Preparar la consulta
     $stmt = $mysqli->prepare($sql);
     if (!$stmt) {

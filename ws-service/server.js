@@ -7,7 +7,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*", // Puerto de tu app React Admin/Visualización
+    origin: "*",
     methods: ["GET", "POST"]
   }
 });
@@ -18,8 +18,7 @@ io.on('connection', (socket) => {
   console.log('Un cliente de react se ha conectado con id:', socket.id);
 
   socket.on('send_command', (data) => {
-    const { id, msg } = data;
-    
+    const { id, msg, img } = data;
     // Validación de parámetros
     if(!id || !msg) { 
       // Enviamos un error de vuelta solo al cliente que envió el comando
@@ -27,10 +26,11 @@ io.on('connection', (socket) => {
     }
 
     // Envía el mensaje a TODOS los demás clientes conectados (menos al que lo envió)
-        console.log(`[WS] Reenviando comando: ${id} | Mensaje: ${msg}`);
+        console.log(`[WS] Reenviando comando: ${id} | Mensaje: ${msg} | Imagen: ${img || 'n/a'}`);
     socket.broadcast.emit('ui_update', {
       pantallaId: id,
-      mensaje: msg
+      mensaje: msg,
+      img: img || null
     });
   });
 

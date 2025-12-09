@@ -73,6 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             RP.fecha,
             RP.ref_id,
             RP.modulo,
+            RP.op_id,
             RP.adicionales as Comentarios,
             horario,
             RP.rol,
@@ -92,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
     // Agregar filtro por módulo si se proporciona
     if ($moduloFiltro) {
-        $sql .= " AND R.modulo = $moduloFiltro";
+        $sql .= " AND RP.modulo = $moduloFiltro";
     }
 
     // Agregar filtro por rango de fechas si se proporcionan
@@ -148,6 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 "ref_id" => $row["ref_id"],
                 "horario" => $row["horario"],
                 "reg_id" => $row["regProd_id"],
+                "op_id" => $row["op_id"],
                 "nombre_operario" => $row["NombreOperario"],
                 "referencia" => $row["Referencia"],
                 "fecha" => $row["fecha"],

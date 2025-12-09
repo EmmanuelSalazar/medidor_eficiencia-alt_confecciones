@@ -31,7 +31,7 @@ const ListaReferencias = () => {
                 }, 3000);
             return () => clearTimeout(timer);
             }
-        }, [mensajeDeExito, mensajeDeAlerta, mensajeDeError]);
+    }, [mensajeDeExito, mensajeDeAlerta, mensajeDeError]);
         // ABRIR MODAL Y CARGAR DATOS
         const showModal = (referencia) => {
             setReferenciaSeleccionada(referencia)
@@ -76,7 +76,7 @@ const ListaReferencias = () => {
         { title: 'Referencia', dataIndex: 'referencia', key: 'referencia'},
         { title: 'Tiempo de produccion', dataIndex: 'tiempoDeProduccion', key: 'tiempoDeProduccion'},
         { title: 'Modulo', dataIndex: 'modulo', key: 'modulo'},
-        { title: 'Estado', dataIndex: 'estado', key: 'estado'},
+        { title: 'Estado', dataIndex: 'estado', key: 'estado'},     
         {   fixed: 'right',
             title: 'Acciones',
             key: 'acciones',
@@ -89,7 +89,6 @@ const ListaReferencias = () => {
                 </span>
             ),
         },
-
     ];
     if (status === 'loading') return <Spin className='mt-5' tip="Cargando..."><div></div></Spin>;
     if (error) return <Alert variant='danger'>Error: {error.message}</Alert>;

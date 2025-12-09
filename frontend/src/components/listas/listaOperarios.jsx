@@ -76,6 +76,7 @@ const ListaOperarios = () => {
         { value: 1, label: 'Operario/a' },
         { value: 2, label: 'Revisador/a' },
         { value: 3, label: 'Empaquetador/a' },
+        { value: 4, label: 'Revisador/a Meta Normal' },
     ];
     // ORDENAR ROLES
     roles = reordenarArreglo(roles, operarioSeleccionado?.rol)
