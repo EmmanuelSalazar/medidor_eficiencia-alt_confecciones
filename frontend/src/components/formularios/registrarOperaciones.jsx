@@ -23,6 +23,8 @@ const RegistrarOperaciones = () => {
     const referenciaRef = useRef();
     const adicionalesRef = useRef();
     const formRef = useRef(null);
+    const [refId, setRefId] = useState(0)
+    const [opInfo, setOpInfo] = useState({});
     // MANEJO DE ALERTAS EXITO/ALERTA/ERROR
     const [mensajeDeExito, setMensajeDeExito] = useState("");
     const [mensajeDeAlerta, setMensajeDeAlerta] = useState("");
@@ -47,13 +49,23 @@ const RegistrarOperaciones = () => {
     }, [registroMultiple]);
     // ACTUALIZAR ORDENES DE PRODUCCION
     useEffect(() => {
+        if(!refId) {
+            setRefId(ordenesDeProduccionModulo?.[0]?.ref_id);
+        }
+    })
+    useEffect(() => {
         if (ordenesDeProduccionModulo) {
+            const dataFiltered = ordenesDeProduccionModulo.filter(item => Number(item.ref_id) === Number(refId));
+            setOpInfo({
+                ordenProduccion: dataFiltered?.[0]?.ordenProduccion,
+                unidadesDisponibles: dataFiltered?.[0]?.cantidadEntrada,
+            })
             ordenRef.current = ({
-                ordenProduccion: ordenesDeProduccionModulo?.[0]?.ordenProduccion,
-                cantidadEntrada: ordenesDeProduccionModulo?.[0]?.cantidadEntrada,
+                ordenProduccion: dataFiltered?.[0]?.ordenProduccion,
+                unidadesDisponibles: dataFiltered?.[0]?.cantidadEntrada,
             });
         }
-    }, [ordenesDeProduccionModulo])
+    }, [ordenesDeProduccionModulo, refId])
     const activarRegistroMultiple = (valor) => {
         if (!valor) {
         setRegistroMultiple(valor);
@@ -66,16 +78,15 @@ const RegistrarOperaciones = () => {
     const activarComentarios = (checked) => {
         setComentarios(checked); // Actualiza el estado basado en el valor del checkbox
     };
-    const enviarDatos = async () => {
-        if(!ordenRef.current){
+    const enviarDatos = async (opInfo) => {
+        if(!opInfo){
             setMensajeDeError("Los datos de la orden no se han cargado aún.");
             return;
         }
-
         const values = {
             orden: {
-                orden: ordenRef.current?.ordenProduccion,
-                unidadesDisponibles: ordenRef.current?.cantidadEntrada,
+                orden: opInfo?.ordenProduccion,
+                unidadesDisponibles: opInfo?.unidadesDisponibles,
             },
             operario: operarioRef.current.value,
             unidadesProducidas: unidadesProducidasRef.current.value,
@@ -101,7 +112,7 @@ const RegistrarOperaciones = () => {
     // THROTTLING PARA LIMITAR LA CANTIDAD DE LLAMADAS A LA API
     const throttlingFormulario = useRef(
         throttle(async () => {
-            await enviarDatos();
+            await enviarDatos(ordenRef.current);
         }, 2000, { leading: true, trailing: false  })
     ).current;
     // ALMACENAR, ENVIAR Y ACTUALIZAR INFORMACIÓN
@@ -115,11 +126,6 @@ const RegistrarOperaciones = () => {
     return (
         <Col className="formularioConBotones">
             <ListaProvider>
-                {/* <div className="d-flex flex-column justify-content-center align-items-center">
-                    <span>Orden en producción: <strong>{ ordenesDeProduccionModulo?.[0]?.ordenProduccion }</strong></span>
-                    <span>Total de unidades asignadas: <strong>{ ordenesDeProduccionModulo?.[0]?.cantidadEntrada }</strong></span>
-                    <span>Unidades restantes: <strong>{ ordenesDeProduccionModulo?.[0]?.cantidadEntrada - ordenesDeProduccionModulo?.[0]?.unidadesProducidas }</strong></span>
-                </div> */}
                 <Form className="mx-5" style={{ width: "100%" }} onSubmit={handleSubmit} ref={formRef}>
                     {mensajeDeExito && <Alert variant="success">{mensajeDeExito}</Alert>}
                     {mensajeDeAlerta && <Alert variant="warning">{mensajeDeAlerta}</Alert>}
@@ -136,14 +142,10 @@ const RegistrarOperaciones = () => {
                     </Form.Group>
                     <Form.Group className="m-5">
                         <Form.Label>Seleccione la referencia</Form.Label>
-                        <Form.Select required ref={referenciaRef} size="lg">
-                            {ordenesDeProduccionModulo?.length > 0 ? ordenesDeProduccionModulo?.map((dato, index) => (
+                        <Form.Select required ref={referenciaRef}  onChange={() => setRefId(referenciaRef.current.value)} size="lg">
+                            {ordenesDeProduccionModulo?.map((dato, index) => (
                                 <option key={index} value={dato.ref_id}>
                                     OP ({dato.ordenProduccion}) - REF ({dato.referencia})
-                                </option>
-                            )) : listaReferencias?.map((dato, index) => (
-                                <option key={index} value={dato.ref_id}>
-                                    {dato.referencia}
                                 </option>
                                 ))}
                         </Form.Select>
