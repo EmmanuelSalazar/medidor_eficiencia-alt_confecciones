@@ -1,16 +1,14 @@
-import { useRef, useState, useEffect, useContext, useCallback } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import { Button, Form, Alert, Col, Stack } from "react-bootstrap";
 import { Switch, Checkbox, Spin } from "antd";
 import AlmacenarDatos from "../../services/api/create/almacenarRegistroOperaciones";
 import { ListaContext as ContextoEnLista } from "../../contexts/actualizarRegistroOperaciones";
 import { ListaContext, ListaProvider } from "../../contexts/actualizarOperarios";
-import { ListaContext as ContextoEnLista2 } from "../../contexts/actualizarReferencias";
 import { throttle } from "lodash";
 
 const RegistrarOperaciones = () => {
     // CONTEXTOS
     const { lista, setOperariosRetirados, setRegistroMultipleActivo } = useContext(ListaContext);
-    const { lista:listaReferencias } = useContext(ContextoEnLista2);
     const { actualizarLista, status, error, ordenesDeProduccionModulo, statusOrdenes, errorOrdenes } = useContext(ContextoEnLista);
     // ACTIVAR/DESACTIVARR REGISTROS MULTIPLES/COMENTARIOS ADICIONALES
     const [registroMultiple, setRegistroMultiple] = useState(true);
@@ -24,7 +22,6 @@ const RegistrarOperaciones = () => {
     const adicionalesRef = useRef();
     const formRef = useRef(null);
     const [refId, setRefId] = useState(0)
-    const [opInfo, setOpInfo] = useState({});
     // MANEJO DE ALERTAS EXITO/ALERTA/ERROR
     const [mensajeDeExito, setMensajeDeExito] = useState("");
     const [mensajeDeAlerta, setMensajeDeAlerta] = useState("");
@@ -54,16 +51,8 @@ const RegistrarOperaciones = () => {
         }
     })
     useEffect(() => {
-        if (ordenesDeProduccionModulo) {
-            const dataFiltered = ordenesDeProduccionModulo.filter(item => Number(item.ref_id) === Number(refId));
-            setOpInfo({
-                ordenProduccion: dataFiltered?.[0]?.ordenProduccion,
-                unidadesDisponibles: dataFiltered?.[0]?.cantidadEntrada,
-            })
-            ordenRef.current = ({
-                ordenProduccion: dataFiltered?.[0]?.ordenProduccion,
-                unidadesDisponibles: dataFiltered?.[0]?.cantidadEntrada,
-            });
+        if (ordenesDeProduccionModulo) {        
+            ordenRef.current = ordenesDeProduccionModulo;
         }
     }, [ordenesDeProduccionModulo, refId])
     const activarRegistroMultiple = (valor) => {
@@ -78,15 +67,20 @@ const RegistrarOperaciones = () => {
     const activarComentarios = (checked) => {
         setComentarios(checked); // Actualiza el estado basado en el valor del checkbox
     };
-    const enviarDatos = async (opInfo) => {
+    const obtenerOP = (ref_id) => {
+        const odpl = ordenRef.current;
+        return odpl.filter(item => Number(item.ref_id) === Number(ref_id));
+    }
+    const enviarDatos = async () => {
+        const opInfo = obtenerOP(Number(referenciaRef.current.value));
         if(!opInfo){
             setMensajeDeError("Los datos de la orden no se han cargado aún.");
             return;
         }
         const values = {
             orden: {
-                orden: opInfo?.ordenProduccion,
-                unidadesDisponibles: opInfo?.unidadesDisponibles,
+                orden: opInfo?.[0]?.ordenProduccion,
+                unidadesDisponibles: opInfo?.[0]?.cantidadEntrada,
             },
             operario: operarioRef.current.value,
             unidadesProducidas: unidadesProducidasRef.current.value,
@@ -112,7 +106,7 @@ const RegistrarOperaciones = () => {
     // THROTTLING PARA LIMITAR LA CANTIDAD DE LLAMADAS A LA API
     const throttlingFormulario = useRef(
         throttle(async () => {
-            await enviarDatos(ordenRef.current);
+            await enviarDatos();
         }, 2000, { leading: true, trailing: false  })
     ).current;
     // ALMACENAR, ENVIAR Y ACTUALIZAR INFORMACIÓN
