@@ -21,6 +21,7 @@ const RegistrarOperaciones = () => {
     const referenciaRef = useRef();
     const adicionalesRef = useRef();
     const formRef = useRef(null);
+    const opRef = useRef(null)
     const [refId, setRefId] = useState(0)
     // MANEJO DE ALERTAS EXITO/ALERTA/ERROR
     const [mensajeDeExito, setMensajeDeExito] = useState("");
@@ -67,12 +68,12 @@ const RegistrarOperaciones = () => {
     const activarComentarios = (checked) => {
         setComentarios(checked); // Actualiza el estado basado en el valor del checkbox
     };
-    const obtenerOP = (ref_id) => {
+    const obtenerOP = (op) => {
         const odpl = ordenRef.current;
-        return odpl.filter(item => Number(item.ref_id) === Number(ref_id));
+        return odpl.filter(item => item.ordenProduccion == op);
     }
     const enviarDatos = async () => {
-        const opInfo = obtenerOP(Number(referenciaRef.current.value));
+        const opInfo = obtenerOP(opRef.current.value);
         if(!opInfo){
             setMensajeDeError("Los datos de la orden no se han cargado aún.");
             return;
@@ -84,7 +85,7 @@ const RegistrarOperaciones = () => {
             },
             operario: operarioRef.current.value,
             unidadesProducidas: unidadesProducidasRef.current.value,
-            referencia: referenciaRef.current.value,
+            referencia: opInfo?.[0]?.ref_id,
             adicionales: adicionalesRef.current.value ?? null,
             modulo: window.moduloSeleccionado,
         };
@@ -92,6 +93,7 @@ const RegistrarOperaciones = () => {
             setMensajeDeError("No se ha seleccionado un modulo");
             return;
         }
+        console.log(values);
         try {
             await AlmacenarDatos(values);
             await actualizarLista();
@@ -136,9 +138,9 @@ const RegistrarOperaciones = () => {
                     </Form.Group>
                     <Form.Group className="m-5">
                         <Form.Label>Seleccione la referencia</Form.Label>
-                        <Form.Select required ref={referenciaRef}  onChange={() => setRefId(referenciaRef.current.value)} size="lg">
+                        <Form.Select required ref={opRef}  onChange={() => setRefId(referenciaRef.current.value)} size="lg">
                             {ordenesDeProduccionModulo?.map((dato, index) => (
-                                <option key={index} value={dato.ref_id}>
+                                <option key={index} value={dato.ordenProduccion}>
                                     OP ({dato.ordenProduccion}) - REF ({dato.referencia})
                                 </option>
                                 ))}
