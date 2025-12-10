@@ -10,7 +10,6 @@ const ListaPorOperario = ( { data = [{}] }) => {
             render: (text, record) => record.eficiencia + '%'
          },
     ]
-
     return (
         <div className="limitToPrint">
             <Table  rowKey="user_id" columns={columns} dataSource={data} pagination={false} />
