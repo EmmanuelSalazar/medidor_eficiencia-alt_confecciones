@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Menu } from 'antd'
-import { AppstoreOutlined, DesktopOutlined, TeamOutlined, BarsOutlined, FileAddOutlined, DatabaseOutlined, BarChartOutlined, SolutionOutlined, LogoutOutlined, SettingOutlined, MenuUnfoldOutlined, ApartmentOutlined, SnippetsOutlined } from '@ant-design/icons'
+import { AppstoreOutlined, DesktopOutlined, TeamOutlined, BarsOutlined, FileAddOutlined, DatabaseOutlined, BarChartOutlined, SolutionOutlined, LogoutOutlined, SettingOutlined, MenuUnfoldOutlined, ApartmentOutlined, SnippetsOutlined, FolderViewOutlined } from '@ant-design/icons'
 import { NavLink } from 'react-router-dom'
 import { ListaContext } from "../contexts/informacionGrafico";
 import { jwtDecode } from 'jwt-decode';
@@ -51,6 +51,10 @@ const items = [
             label: <NavLink to="/informes" className="noDecorativos">Informes</NavLink>,
             key: 'informes',
             icon: <SnippetsOutlined />
+          }, {
+            label: <NavLink to="/informe_operario" className="noDecorativos">Desempeño operarios</NavLink>,
+            key: 'informes_operario',
+            icon: <FolderViewOutlined />
           }
         ]
       }: null,

@@ -28,7 +28,7 @@ function InformePorOperario() {
     return (
         <Container>
             <Row>
-                <Col lg={4} className='mt-2 g-5 py-3 border rounded border-dark noImprimir'>
+                <Col lg={4} className='mt-2 g-5 py-3 rounded noImprimir'>
                     <Row className='mb-3 gap-1'>
                         <h4>Filtrar por rango de fechas</h4>
                         <span className='text-muted'>Selecciona las fechas que deseas estudiar <br/>(desde-hasta)</span>
@@ -36,7 +36,7 @@ function InformePorOperario() {
                             onChange={datesPicked}
                         />
                     </Row>
-                    <Row>
+                    <Row className='mb-3 gap-1'>
                         <h4>Filtrar por operario</h4>
                         <span className='text-muted'>Selecciona el operario que deseas estudiar</span>
                         <Form.Select
@@ -55,7 +55,7 @@ function InformePorOperario() {
                         <Button variant='primary' onClick={() => window.print()}>Imprimir</Button>
                     </Row>
                 </Col>
-                <Col lg={8} md={12} sm={12}>
+                <Col lg={8} md={12} sm={12} className="py-3">
                     <ListaPorOperario data={data} />
                 </Col>
             </Row>
