@@ -6,8 +6,8 @@ $respuesta = [
     "ok" => false
 ];
 if($_SERVER['REQUEST_METHOD'] == 'GET') {
-    $fechaInicial = $_GET['fechaInicial'] ?? NULL;
-    $fechaFinal = $_GET['fechaFinal'] ?? NULL; 
+    $fechaInicial = $_GET['fecha_inicio'] ?? NULL;
+    $fechaFinal = $_GET['fecha_final'] ?? NULL; 
     if (!$fechaFinal || !$fechaInicial) {
         $respuesta = [
             ...$respuesta,

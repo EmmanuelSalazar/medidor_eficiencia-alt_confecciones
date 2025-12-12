@@ -91,6 +91,9 @@ const items = [
             label: <NavLink to="/bodega_despacho" className="noDecorativos">Despacho</NavLink>,
             key: 'despacho'
           },{
+            label: <NavLink to="/despacho_por_referencia" className="noDecorativos">Despacho por referencia</NavLink>,
+            key: 'despacho_por_referencia'
+          },{
             label: <NavLink to="/bodega_clientes" className="noDecorativos">Clientes</NavLink>,
             key: 'clientes'
           }, {

@@ -17,6 +17,8 @@ import BodegaClientes from './pages/bodega_clientes';
 import InformePorOperario from './pages/informePorOperario';
 import BodegaDespachos from './pages/bodega_despachos';
 import Kardex from './pages/kardex';
+import mostrarSumatoriaReferencia from './services/api/read/mostrarSumatoriaReferencia';
+import DespachoPorReferencia from './pages/despachoPorReferencia';
 function App() {
   const token = localStorage.getItem('token') || null;
   // Verificar que tenga un token almacenado
@@ -58,6 +60,7 @@ function App() {
             <Route path='/bodega' element={<Bodega />}/>
             <Route path='/bodega_despacho' element={<BodegaDespachos />}/>
             <Route path='/kardex' element={<Kardex />}/>
+            <Route path='/despacho_por_referencia' element={<DespachoPorReferencia />}/>
             <Route path='*' element={<NotFoundPage />}/>
           </Routes>
         </ListaProvider>
