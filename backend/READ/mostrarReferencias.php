@@ -17,12 +17,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 WHEN activo = 0 THEN 'Inactivo'
                 ELSE 'Desconocido' -- Manejar valores inesperados
             END AS estado
-        FROM referencias  
+        FROM referencias WHERE eliminado = 0
     ";
     if($activo == 1) {
-        $sql .= " WHERE activo = 1 ";
+        $sql .= " AND activo = 1 ";
     }
-    $sql .= ' ORDER BY ref_id DESC';
+    $sql .= ' ORDER BY referencia DESC';
     // Preparar la consulta
     $stmt = $mysqli->prepare($sql);
     if (!$stmt) {

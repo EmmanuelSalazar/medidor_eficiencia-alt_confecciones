@@ -16,11 +16,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Validar datos
     $referencia = $postData['codigoReferencia'] ?? null;
     $tiempoTarea = $postData['tiempoTarea'] ?? null;
-    $modulo = $postData['modulo'] ?? null;
     $cantidadPorModulo = $postData['cantidadPorModulo'] ?? null;
 
 
-    if (empty($referencia) OR empty($tiempoTarea) OR empty($modulo)) {
+    if (empty($referencia) OR empty($tiempoTarea)) {
         http_response_code(401);
         echo json_encode([
             'ok' => false,
@@ -30,8 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Insertar en base de datos
-    $stmt = $mysqli->prepare("INSERT INTO referencias (referencia, tiempoDeProduccion, modulo) VALUES (?, ?, ?)");
-    $stmt->bind_param("ssi", $referencia, $tiempoTarea, $modulo);
+    $stmt = $mysqli->prepare("INSERT INTO referencias (referencia, tiempoDeProduccion) VALUES (?, ?)");
+    $stmt->bind_param("ss", $referencia, $tiempoTarea);
 
     if ($stmt->execute()) {
         http_response_code(200);
@@ -40,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'respuesta' => 'Solicitud exitosa',
             'referencia' => $referencia,
             'nome' => $tiempoTarea,
-            'modulo' => $modulo
         ], true);
     } else {
         http_response_code(500);

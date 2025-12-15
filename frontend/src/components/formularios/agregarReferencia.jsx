@@ -30,7 +30,6 @@ const AgregarReferencia = () => {
         const values = {
             'codigoReferencia': codigoReferenciaRef.current.value,
             'tiempoTarea': tiempoTareaRef.current.value,
-            'modulo': moduloRef.current.value,
         }
         try {
             await AlmacenarDatos(values)
@@ -57,8 +56,6 @@ const AgregarReferencia = () => {
                     <Form.Control type="number" placeholder="Tiempo en minutos" required ref={tiempoTareaRef} step="any"/>
                 </Form.Group>
                 <Form.Group className="m-5">
-                    <Form.Label>Ingresa el modulo al cual pertenece</Form.Label>
-                    <Form.Control type="number" placeholder="Ej: 1" required ref={moduloRef}/>
                     <Form.Text>Las referencias recien registradas se marcan como <strong>inactivas</strong>, deberás <strong>activarlas</strong> manualmente</Form.Text>
                 </Form.Group>
                 <Form.Group>

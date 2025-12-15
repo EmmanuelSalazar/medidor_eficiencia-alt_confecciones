@@ -13,9 +13,6 @@ function Referencias() {
                         <AgregarReferencia/>
                     </Col>
                     <Col lg="7">
-                        <Row className="my-3">
-                            <BotonesSeleccionModulos/>
-                        </Row>
                         <Row>
                             <ListaReferencias />
                         </Row>

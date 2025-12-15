@@ -42,7 +42,6 @@ const ListaReferencias = () => {
             const values = {
                 "referencia": referenciaRef.current.value,
                 "tiempoDeProduccion": tiempoDeProduccionRef.current.value,
-                "modulo": moduloRef.current.value,
                 "estado": estadoRef.current.value,
                 "ref_id": referenciaSeleccionada.ref_id
             }
@@ -75,7 +74,6 @@ const ListaReferencias = () => {
     const columns = [
         { title: 'Referencia', dataIndex: 'referencia', key: 'referencia'},
         { title: 'Tiempo de produccion', dataIndex: 'tiempoDeProduccion', key: 'tiempoDeProduccion'},
-        { title: 'Modulo', dataIndex: 'modulo', key: 'modulo'},
         { title: 'Estado', dataIndex: 'estado', key: 'estado'},     
         {   fixed: 'right',
             title: 'Acciones',
@@ -113,10 +111,6 @@ const ListaReferencias = () => {
                         <Form.Group>
                             <Form.Label>Tiempo de produccion</Form.Label>
                             <Form.Control type="number" defaultValue={referenciaSeleccionada?.tiempoDeProduccion} ref={tiempoDeProduccionRef}/>
-                        </Form.Group>
-                        <Form.Group>
-                            <Form.Label>Modulo</Form.Label>
-                            <Form.Control type="number" defaultValue={referenciaSeleccionada?.modulo} ref={moduloRef}/>
                         </Form.Group>
                         <Form.Group>
                             <Form.Label>Estado</Form.Label>

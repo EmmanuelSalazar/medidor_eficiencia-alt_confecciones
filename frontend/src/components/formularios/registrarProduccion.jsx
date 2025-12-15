@@ -95,20 +95,6 @@ const RegistrarProduccion = () => {
                     </Form.Select>
                 </Form.Group>
                 <Form.Group>
-                    <Form.Label>Modulo</Form.Label>
-                    <Form.Select className='selectCustom' ref={moduloRef} required onChange={cargarReferencias}>
-                        <option>Seleccione un modulo</option>
-                        {datos.map((dato, index) => (
-                            <option key={index} value={dato.value}>
-                                {dato.label}
-                            </option>
-                        ))}
-                    </Form.Select>
-                    <Form.Text className='textSecondary'>
-                        Al seleccionar un modulo, se cargara la lista de referencias correspondiente
-                    </Form.Text>
-                </Form.Group>
-                <Form.Group>
                         <Form.Label>Seleccione la referencia</Form.Label>
                         <Form.Select className='selectCustom' required ref={referenciaRef}>
                             {lista.map((dato, index) => (

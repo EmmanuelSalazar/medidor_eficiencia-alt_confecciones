@@ -10,11 +10,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     $ref_id = $datos['ref_id'] ?? NULL;
     $referencia = $datos['referencia'] ?? NULL;
     $tiempoDeProduccion = $datos['tiempoDeProduccion'] ?? NULL;
-    $modulo = $datos['modulo'] ?? NULL;
-    $activo = $datos['estado'] ?? NULL; // Cambio: Usar "activo" en lugar de "estado"
+    $activo = $datos['estado'] ?? NULL;
 
     // Validar que los datos necesarios estén presentes
-    if (!$referencia || !$tiempoDeProduccion || !$modulo || $activo === NULL) {
+    if (!$referencia || !$tiempoDeProduccion || $activo === NULL) {
         echo json_encode(['ok' => false, 'respuesta' => 'SOLICITUD INVALIDA: ERR 402']);
         exit;
     }
@@ -24,9 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'PUT') {
 
     try {
         // Actualizar la referencia seleccionada
-        $sql = "UPDATE referencias SET referencia = ?, tiempoDeProduccion = ?, modulo = ?, activo = ? WHERE ref_id = ?";
+        $sql = "UPDATE referencias SET referencia = ?, tiempoDeProduccion = ?, activo = ? WHERE ref_id = ?";
         $stmt = $mysqli->prepare($sql);
-        $stmt->bind_param("sdiii", $referencia, $tiempoDeProduccion, $modulo, $activo, $ref_id); // Usamos "iiis" porque `tiempoDeProduccion`, `modulo` y `activo` son enteros, y `referencia` es una cadena
+        $stmt->bind_param("sdii", $referencia, $tiempoDeProduccion, $activo, $ref_id); // Usamos "iiis" porque `tiempoDeProduccion`, `modulo` y `activo` son enteros, y `referencia` es una cadena
 
         if (!$stmt->execute()) {
             throw new Exception("Error al actualizar la referencia.");

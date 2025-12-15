@@ -8,7 +8,7 @@ export const ListaProvider = ({ children }) => {
  const location = useLocation();
   // VOLVER A CARGAR TODOS LOS OPERARIOS
   const [lista, setLista] = useState([]);
-  const [modulo, setModulo] = useState(9999);
+  const [modulo, setModulo] = useState(0);
   const [estado, setEstado] = useState(1);
    // MOSTRAR TODAS LAS REFERENCIAS AL ENTRAR EN LA PESTAÑA DE REFERENCIAS
    useEffect(() => {
@@ -30,18 +30,9 @@ export const ListaProvider = ({ children }) => {
   // FILTRAR LAS REFERENCIAS
   useEffect(() => {
     if(data) {
-        // Si el modulo es 0, mostrar todas las referencias, si no, mostrar solo las referencias del modulo seleccio
-        if(modulo === 0) {
-            setLista(data.sort((a, b) => a.modulo - b.modulo))
-        } else {
-           if(estado === 0) {
-            setLista(data.filter((lista) => lista.modulo === modulo));
-           } else {
-            setLista(data.filter((lista) => lista.modulo === modulo && lista.estado === 'Activo'));
-           }
-        }
+        setLista(data);
     }
-  }, [modulo, estado, data])
+  }, [data])
   // ACTUALIZAR LA LISTA DE REFERENCIAS
   const actualizarLista = async () => {
     try {
